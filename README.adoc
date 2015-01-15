@@ -33,5 +33,58 @@ According to <<wikipedia>> there are, well, three versions of rpm:
 The first rpm i got my hand on was 4.4, so for now the one and only implementation is 4.4.
 Do not any newer features such as compression other than gzip.
 
+== RPM file format specification
+
+RPM files are persisted in network byte order and consist of four parts.
+
+=== Lead
+
+Our lead looks like this:
+
+magic (0-3)::
+Magic value for both 'file' and rpm utilities ('ED AB EE DB')
+
+major (4)::
+RPM Major version ('03')
+
+minor (5)::
+RPM minor version ('00')
+
+type (6-9)::
+Type binary ('00 00 00 00').
+Type source ('00 00 00 01') not supported yet.
+
+deprecated (10-95)::
+The rest is not used any more because its format is inflexible.
+Content is superseded by the header. 
+It's only use is to support non-rpm utilities such as 'file' that can identify rpms based on a magic value.
+(85 times '00')
+
+=== Signature
+
+Signature format is equal to header format.
+This lib does not support checksums because the order of the checksum field would require the complete rpm structure to be processed before streaming could continue.
+
+=== Header
+
+Supported index types:
+
+- NULL = 0
+- CHAR = 1
+- INT8 = 2
+- INT16 = 3
+- INT32 = 4
+- INT64 = 5
+- STRING = 6
+- BIN = 7
+- STRING_ARRAY = 8
+
+=== Payload
+
+A gzip compressed cpio structure carries the rpm payload.
+
+== Bibliography
+
 [bibliography]
 - [[[wikipedia]]] Wikipedia: [http://en.wikipedia.org/wiki/RPM_Package_Manager] RPM Package Manager
+- [[[maxrpm]]] Edward C. Bailey. Maximum rpm. Red Hat Software, Inc. 1997.
