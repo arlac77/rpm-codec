@@ -38,11 +38,7 @@ test('Read header from rpm package', function() {
         fs.read(fd, buffer, 0, 16, 96, function(err, num) {
             if (err) ok(false, `Reading header header failed: ${err} at ${num}`)
             let m = header.readHeader(buffer.toByteArray());
-            console.log(`Typeof ${typeof(m)}`);
-            console.log(`Magic = ${m.magic}`);
-            console.log(`Version = ${m.version}`);
-            console.log(`Number of index entries = ${m.count}`);
-            console.log(`Size [bytes] of index = ${m.size}`);
+            console.log(`Read header entry ${JSON.stringify(m)}`);
             
             // Read header/index
             buffer = new Buffer(m.size);
@@ -56,21 +52,21 @@ test('Read header from rpm package', function() {
                     for (let k of Object.keys(indices[i])) {
                         let val = indices[i][k];
                         let msg = (k == 'type' ? `(${Object.keys(header.types)[val]})` : '')
-                        console.log(`Index ${i}: ${k} = ${val} ${msg}`);
+                        let tag = (k == 'tag' ? `(${Object.keys(header.headerTags)[val-1000]})` : '')
+                        console.log(`Index ${i}: ${k} = ${val} ${msg} ${tag}`);
                     }
                 }
                 // Read header/store
                 // Size is the TODO
-                /*
-                buffer = new Buffer(TODO);
+                buffer = new Buffer(1024);
                 fs.read(fd, buffer, 0, buffer.length, 96 + 16 + (indices.length * 16), function(err, num) {
-                    ok(true, `Read index`);
-                    return;
-                }
-                */
-                ok(true, `Read index`);
-                return;
+                    if (err) {
+                        ok.false(`Reading store failed with ${err}`);
+                        return;
+                    }
+                });
             });
+            ok(true, `Read index`);
             start();
             return buffer;
         });

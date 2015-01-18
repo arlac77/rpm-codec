@@ -10,29 +10,12 @@ var rpm = require('../');
 
 var header = require('../lib/header');
 
-// Read existing rpm from local filesystem
-function readRpmLead(filename) {
-    fs.open(filename, 'r', function(status, fd) {
-        if (status) {
-            console.log(status.message);
-            ok(false, "Opening rpm file failed:" + status);
-		start();
-            return;
-        }
-        let buffer = new Buffer(100);
-        fs.read(fd, buffer, 0, 100, 0, function(err, num) {
-            console.log(buffer.toString('utf-8', 0, num));
-            return buffer;
-        });
-    });
+// [ Buffer -> [] ]
+Buffer.prototype.toByteArray = function () {
+  return Array.prototype.slice.call(this, 0)
 }
 
-QUnit.test('Empty test', function(assert) {
-    console.log('empty test');
-    assert.ok(true, "Always ok");
-});
-
-QUnit.test('simple lead', function(assert) {
+test('simple lead', function(assert) {
     var l1 = header.defaultLead();
     assert.ok(l1.slice(0, 4).equal([0xED, 0xAB, 0xEE, 0xDB]), 'magic is ok');
 });
@@ -40,42 +23,33 @@ QUnit.test('simple lead', function(assert) {
   // TODO test lead with bad length -> throw
   // TODO test lead with bad magic -> throw
 
-/*
 test('Read lead from rpm package', function() {
     console.log('Executing read lead from rpm package');
     expect(1);
     stop();
- 
-    var l = readRpmLead('s1.f1-1.0.0.0-1.x64_64.rpm');
-    console.log(header.readLead(l));
-});
-*/
-
-test("this is an async test example", function () {
-    expect(1);
-    stop();
     var filename = path.join(__dirname,'..','s1.f1-1.0.0.0-1.x86_64.rpm');
+    console.log(`Opening file ${filename}`);
     fs.open(filename, 'r', function(status, fd) {
         if (status) {
-            console.log(status.message);
-            ok(false, "Opening rpm file failed:" + status);
-		start();
+            console.log(`Opening file ${filename} failed with ${status.message}`);
+            ok(false, `Opening rpm file failed with ${status}`);
+	    start();
             return;
         }
-        let buffer = new Buffer(100);
-        fs.read(fd, buffer, 0, 100, 0, function(err, num) {
-            //console.log(buffer.toString('utf-8', 0, num));
-            ok(true, "looks good");
-		start();
+        console.log(`Reading lead...`);
+        let buffer = new Buffer(96);
+        fs.read(fd, buffer, 0, 96, 0, function(err, num) {
+            if (err) {
+                ok(false, `Reading failed with ${err}`);
+                return;
+            }
+            let l = header.readLead(buffer.toByteArray());
+            console.log(`Lead: ${JSON.stringify(l)}`);
+            ok(true, "Reading lead succeeded");
+            start();
             return buffer;
         });
     });
-/*
-    setTimeout(function () {
-        ok(true, "finished async test");
-        strictEqual(true, true, "Strict equal assertion uses ===");
-        start();
-    }, 100);
-*/
 });
 
+// EOF
