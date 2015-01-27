@@ -1,2 +1,7 @@
-# rpm-stream
+= rpm-stream
+
 rpm-stream is a streaming rpm packer, basically the rpm version of tar-stream
+
+== Usage
+Don't use this library.
+In 99% of all cases, you are better off using the OS supplied rpm toolchain ('rpm', 'rpmbuild', ...).
