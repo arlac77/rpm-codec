@@ -1,30 +1,33 @@
 {
-  "name": "rpm-stream",
-  "version": "0.0.1",
-  "description": "Streaming RPM generator/extractor",
-  "main": "index.js",
-  "scripts": {
-    "test": "node test/lead.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jhinrichsen/rpm-stream.git"
-  },
-  "keywords": [
-    "RPM",
-    "package",
-    "stream"
-  ],
-  "author": [
-    "Jochen Hinrichsen",
-    "Markus Felten <markus.felten@gmx.de>"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jhinrichsen/rpm-stream/issues"
-  },
-  "homepage": "https://github.com/jhinrichsen/rpm-stream",
-  "dependencies": {
-    "cpio-stream": "^1.0.0"
-  }
+	"name": "rpm-stream",
+	"version": "0.0.1",
+	"description": "Streaming RPM generator/extractor",
+	"main": "index.js",
+	"scripts": {
+		"test": "qunit -c lib/stream.js -t test/extract.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jhinrichsen/rpm-stream.git"
+	},
+	"keywords": [
+		"RPM",
+		"package",
+		"stream"
+	],
+	"author": [
+		"Jochen Hinrichsen",
+		"Markus Felten <markus.felten@gmx.de>"
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/jhinrichsen/rpm-stream/issues"
+	},
+	"homepage": "https://github.com/jhinrichsen/rpm-stream",
+	"dependencies": {
+		"cpio-stream": "^1.0.0"
+	},
+	"devDependencies": {
+		"qunit": "^0.7.5"
+	}
 }
