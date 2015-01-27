@@ -39,9 +39,6 @@ RPM files are persisted in network byte order and consist of four parts.
 
 === Lead
 
-The lead is not used any more because its format is inflexible.
-It's only use is to support non-rpm utilities such as 'file' that can identify rpms based on a magic value.
-
 Our lead looks like this:
 
 magic (0-3)::
@@ -51,11 +48,18 @@ major (4)::
 RPM Major version ('03')
 
 minor (5)::
-RPM minor version (00)
+RPM minor version ('00')
 
 type (6-9)::
-Type binary (00 00 00 00).
-Type source (00 00 00 01) not supported yet.
+Type binary ('00 00 00 00').
+Type source ('00 00 00 01') not supported yet.
+
+deprecated (10-95)::
+The rest is not used any more because its format is inflexible.
+Content is superseded by the header. 
+It's only use is to support non-rpm utilities such as 'file' that can identify rpms based on a magic value.
+(85 times '00')
+
 
 [bibliography]
 - [[[wikipedia]]] Wikipedia: [http://en.wikipedia.org/wiki/RPM_Package_Manager] RPM Package Manager
