@@ -17,5 +17,19 @@ You're probably in the remaining 1% if
 * You want to be independant of changes in the underlying toolchain, e.g. when upgrading the OS.
 Especially if you do not control the whens and whys.
 * You are packaging on a brand new platform, but your rpms need to run in environments that are dead old.
-* All of your artifacts are already prepared in binary form, and you just need to wrap an rpm bag around them.
+* All of your artifacts are already prepared in binary form, maybe in a repository, and you just need a light rpm wrapper (streaming in memory, avoid hitting the disk completely)
 * You are already using the rpmlib interface for some kung fu voodoo.
+
+== Which version of RPM is supported?
+
+According to <<wikipedia>> there are, well, three versions of rpm:
+
+1. 'THE' rpm
+2. rpm.org, a public effort starting around 2007 producing versions 4.8 to 4.10
+3. rpm v5 creating version 5
+
+The first rpm i got my hand on was 4.4, so for now the one and only implementation is 4.4.
+Do not any newer features such as compression other than gzip.
+
+[bibliography]
+- [[[wikipedia]]] Wikipedia: [http://en.wikipedia.org/wiki/RPM_Package_Manager] RPM Package Manager
