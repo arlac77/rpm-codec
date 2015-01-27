@@ -60,6 +60,11 @@ Content is superseded by the header.
 It's only use is to support non-rpm utilities such as 'file' that can identify rpms based on a magic value.
 (85 times '00')
 
+=== Signature
+
+Signature format is equal to header format.
+This lib does not support checksums because the order of the checksum field would require the complete rpm structure to be processed before streaming could continue.
+
 === Header
 
 Supported index types:
@@ -73,6 +78,10 @@ Supported index types:
 - STRING = 6
 - BIN = 7
 - STRING_ARRAY = 8
+
+=== Payload
+
+A gzip compressed cpio structure carries the rpm payload.
 
 == Bibliography
 
