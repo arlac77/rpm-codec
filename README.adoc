@@ -33,5 +33,30 @@ According to <<wikipedia>> there are, well, three versions of rpm:
 The first rpm i got my hand on was 4.4, so for now the one and only implementation is 4.4.
 Do not any newer features such as compression other than gzip.
 
+== RPM file format specification
+
+RPM files are persisted in network byte order and consist of four parts.
+
+=== Lead
+
+The lead is not used any more because its format is inflexible.
+It's only use is to support non-rpm utilities such as 'file' that can identify rpms based on a magic value.
+
+Our lead looks like this:
+
+magic (0-3)::
+Magic value for both 'file' and rpm utilities ('ED AB EE DB')
+
+major (4)::
+RPM Major version ('03')
+
+minor (5)::
+RPM minor version (00)
+
+type (6-9)::
+Type binary (00 00 00 00).
+Type source (00 00 00 01) not supported yet.
+
 [bibliography]
 - [[[wikipedia]]] Wikipedia: [http://en.wikipedia.org/wiki/RPM_Package_Manager] RPM Package Manager
+- [[[maxrpm]]] Edward C. Bailey. Maximum rpm. Red Hat Software, Inc. 1997.
