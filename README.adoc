@@ -18,7 +18,7 @@ You're probably in the remaining 1% if
 * You want to be independant of changes in the underlying toolchain, e.g. when upgrading the OS.
 Especially if the whens and whys of such upgrades are controlled by your hosting platform and not by you.
 
-* You are packaging on a brand new platform, but your rpms need to run in environments that are dead old.
+* You are packaging on a brand new platform, but your rpms need to run in ancient environments.
 * All of your artifacts are already prepared in binary form, maybe in a repository, and you just need a light rpm wrapper (streaming in memory, avoid hitting the disk completely)
 * You are already using the rpmlib interface for some kung fu voodoo.
 
