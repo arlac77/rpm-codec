@@ -3,7 +3,8 @@
 rpm-stream is a streaming rpm packer, basically the rpm version of tar-stream.
 
 == Usage
-`Don't use this library.`
+_Don't use this library._
+
 In 99% of all cases, you are better off using the OS supplied rpm toolchain ('rpm', 'rpmbuild', ...).
 Creating an rpm package using the built-in toolchain is pretty easy: provide a text file ('.spec')
 containing some metadata for your files, create the package, done.
