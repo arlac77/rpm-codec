@@ -1,6 +1,6 @@
 = rpm-stream
 
-rpm-stream is a streaming rpm packer, basically the rpm version of tar-stream.
+rpm-stream is a streaming rpm packer for node.js/ io.js, basically the rpm version of tar-stream.
 
 == Usage
 _Don't use this library._
@@ -31,7 +31,7 @@ According to <<wikipedia>> there are, well, three versions of rpm:
 3. rpm v5 creating version 5
 
 The first rpm i got my hand on was 4.4, so for now the one and only implementation is 4.4.
-Do not any newer features such as compression other than gzip.
+Do _not_ expect any newer features such as compression other than gzip (lzma, xz, ...).
 
 == RPM file format specification
 
