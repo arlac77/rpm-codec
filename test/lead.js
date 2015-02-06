@@ -3,9 +3,10 @@
 
 var fs = require('fs');
 var path = require('path');
-// var Buffer = require('buffer').Buffer;
 
 require('6to5/register');
+var assert = require('assert')
+var mocha = require('mocha')
 var rpm = require('../');
 
 var header = require('../lib/header');
@@ -15,41 +16,41 @@ Buffer.prototype.toByteArray = function () {
   return Array.prototype.slice.call(this, 0)
 }
 
-test('simple lead', function(assert) {
-    var l1 = header.defaultLead();
-    assert.ok(l1.slice(0, 4).equal([0xED, 0xAB, 0xEE, 0xDB]), 'magic is ok');
-});
+describe('should validate an RPM lead', function() {
+  var l1 = header.defaultLead();
+  assert(l1.slice(0, 4).equal([0xED, 0xAB, 0xEE, 0xDB]));
+})
 
-  // TODO test lead with bad length -> throw
-  // TODO test lead with bad magic -> throw
+// TODO test lead with bad length -> throw
+// TODO test lead with bad magic -> throw
 
-test('Read lead from rpm package', function() {
+describe('Read lead from rpm package', function() {
+  it('should work', function(done) {
     console.log('Executing read lead from rpm package');
-    expect(1);
-    stop();
     var filename = path.join(__dirname,'.','fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
     console.log(`Opening file ${filename}`);
     fs.open(filename, 'r', function(status, fd) {
-        if (status) {
-            console.log(`Opening file ${filename} failed with ${status.message}`);
-            ok(false, `Opening rpm file failed with ${status}`);
-	    start();
-            return;
+      if (status) {
+        console.log(`Opening file ${filename} failed with ${status.message}`);
+        assert(false, `Opening rpm file failed with ${status}`);
+        done();
+        return;
+      }
+      console.log(`Reading lead ...`);
+      let buffer = new Buffer(96);
+      fs.read(fd, buffer, 0, 96, 0, function(err, num) {
+        if (err) {
+          assert(false, `Reading failed with ${err}`);
+          done();
+          return;
         }
-        console.log(`Reading lead...`);
-        let buffer = new Buffer(96);
-        fs.read(fd, buffer, 0, 96, 0, function(err, num) {
-            if (err) {
-                ok(false, `Reading failed with ${err}`);
-                return;
-            }
-            let l = header.readLead(buffer.toByteArray());
-            console.log(`Lead: ${JSON.stringify(l)}`);
-            ok(true, "Reading lead succeeded");
-            start();
-            return buffer;
-        });
+        let l = header.readLead(buffer.toByteArray());
+        console.log(`Lead: ${JSON.stringify(l)}`);
+        assert(true, "Reading lead succeeded");
+        done();
+      });
     });
-});
+  })
+})
 
 // EOF

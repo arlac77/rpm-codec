@@ -4,7 +4,7 @@
   "description": "Streaming RPM generator/extractor",
   "main": "index.js",
   "scripts": {
-    "test": "qunit -c lib/header.js -t test/header.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -26,10 +26,9 @@
   "homepage": "https://github.com/jhinrichsen/rpm-stream",
   "dependencies": {
     "6to5": "^3.0.16",
-    "cpio-stream": "^1.0.0",
-    "qunit": "^0.7.5"
+    "cpio-stream": "^1.0.0"
   },
   "devDependencies": {
-    "qunit": "^0.7.5"
+    "mocha": "^2.1.0"
   }
 }

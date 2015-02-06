@@ -1,29 +1,31 @@
 var rpm_stream = require('../lib/stream');
 var fs = require('fs');
 var path = require('path');
+var assert = require('assert')
+var mocha = require('mocha')
 
-test('simple unpack header', function() {
+describe('simple unpack header', function() {
 	var stream = rpm_stream();
-	expect(1);
+	// TODO expect(1);
 
-	stop();
+	// TODO stop();
 	stream.on('header', function(chunk) {
-		ok(chunk.length >= 4, "is good");
-		start();
+		assert(chunk.length >= 4, "is good");
+		// TODO start();
 	});
 
 	fs.createReadStream(path.join(__dirname,
 		'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm')).pipe(stream);
 });
 
-test('fail unpack invalid header', function() {
+describe('fail unpack invalid header', function() {
 	var stream = rpm_stream();
-	expect(1);
+	// TODO expect(1);
 
-	stop();
+	// TODO stop();
 	stream.on('error', function(e) {
-		ok(e, "failed with " + e);
-		start();
+		assert(e, "failed with " + e);
+		// TODO start();
 	});
 
 	fs.createReadStream(path.join(__dirname,
