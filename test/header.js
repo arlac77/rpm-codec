@@ -69,9 +69,10 @@ describe('Read header from rpm package', function() {
             ix.stag = header.signatureTags[ix.tag];
             sigs[i] = ix;
           }
-          // Read header/store
-          // Size is the TODO
-          buffer = new Buffer(1024);
+          // Read signatures/store
+          let signatureStoreSize = header.storeSize(sigs);
+          buffer = new Buffer(signatureStoreSize);
+          console.log(`Reading signature store (${signatureStoreSize} bytes)`);
           fs.read(fd, buffer, 0, buffer.length, 96 + 16 + (indices.length * 16)
           , function(err, num) {
 
@@ -79,7 +80,6 @@ describe('Read header from rpm package', function() {
               assert(false, `Reading store failed with ${err}`);
               return;
             }
-            console.log('Reading store...');
             // Show first signature incl. storage data
             for (let i = sigs.length; --i >=0; ) {
               let f = sigs[i];
