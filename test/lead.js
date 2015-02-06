@@ -27,7 +27,7 @@ test('Read lead from rpm package', function() {
     console.log('Executing read lead from rpm package');
     expect(1);
     stop();
-    var filename = path.join(__dirname,'..','s1.f1-1.0.0.0-1.x86_64.rpm');
+    var filename = path.join(__dirname,'.','fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
     console.log(`Opening file ${filename}`);
     fs.open(filename, 'r', function(status, fd) {
         if (status) {
