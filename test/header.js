@@ -2,6 +2,7 @@
 "use strict"
 
 var fs = require('fs');
+var path = require('path');
 // var Buffer = require('buffer').Buffer;
 
 require('6to5/register');
@@ -26,7 +27,8 @@ test('Read header from rpm package', function() {
     stop();
     expect(1);
 
-    fs.open('s1.f1-1.0.0.0-1.x86_64.rpm', 'r', function(status, fd) {
+    var filename = path.join(__dirname, 'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
+    fs.open(filename, 'r', function(status, fd) {
         console.log("1");
         if (status) {
             ok(false, "Opening rpm file failed: " + status);
@@ -40,20 +42,20 @@ test('Read header from rpm package', function() {
             let m = header.readHeader(buffer.toByteArray());
             console.log(`Read header entry ${JSON.stringify(m)}`);
             
-            // Read header/index
+            // Read signatures/index
             buffer = new Buffer(m.size);
-            console.log(`Reading header index (${m.size} bytes)`);
+            console.log(`Reading signature index (${m.size} bytes)`);
             fs.read(fd, buffer, 0, m.size, 96+16, function(err, num) {
-                if (err) ok(false, `Reading header index failed: ${err} at ${num}`)
+                if (err) ok(false, `Reading signature index failed: ${err} at ${num}`)
                 let indices = header.readIndex(buffer.toByteArray(), m.count);
                 console.log(`Found ${indices.length} index entries`);
                 console.log('Indices:');
                 for (let i = 0; i < indices.length; i++) {
                     for (let k of Object.keys(indices[i])) {
                         let val = indices[i][k];
-                        let msg = (k == 'type' ? `(${Object.keys(header.types)[val]})` : '')
-                        let tag = (k == 'tag' ? `(${Object.keys(header.headerTags)[val-1000]})` : '')
-                        console.log(`Index ${i}: ${k} = ${val} ${msg} ${tag}`);
+                        let msg = (k == 'type' ? `${header.types[val]}` : '')
+                        let tag = (k == 'tag' ? `${header.signatureTags[val]}` : '')
+                        console.log(`Signature #${i}: ${k} = ${val} ${msg} ${tag}`);
                     }
                 }
                 // Read header/store
