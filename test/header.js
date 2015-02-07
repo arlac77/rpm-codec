@@ -48,33 +48,49 @@ describe('Read header from rpm package', function() {
 var parse = function(bs) {
   let hs = {};
 
+  console.log(`Reading lead`);
+
   // Read lead
   let pos = 0;
   let l = header.readLead(bs);
-  console.log(`Read lead: ${JSON.stringify(l)}`);
+  console.log(`- Read lead: ${JSON.stringify(l)}`);
   hs.lead = l;
+
+  console.log(`Reading signatures`);
 
   // Read signatures/header
   pos += header.LEAD_LENGTH;
   let m = header.readHeader(bs.slice(pos));
-  console.log(`Read header entry ${JSON.stringify(m)}`);
 
   // Read signatures/index
   pos += header.headerStructureHeaderLength;
-  console.log(`Reading signature index (${m.count} entries)`);
   let sigs = header.readSignatureIndex(bs.slice(pos), m.count);
-  console.log('Signatures (index only) = ' + JSON.stringify(sigs));
 
   // Read signatures/store
   pos += header.oneIndexSize * m.count;
   sigs = header.readStore(sigs, bs.slice(pos));
-  console.log('Signatures (index + store) = ' + JSON.stringify(sigs));
   hs.signatures = sigs;
+
+  console.log(`Reading header`);
 
   // Same for header now
   let signatureStoreSize = header.storeSize(sigs);
   pos += signatureStoreSize;
-  console.log(`Reading signature store (${signatureStoreSize} bytes)`);
+  m = header.readHeader(bs.slice(pos));
+  pos += header.headerStructureHeaderLength;
+  let ids = header.readHeaderIndex(bs.slice(pos), m.count);
+  pos += header.oneIndexSize * m.count;
 
+  console.log(`Expected store position: ${pos} (${pos.toString(16)})`);
+
+  ids = header.readStore(ids, bs.slice(pos));
+  hs.header = ids;
+
+  // Just for fun - forward into payload
+  let headerStoreSize = header.storeSize(ids);
+  pos += headerStoreSize;
+  console.log(`cpio payload starts at position ${pos} (${pos.toString(16)})`);
+
+  console.log(`Complete header: ${JSON.stringify(hs)}`);
   return hs;
 };
