@@ -26,6 +26,7 @@
   "homepage": "https://github.com/jhinrichsen/rpm-stream",
   "dependencies": {
     "6to5": "^3.0.16",
+    "bl": "^0.9.4",
     "cpio-stream": "^1.0.0"
   },
   "devDependencies": {
