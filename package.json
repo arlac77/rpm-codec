@@ -30,6 +30,7 @@
     "cpio-stream": "https://github.com/jhinrichsen/cpio-stream/tarball/4ccae8d3d0088118534b744e2c560f5ee0db5759"
   },
   "devDependencies": {
-    "mocha": "^2.1.0"
+    "mocha": "^2.1.0",
+    "simple-bufferstream": "0.0.4"
   }
 }
