@@ -5,7 +5,8 @@
 var fs = require('fs');
 var test = require('mocha');
 var path = require('path');
-var sbuff = require('simple-bufferstream')
+var zlib = require('zlib');
+var sbuff = require('simple-bufferstream');
 
 var cpio = require('cpio-stream');
 
@@ -30,21 +31,10 @@ Buffer.prototype.toByteArray = function() {
 test.describe('Read header from rpm package', function() {
   test.it('should work', function(done) {
     var filename = path.join(__dirname, 'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
-    fs.open(filename, 'r', function(status, fd) {
-      if (status) {
-        assert(false, "Opening rpm file failed: " + status);
-        done();
-        return;
-      }
-      let buffer = new Buffer(2048);
-      let offset = 0;
-      let length = buffer.length;
-      let position = 0;
-      let n = fs.readSync(fd, buffer, offset, length, position);
-      console.log(`Read ${n} bytes`);
-      parse(buffer.toByteArray());
-      done();
-    });
+    let buffer = fs.readFileSync(filename);
+    console.log(`Read ${buffer.length} bytes`);
+    parse(buffer.toByteArray());
+    done();
   });
 });
 
@@ -65,7 +55,8 @@ var consume = function(buf) {
     // all entries read
   });
 
-  sbuff(buf).pipe(extract);
+  var f = fs.createWriteStream('payload');
+  sbuff(buf).pipe(zlib.createDeflateRaw()).pipe(extract);
 };
 
 var parse = function(bs) {
@@ -112,6 +103,13 @@ var parse = function(bs) {
   // Just for fun - forward into payload
   let headerStoreSize = header.storeSize(ids);
   pos += headerStoreSize;
+
+  // TODO 127?
+  pos += 3655 - 3528;
+  // zlib header
+  assert(bs[pos] == 0x78);
+  assert(bs[pos + 1] == 0xDA);
+
   console.log(`cpio payload starts at position ${pos} (${pos.toString(16)})`);
   consume(new Buffer(bs.slice(pos)));
 
