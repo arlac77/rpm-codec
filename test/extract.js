@@ -4,6 +4,7 @@ var path = require('path');
 var assert = require('assert')
 var mocha = require('mocha')
 
+/*
 describe('simple unpack header', function() {
 	it('should work', function(done) {
 		var stream = rpm_stream();
@@ -39,3 +40,4 @@ describe('fail unpack invalid header', function() {
 			'extract.js')).pipe(stream);
 	});
 });
+*/

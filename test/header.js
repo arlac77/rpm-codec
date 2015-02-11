@@ -111,8 +111,19 @@ var parse = function(bs) {
   assert(bs[pos + 1] == 0xDA);
 
   console.log(`cpio payload starts at position ${pos} (${pos.toString(16)})`);
-  consume(new Buffer(bs.slice(pos)));
 
-  console.log(`Complete header: ${JSON.stringify(hs)}`);
+  let fmt = ids.filter(function(e) {
+    return e.stag === "PAYLOADFORMAT";
+  })[0].value;
+  let cmp = ids.filter(function(e) {
+    return e.stag === "PAYLOADCOMPRESSOR";
+  })[0].value;
+  if (fmt == "cpio" && cmp == "gzip") {
+    consume(new Buffer(bs.slice(pos)));
+  } else {
+    console.log(`Unsupported payload: Cannot process a ${cmp} compressed ${fmt}.`)
+  }
+
+  // console.log(`Complete header: ${JSON.stringify(hs)}`);
   return hs;
 };

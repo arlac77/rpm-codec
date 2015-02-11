@@ -1,25 +1,26 @@
+/* jslint node: true, esnext: true */
 
-"use strict"
+"use strict";
 
 var fs = require('fs');
 var path = require('path');
 
 require('6to5/register');
-var assert = require('assert')
-var mocha = require('mocha')
+var assert = require('assert');
+var mocha = require('mocha');
 var rpm = require('../');
 
 var header = require('../lib/header');
 
 // [ Buffer -> [] ]
-Buffer.prototype.toByteArray = function () {
-  return Array.prototype.slice.call(this, 0)
-}
+Buffer.prototype.toByteArray = function() {
+  return Array.prototype.slice.call(this, 0);
+};
 
 describe('should validate an RPM lead', function() {
   var l1 = header.defaultLead();
-  assert(l1.slice(0, 4).equal([0xED, 0xAB, 0xEE, 0xDB]));
-})
+  assert(header.byteArrayEqual([0xED, 0xAB, 0xEE, 0xDB], l1));
+});
 
 // TODO test lead with bad length -> throw
 // TODO test lead with bad magic -> throw
@@ -27,7 +28,7 @@ describe('should validate an RPM lead', function() {
 describe('Read lead from rpm package', function() {
   it('should work', function(done) {
     console.log('Executing read lead from rpm package');
-    var filename = path.join(__dirname,'.','fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
+    var filename = path.join(__dirname, '.', 'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
     console.log(`Opening file ${filename}`);
     fs.open(filename, 'r', function(status, fd) {
       if (status) {
