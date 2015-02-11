@@ -1,4 +1,4 @@
-= rpm-stream
+= rpm-stream image:https://secure.travis-ci.org/rpm-stream/rpm-stream.org.png?branch=master["Build Status", link="https://travis-ci.org/rpm-stream/rpm-stream.org"]
 
 rpm-stream is a streaming rpm packer for node.js/ io.js, basically the rpm version of tar-stream.
 
@@ -56,7 +56,7 @@ Type source ('00 00 00 01') not supported yet.
 
 deprecated (10-95)::
 The rest is not used any more because its format is inflexible.
-Content is superseded by the header. 
+Content is superseded by the header.
 It's only use is to support non-rpm utilities such as 'file' that can identify rpms based on a magic value.
 (85 times '00')
 
