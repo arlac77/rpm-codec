@@ -30,7 +30,7 @@ Buffer.prototype.toByteArray = function() {
 
 test.describe('Read header from rpm package', function() {
   test.it('should work', function(done) {
-    var filename = path.join(__dirname, 'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
+    var filename = path.join(__dirname, 'fixtures/mktemp-1.5-12sls.i586.rpm');
     let buffer = fs.readFileSync(filename);
     console.log(`Read ${buffer.length} bytes`);
     parse(buffer.toByteArray());
@@ -56,7 +56,7 @@ var consume = function(buf) {
   });
 
   var f = fs.createWriteStream('payload');
-  sbuff(buf).pipe(zlib.createDeflateRaw()).pipe(extract);
+  sbuff(buf).pipe(zlib.createGunzip()).pipe(extract);
 };
 
 var parse = function(bs) {
@@ -105,10 +105,10 @@ var parse = function(bs) {
   pos += headerStoreSize;
 
   // TODO 127?
-  pos += 3655 - 3528;
+  //pos += 3655 - 3528;
   // zlib header
-  assert(bs[pos] == 0x78);
-  assert(bs[pos + 1] == 0xDA);
+  //assert(bs[pos] == 0x78);
+  //assert(bs[pos + 1] == 0xDA);
 
   console.log(`cpio payload starts at position ${pos} (${pos.toString(16)})`);
 
