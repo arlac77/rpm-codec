@@ -1,4 +1,4 @@
-= rpm-stream image:https://travis-ci.org/jhinrichsen/nexus-util.svg?branch=master["Build Status", link="https://travis-ci.org/jhinrichsen/rpm-stream"]
+= rpm-stream image:https://travis-ci.org/jhinrichsen/rpm-stream.svg?branch=master["Build Status", link="https://travis-ci.org/jhinrichsen/rpm-stream"]
 
 
 
