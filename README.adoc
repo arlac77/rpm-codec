@@ -1,6 +1,4 @@
-= rpm-stream image:https://travis-ci.org/jhinrichsen/rpm-stream.svg?branch=master["Build Status", link="https://travis-ci.org/jhinrichsen/rpm-stream"]
-
-
+= rpm-stream image:https://travis-ci.org/jhinrichsen/rpm-stream.svg?branch=master["Build Status", link="https://travis-ci.org/jhinrichsen/rpm-stream"] image:https://coveralls.io.org/jhinrichsen/rpm-stream-coverage/badge.svg["Coverage Status", link="https://coveralls.io.org/jhinrichsen/rpm-stream-coverage"]
 
 rpm-stream is a streaming rpm packer for node.js/ io.js, basically the rpm
 version of tar-stream.
