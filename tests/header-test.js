@@ -1,7 +1,3 @@
-/* jslint node: true, esnext: true */
-
-"use strict";
-
 var fs = require('fs');
 var test = require('mocha');
 var path = require('path');
@@ -10,17 +6,16 @@ var sbuff = require('simple-bufferstream');
 
 var cpio = require('cpio-stream');
 
-require('6to5/register');
 var assert = require('assert');
 var rpm = require('../');
 var header = require('../lib/header');
 
 test.describe('Convert byte[] to number', function() {
-  assert.equal(0, header.num([0]), "Can convert 0");
+  assert.equal(0, header.num([0]), 'Can convert 0');
 });
 
 test.describe('Convert byte[] to number', function() {
-  assert.equal(65537, header.num([1, 0, 1]), "Can convert large numbers");
+  assert.equal(65537, header.num([1, 0, 1]), 'Can convert large numbers');
 });
 
 // [ Buffer -> [] ]
@@ -56,7 +51,9 @@ var consume = function(buf) {
   });
 
   var f = fs.createWriteStream('payload');
-  sbuff(buf).pipe(zlib.createGunzip()).pipe(extract);
+  sbuff(buf)
+    .pipe(zlib.createGunzip())
+    .pipe(extract);
 };
 
 var parse = function(bs) {
@@ -113,15 +110,17 @@ var parse = function(bs) {
   console.log(`cpio payload starts at position ${pos} (${pos.toString(16)})`);
 
   let fmt = ids.filter(function(e) {
-    return e.stag === "PAYLOADFORMAT";
+    return e.stag === 'PAYLOADFORMAT';
   })[0].value;
   let cmp = ids.filter(function(e) {
-    return e.stag === "PAYLOADCOMPRESSOR";
+    return e.stag === 'PAYLOADCOMPRESSOR';
   })[0].value;
-  if (fmt == "cpio" && cmp == "gzip") {
+  if (fmt == 'cpio' && cmp == 'gzip') {
     consume(new Buffer(bs.slice(pos)));
   } else {
-    console.log(`Unsupported payload: Cannot process a ${cmp} compressed ${fmt}.`)
+    console.log(
+      `Unsupported payload: Cannot process a ${cmp} compressed ${fmt}.`
+    );
   }
 
   // console.log(`Complete header: ${JSON.stringify(hs)}`);

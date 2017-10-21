@@ -1,43 +1,49 @@
-/* jslint node: true, esnext: true */
+import test from 'ava';
+import { RPMStream } from '../src/stream';
 
-var rpm_stream = require('../lib/stream');
-var fs = require('fs');
-var path = require('path');
-var assert = require('assert');
+const fs = require('fs');
+const path = require('path');
 
+test.cb('simple unpack header', t => {
+  const stream = new RPMStream();
 
-describe('simple unpack header', function() {
-	it('should work', function(done) {
-		var stream = rpm_stream();
-		//expect(1);
+  t.plan(7);
 
-		stream.on('lead', function(lead) {
-			assert(lead.major === 3, "major ok");
-			assert(lead.minor === 0, "minor ok");
-			assert(lead.type === 1, "type ok");
-			assert(lead.arch === 28011, "type ok");
-			assert(lead.name === 'temp-1.6-4mdv2010.1', "name ok");
-			assert(lead.os === 1, "os ok");
-			assert(lead.signatureType === 5, "signatureType ok");
-			done();
-		});
+  stream.on('lead', lead => {
+    t.is(lead.major, 3, 'major ok');
+    t.is(lead.minor, 0, 'minor ok');
+    t.is(lead.type, 1, 'type ok');
+    t.is(lead.arch, 28011, 'type ok');
+    t.is(lead.name, 'temp-1.6-4mdv2010.1', 'name ok');
+    t.is(lead.os, 1, 'os ok');
+    t.is(lead.signatureType, 5, 'signatureType ok');
+    t.end();
+  });
 
-		fs.createReadStream(path.join(__dirname,
-			'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm')).pipe(stream);
-	});
+  fs
+    .createReadStream(
+      path.join(
+        __dirname,
+        '..',
+        'tests',
+        'fixtures',
+        'mktemp-1.6-4mdv2010.1.i586.rpm'
+      )
+    )
+    .pipe(stream);
 });
 
-describe('fail unpack invalid header', function() {
-	it('should work', function(done) {
-		var stream = rpm_stream();
-		//expect(1);
+test.cb('fail unpack invalid header', t => {
+  const stream = new RPMStream();
 
-		stream.on('error', function(e) {
-			assert(e, "failed with " + e);
-			done();
-		});
+  t.plan(1);
 
-		fs.createReadStream(path.join(__dirname,
-			'extract.js')).pipe(stream);
-	});
+  stream.on('error', e => {
+    t.pass('failed with ' + e);
+    t.end();
+  });
+
+  fs
+    .createReadStream(path.join(__dirname, '..', 'tests', 'extract-test.js'))
+    .pipe(stream);
 });

@@ -43,6 +43,7 @@ const states = {
 
 export class RPMStream extends Transform {
   constructor() {
+    super();
     this._state = states.initial;
     this._buffer = bl();
   }

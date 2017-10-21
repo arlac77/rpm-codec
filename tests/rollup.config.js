@@ -1,3 +1,5 @@
+const external = ['ava'];
+
 export default [
   {
     input: 'tests/extract-test.js',
@@ -6,8 +8,10 @@ export default [
       format: 'cjs',
       sourcemap: true
     },
-    external: ['ava']
-  },
+    external
+  }
+  /*
+  ,
   {
     input: 'tests/header-test.js',
     output: {
@@ -15,7 +19,7 @@ export default [
       format: 'cjs',
       sourcemap: true
     },
-    external: ['ava']
+    external
   },
   {
     input: 'tests/lead-test.js',
@@ -24,6 +28,7 @@ export default [
       format: 'cjs',
       sourcemap: true
     },
-    external: ['ava']
+    external
   }
+  */
 ];

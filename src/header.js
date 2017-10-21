@@ -26,11 +26,11 @@ export function str(buf) {
   return s;
 }
 
-const leadMagic = [237, 171, 238, 219];
-const leadMajor = [3];
-const leadMinor = [0];
-const leadType = [0, 0, 0, 0];
-const LEAD_LENGTH = 96;
+export const leadMagic = [237, 171, 238, 219];
+export const leadMajor = [3];
+export const leadMinor = [0];
+export const leadType = [0, 0, 0, 0];
+export const LEAD_LENGTH = 96;
 
 const types = {
   NULL: 0,
@@ -169,8 +169,8 @@ export function writeLead(attrs) {
   return lead;
 }
 
-const headerStructureHeaderMagic = [0x8e, 0xad, 0xe8];
-const headerStructureHeaderLength = 16;
+export const headerStructureHeaderMagic = [0x8e, 0xad, 0xe8];
+export const headerStructureHeaderLength = 16;
 
 export function readHeader(buf) {
   // Preconditions
@@ -224,13 +224,13 @@ export function readIndex(buf, n, tagTable) {
   return indices;
 }
 
-var readSignatureIndex = function(buf, n) {
+export function readSignatureIndex(buf, n) {
   return readIndex(buf, n, signatureTags);
-};
+}
 
-var readHeaderIndex = function(buf, n) {
+export function readHeaderIndex(buf, n) {
   return readIndex(buf, n, headerTags);
-};
+}
 
 // Signatures and headers use a mod 4 byte size
 export function mod(m) {

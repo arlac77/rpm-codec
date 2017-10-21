@@ -2,10 +2,10 @@
   "name": "rpm-stream",
   "version": "0.0.1",
   "description": "Streaming RPM generator/extractor",
-  "main": "index.js",
+  "main": "dist/stream.js",
+  "module": "src/stream.js",
   "scripts": {
     "test": "ava",
-    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
     "cover": "nyc ava",
     "precover": "rollup -c tests/rollup.config.js",
     "pretest": "rollup -c tests/rollup.config.js",
@@ -33,7 +33,6 @@
   },
   "homepage": "https://github.com/arlac77/rpm-stream#readme",
   "dependencies": {
-    "6to5": "^3.0.16",
     "bl": "^0.9.4",
     "cpio-stream": "https://github.com/jhinrichsen/cpio-stream/tarball/4ccae8d3d0088118534b744e2c560f5ee0db5759"
   },

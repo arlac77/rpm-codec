@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-require('6to5/register');
 var assert = require('assert');
 var mocha = require('mocha');
 var rpm = require('../');
