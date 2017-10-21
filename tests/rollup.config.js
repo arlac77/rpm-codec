@@ -1,20 +1,29 @@
-import babel from 'rollup-plugin-babel';
-import multiEntry from 'rollup-plugin-multi-entry';
-
-export default {
-  input: 'tests/**/*-test.js',
-  output: {
-    file: 'build/bundle-test.js',
-    format: 'cjs',
-    sourcemap: true
+export default [
+  {
+    input: 'tests/extract-test.js',
+    output: {
+      file: 'build/extract-test.js',
+      format: 'cjs',
+      sourcemap: true
+    },
+    external: ['ava']
   },
-  external: ['ava'],
-  plugins: [
-    babel({
-      babelrc: false,
-      presets: ['latest'],
-      exclude: 'node_modules/**'
-    }),
-    multiEntry()
-  ]
-};
+  {
+    input: 'tests/header-test.js',
+    output: {
+      file: 'build/header-test.js',
+      format: 'cjs',
+      sourcemap: true
+    },
+    external: ['ava']
+  },
+  {
+    input: 'tests/lead-test.js',
+    output: {
+      file: 'build/lead-test.js',
+      format: 'cjs',
+      sourcemap: true
+    },
+    external: ['ava']
+  }
+];

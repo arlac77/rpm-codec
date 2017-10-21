@@ -1,9 +1,5 @@
-/* jslint node: true, esnext: true */
-
-"use strict";
-
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 require('6to5/register');
 var assert = require('assert');
@@ -19,7 +15,7 @@ Buffer.prototype.toByteArray = function() {
 
 describe('should validate an RPM lead', function() {
   var l1 = header.defaultLead();
-  assert(header.byteArrayEqual([0xED, 0xAB, 0xEE, 0xDB], l1));
+  assert(header.byteArrayEqual([0xed, 0xab, 0xee, 0xdb], l1));
 });
 
 // TODO test lead with bad length -> throw
@@ -28,7 +24,11 @@ describe('should validate an RPM lead', function() {
 describe('Read lead from rpm package', function() {
   it('should work', function(done) {
     console.log('Executing read lead from rpm package');
-    var filename = path.join(__dirname, '.', 'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm');
+    var filename = path.join(
+      __dirname,
+      '.',
+      'fixtures/mktemp-1.6-4mdv2010.1.i586.rpm'
+    );
     console.log(`Opening file ${filename}`);
     fs.open(filename, 'r', function(status, fd) {
       if (status) {
@@ -47,11 +47,11 @@ describe('Read lead from rpm package', function() {
         }
         let l = header.readLead(buffer.toByteArray());
         console.log(`Lead: ${JSON.stringify(l)}`);
-        assert(true, "Reading lead succeeded");
+        assert(true, 'Reading lead succeeded');
         done();
       });
     });
-  })
-})
+  });
+});
 
 // EOF

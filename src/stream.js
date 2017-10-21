@@ -1,87 +1,77 @@
-/* jslint node: true, esnext: true */
-
-"use strict";
-
 const bl = require('bl');
-const util = require('util');
-const Transform = require('stream').Transform;
-const header = require('./header');
+const { Transform } = require('stream');
 
-util.inherits(RPMStream, Transform);
+import {
+  LEAD_LENGTH,
+  headerStructureHeaderLength,
+  readLead,
+  readHeader,
+  readSignatureIndex
+} from './header';
 
 /*
   states:
 */
 const states = {
-	"initial": {
-		requiredLength: header.LEAD_LENGTH,
-		decode: header.readLead,
-		nextState: function(state, stream) {
-			stream.emit('lead', state.result);
-			return states.structureHeader;
-		}
-	},
-	"structureHeader": {
-		requiredLength: header.headerStructureHeaderLength,
-		decode: header.readHeader,
-		nextState: function(state, stream) {
-			return Object.create(states.signatureIndex, {
-				requiredLength: {
-					value: state.result.count
-				}
-			});
-		}
-	},
-	"signatureIndex": {
-		requiredLength: 4711,
-		decode: header.readSignatureIndex,
-		nextState: function(state, stream) {
-			return undefined;
-		}
-	}
+  initial: {
+    requiredLength: LEAD_LENGTH,
+    decode: readLead,
+    nextState(state, stream) {
+      stream.emit('lead', state.result);
+      return states.structureHeader;
+    }
+  },
+  structureHeader: {
+    requiredLength: headerStructureHeaderLength,
+    decode: readHeader,
+    nextState(state, stream) {
+      return Object.create(states.signatureIndex, {
+        requiredLength: {
+          value: state.result.count
+        }
+      });
+    }
+  },
+  signatureIndex: {
+    requiredLength: 4711,
+    decode: readSignatureIndex,
+    nextState(state, stream) {
+      return undefined;
+    }
+  }
 };
 
+export class RPMStream extends Transform {
+  constructor() {
+    this._state = states.initial;
+    this._buffer = bl();
+  }
 
+  _transform(chunk, encoding, done) {
+    const b = this._buffer;
+    b.append(chunk);
 
-function RPMStream(options) {
-	if (!(this instanceof RPMStream))
-		return new RPMStream(options);
+    let state = this._state;
 
-	Transform.call(this, options);
-	this._state = 0;
-	this._buffer = bl();
+    try {
+      while (state) {
+        if (b.length >= state.requiredLength) {
+          state.result = state.decode(b.slice(0, state.requiredLength));
+          b.consume(state.requiredLength);
+          state = state.nextState(state, this);
+        } else {
+          break;
+        }
+      }
+    } catch (e) {
+      this.emit('error', e);
+      state = undefined;
+    }
 
-	this._state = states.initial;
+    this._state = state;
+
+    //this.push(chunk);
+
+    done();
+  }
 }
-
-
-RPMStream.prototype._transform = function(chunk, encoding, done) {
-
-	const b = this._buffer;
-	b.append(chunk);
-
-	let state = this._state;
-
-	try {
-		while (state) {
-			if (b.length >= state.requiredLength) {
-				state.result = state.decode(b.slice(0, state.requiredLength));
-				b.consume(state.requiredLength);
-				state = state.nextState(state, this);
-			} else {
-				break;
-			}
-		}
-	} catch (e) {
-		this.emit('error', e);
-		state = undefined;
-	}
-
-	this._state = state;
-
-	//this.push(chunk);
-
-	done();
-};
-
-module.exports = RPMStream;
