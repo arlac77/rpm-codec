@@ -4,12 +4,19 @@
   "description": "Streaming RPM generator/extractor",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
-    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*"
+    "test": "ava",
+    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
+    "cover": "nyc ava",
+    "precover": "rollup -c tests/rollup.config.js",
+    "pretest": "rollup -c tests/rollup.config.js",
+    "posttest": "npm run prepare && markdown-doctest",
+    "prepare": "rollup -c",
+    "docs": "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jhinrichsen/rpm-stream.git"
+    "url": "git+https://github.com/arlac77/rpm-stream.git"
   },
   "keywords": [
     "RPM",
@@ -22,17 +29,62 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jhinrichsen/rpm-stream/issues"
+    "url": "https://github.com/arlac77/rpm-stream/issues"
   },
-  "homepage": "https://github.com/jhinrichsen/rpm-stream",
+  "homepage": "https://github.com/arlac77/rpm-stream#readme",
   "dependencies": {
     "6to5": "^3.0.16",
     "bl": "^0.9.4",
     "cpio-stream": "https://github.com/jhinrichsen/cpio-stream/tarball/4ccae8d3d0088118534b744e2c560f5ee0db5759"
   },
   "devDependencies": {
-    "istanbul": "0.3.5",
-    "mocha": "^2.1.0",
-    "simple-bufferstream": "0.0.4"
+    "simple-bufferstream": "0.0.4",
+    "jsdoc-to-markdown": "^3.0.0",
+    "jsdoc-babel": "^0.3.0",
+    "markdown-doctest": "^0.9.1",
+    "nyc": "^11.2.1",
+    "ava": "^0.22.0",
+    "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-multi-entry": "^2.0.1",
+    "semantic-release": "^8.2.1",
+    "xo": "^0.19.0"
+  },
+  "engines": {
+    "node": ">=8.7.0"
+  },
+  "contributors": [
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
+  "xo": {
+    "space": true
+  },
+  "ava": {
+    "files": [
+      "build/*-test.js"
+    ],
+    "presets": [
+      "latest"
+    ],
+    "require": [
+      "babel-register"
+    ]
+  },
+  "nyc": {
+    "include": [
+      "build/*-test.js"
+    ],
+    "reporter": [
+      "lcov"
+    ],
+    "report-dir": "./build/coverage"
+  },
+  "template": {
+    "repository": {
+      "url": "https://github.com/arlac77/npm-package-template.git"
+    }
   }
 }
