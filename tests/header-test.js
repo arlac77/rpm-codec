@@ -1,21 +1,21 @@
-var fs = require('fs');
-var test = require('mocha');
-var path = require('path');
-var zlib = require('zlib');
-var sbuff = require('simple-bufferstream');
+import test from 'ava';
+import { RPMStream } from '../src/stream';
+import { num } from './src/header';
 
-var cpio = require('cpio-stream');
+const fs = require('fs');
+const path = require('path');
 
-var assert = require('assert');
-var rpm = require('../');
-var header = require('../lib/header');
+const zlib = require('zlib');
+const sbuff = require('simple-bufferstream');
 
-test.describe('Convert byte[] to number', function() {
-  assert.equal(0, header.num([0]), 'Can convert 0');
+const cpio = require('cpio-stream');
+
+test('Convert byte[] to number', t => {
+  t.is(0, num([0]), 'Can convert 0');
 });
 
-test.describe('Convert byte[] to number', function() {
-  assert.equal(65537, header.num([1, 0, 1]), 'Can convert large numbers');
+test('Convert byte[] to number', t => {
+  t.is(65537, num([1, 0, 1]), 'Can convert large numbers');
 });
 
 // [ Buffer -> [] ]
