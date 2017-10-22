@@ -60,16 +60,16 @@ const types = {
 export function readStoreValue(store, index) {
   // index.count is not the number in bytes, but in terms of the underlying type,
   // which makes it effectively useless for our purposes here
-  let buf = store.slice(index.offset);
-  let type = index.type;
-  let stype = types[type];
-  console.log('readStoreValue(): type = ' + index.type + ', stype = ' + stype);
+  const buf = store.slice(index.offset);
+  const type = index.type;
+  const stype = types[type];
+  console.log('readStoreValue(): type = ' + type + ', stype = ' + stype);
   let r;
 
   // Number?
   if (stype.startsWith('INT')) {
     // Remap count from bytes to corresponding type
-    let n = stype.substring(3) / 8;
+    const n = stype.substring(3) / 8;
     r = num(store.slice(index.offset, index.offset + n));
     console.log('Read number from store:' + r);
   } else if (
@@ -88,7 +88,7 @@ export function readStoreValue(store, index) {
 }
 
 // Return default lead buffer
-function defaultLead() {
+export function defaultLead() {
   const lead = Array.concat.apply(leadMagic, leadMajor, leadMinor, leadType);
   while (lead.length < LEAD_LENGTH) lead.push(0);
   assert.equal(lead.length, LEAD_LENGTH);
@@ -202,19 +202,19 @@ const oneIndexSize = 16;
 // Read n indices from signature or header index
 // TODO make this one a generator?
 export function readIndex(buf, n, tagTable) {
-  let indices = [];
+  const indices = [];
   for (let i = 0; i < n; i++) {
     // Sliding buffer window
-    let w = buf.slice(i * oneIndexSize, (i + 1) * oneIndexSize);
-    let tag = num(w.slice(0, 4));
-    let type = num(w.slice(4, 8));
-    let offset = num(w.slice(8, 12));
-    let count = num(w.slice(12, 16));
-    let index = {
-      tag: tag,
-      type: type,
-      offset: offset,
-      count: count,
+    const w = buf.slice(i * oneIndexSize, (i + 1) * oneIndexSize);
+    const tag = num(w.slice(0, 4));
+    const type = num(w.slice(4, 8));
+    const offset = num(w.slice(8, 12));
+    const count = num(w.slice(12, 16));
+    const index = {
+      tag,
+      type,
+      offset,
+      count,
       // Add human readable string represenatation for tag and type
       stype: tagTable[type],
       stag: tagTable[tag]
@@ -246,7 +246,7 @@ export function storeSize(indices) {
   let maxOff = 0;
   let n = 0;
   for (let i = indices.length; --i >= 0; ) {
-    let off = indices[i].offset;
+    const off = indices[i].offset;
     if (maxOff < off) {
       maxOff = off;
       n = indices[i].count;
@@ -261,7 +261,7 @@ export function storeSize(indices) {
 export function readStore(ids, store) {
   // Show first signature incl. storage data
   for (let i = ids.length; --i >= 0; ) {
-    let v = readStoreValue(store, ids[i]);
+    const v = readStoreValue(store, ids[i]);
     ids[i].value = v;
   }
   console.log(`Store enhanced signatures: ${JSON.stringify(ids)}`);

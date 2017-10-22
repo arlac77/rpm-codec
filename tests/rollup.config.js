@@ -9,7 +9,17 @@ export default [
       sourcemap: true
     },
     external
+  },
+  {
+    input: 'tests/lead-test.js',
+    output: {
+      file: 'build/lead-test.js',
+      format: 'cjs',
+      sourcemap: true
+    },
+    external
   }
+
   /*
   ,
   {
@@ -21,14 +31,5 @@ export default [
     },
     external
   },
-  {
-    input: 'tests/lead-test.js',
-    output: {
-      file: 'build/lead-test.js',
-      format: 'cjs',
-      sourcemap: true
-    },
-    external
-  }
   */
 ];

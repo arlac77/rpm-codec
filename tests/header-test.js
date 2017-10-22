@@ -23,41 +23,38 @@ Buffer.prototype.toByteArray = function() {
   return Array.prototype.slice.call(this, 0);
 };
 
-test.describe('Read header from rpm package', function() {
-  test.it('should work', function(done) {
-    var filename = path.join(__dirname, 'fixtures/mktemp-1.5-12sls.i586.rpm');
-    let buffer = fs.readFileSync(filename);
-    console.log(`Read ${buffer.length} bytes`);
-    parse(buffer.toByteArray());
-    done();
-  });
+test('Read header from rpm package', t => {
+  const filename = path.join(
+    __dirname,
+    '..',
+    'tests',
+    'fixtures',
+    'mktemp-1.5-12sls.i586.rpm'
+  );
+  const buffer = fs.readFileSync(filename);
+  console.log(`Read ${buffer.length} bytes`);
+  parse(buffer.toByteArray());
 });
 
-var consume = function(buf) {
-  var extract = cpio.extract();
+function consume(buf) {
+  const extract = cpio.extract();
 
   extract.on('entry', function(header, stream, callback) {
     console.log('entry event');
-    stream.on('end', function() {
-      callback();
-    });
-
+    stream.on('end', () => callback());
     stream.resume(); // auto drain
   });
 
-  extract.on('finish', function() {
-    console.log('finish event');
-    // all entries read
-  });
+  extract.on('finish', () => console.log('finish event'));
 
-  var f = fs.createWriteStream('payload');
+  const f = fs.createWriteStream('payload');
   sbuff(buf)
     .pipe(zlib.createGunzip())
     .pipe(extract);
-};
+}
 
-var parse = function(bs) {
-  let hs = {};
+function parse(bs) {
+  const hs = {};
 
   console.log(`Reading lead`);
 
@@ -109,12 +106,8 @@ var parse = function(bs) {
 
   console.log(`cpio payload starts at position ${pos} (${pos.toString(16)})`);
 
-  let fmt = ids.filter(function(e) {
-    return e.stag === 'PAYLOADFORMAT';
-  })[0].value;
-  let cmp = ids.filter(function(e) {
-    return e.stag === 'PAYLOADCOMPRESSOR';
-  })[0].value;
+  let fmt = ids.filter(e => e.stag === 'PAYLOADFORMAT')[0].value;
+  let cmp = ids.filter(e => e.stag === 'PAYLOADCOMPRESSOR')[0].value;
   if (fmt == 'cpio' && cmp == 'gzip') {
     consume(new Buffer(bs.slice(pos)));
   } else {
@@ -125,4 +118,4 @@ var parse = function(bs) {
 
   // console.log(`Complete header: ${JSON.stringify(hs)}`);
   return hs;
-};
+}
