@@ -198,14 +198,15 @@ export function readHeader(buf) {
   };
 }
 
-const oneIndexSize = 16;
+export const INDEX_SLOT_SIZE = 16;
+
 // Read n indices from signature or header index
 // TODO make this one a generator?
 export function readIndex(buf, n, tagTable) {
   const indices = [];
   for (let i = 0; i < n; i++) {
     // Sliding buffer window
-    const w = buf.slice(i * oneIndexSize, (i + 1) * oneIndexSize);
+    const w = buf.slice(i * INDEX_SLOT_SIZE, (i + 1) * INDEX_SLOT_SIZE);
     const tag = num(w.slice(0, 4));
     const type = num(w.slice(4, 8));
     const offset = num(w.slice(8, 12));

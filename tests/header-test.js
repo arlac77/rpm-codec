@@ -1,6 +1,17 @@
 import test from 'ava';
 import { RPMStream } from '../src/stream';
-import { num } from './src/header';
+import {
+  num,
+  readLead,
+  LEAD_LENGTH,
+  INDEX_SLOT_SIZE,
+  headerStructureHeaderLength,
+  readSignatureIndex,
+  storeSize,
+  readStore,
+  readHeader,
+  readHeaderIndex
+} from '../src/header';
 
 const fs = require('fs');
 const path = require('path');
@@ -47,7 +58,9 @@ function consume(buf) {
 
   extract.on('finish', () => console.log('finish event'));
 
-  const f = fs.createWriteStream('payload');
+  const f = fs.createWriteStream(
+    path.join(__dirname, '..', 'build', 'payload')
+  );
   sbuff(buf)
     .pipe(zlib.createGunzip())
     .pipe(extract);
@@ -60,42 +73,42 @@ function parse(bs) {
 
   // Read lead
   let pos = 0;
-  let l = header.readLead(bs);
+  let l = readLead(bs);
   console.log(`- Read lead: ${JSON.stringify(l)}`);
   hs.lead = l;
 
   console.log(`Reading signatures`);
 
   // Read signatures/header
-  pos += header.LEAD_LENGTH;
-  let m = header.readHeader(bs.slice(pos));
+  pos += LEAD_LENGTH;
+  let m = readHeader(bs.slice(pos));
 
   // Read signatures/index
-  pos += header.headerStructureHeaderLength;
-  let sigs = header.readSignatureIndex(bs.slice(pos), m.count);
+  pos += headerStructureHeaderLength;
+  let sigs = readSignatureIndex(bs.slice(pos), m.count);
 
   // Read signatures/store
-  pos += header.oneIndexSize * m.count;
-  sigs = header.readStore(sigs, bs.slice(pos));
+  pos += INDEX_SLOT_SIZE * m.count;
+  sigs = readStore(sigs, bs.slice(pos));
   hs.signatures = sigs;
 
   console.log(`Reading header`);
 
   // Same for header now
-  let signatureStoreSize = header.storeSize(sigs);
+  let signatureStoreSize = storeSize(sigs);
   pos += signatureStoreSize;
-  m = header.readHeader(bs.slice(pos));
-  pos += header.headerStructureHeaderLength;
-  let ids = header.readHeaderIndex(bs.slice(pos), m.count);
-  pos += header.oneIndexSize * m.count;
+  m = readHeader(bs.slice(pos));
+  pos += headerStructureHeaderLength;
+  let ids = readHeaderIndex(bs.slice(pos), m.count);
+  pos += INDEX_SLOT_SIZE * m.count;
 
   console.log(`Expected store position: ${pos} (${pos.toString(16)})`);
 
-  ids = header.readStore(ids, bs.slice(pos));
+  ids = readStore(ids, bs.slice(pos));
   hs.header = ids;
 
   // Just for fun - forward into payload
-  let headerStoreSize = header.storeSize(ids);
+  const headerStoreSize = storeSize(ids);
   pos += headerStoreSize;
 
   // TODO 127?

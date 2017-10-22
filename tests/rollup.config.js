@@ -18,10 +18,7 @@ export default [
       sourcemap: true
     },
     external
-  }
-
-  /*
-  ,
+  },
   {
     input: 'tests/header-test.js',
     output: {
@@ -30,6 +27,5 @@ export default [
       sourcemap: true
     },
     external
-  },
-  */
+  }
 ];
