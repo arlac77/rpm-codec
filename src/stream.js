@@ -1,10 +1,10 @@
 const bl = require('bl');
 const { Transform } = require('stream');
 
+import { readLead, LEAD_LENGTH } from './lead';
+
 import {
-  LEAD_LENGTH,
   headerStructureHeaderLength,
-  readLead,
   readHeader,
   readSignatureIndex
 } from './header';

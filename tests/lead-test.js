@@ -1,5 +1,5 @@
 import test from 'ava';
-import { defaultLead, readLead } from '../src/header';
+import { defaultLead, readLead } from '../src/lead';
 
 const fs = require('fs');
 const path = require('path');

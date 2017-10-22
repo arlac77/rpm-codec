@@ -1,9 +1,7 @@
 import test from 'ava';
+import { num, str } from '../src/util';
 import { RPMStream } from '../src/stream';
 import {
-  num,
-  readLead,
-  LEAD_LENGTH,
   INDEX_SLOT_SIZE,
   headerStructureHeaderLength,
   readSignatureIndex,
@@ -12,6 +10,8 @@ import {
   readHeader,
   readHeaderIndex
 } from '../src/header';
+
+import { readLead, LEAD_LENGTH } from '../src/lead';
 
 const fs = require('fs');
 const path = require('path');
