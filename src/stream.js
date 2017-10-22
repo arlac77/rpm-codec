@@ -7,39 +7,44 @@ const { Transform } = require('stream');
 /*
   states:
 */
-const states = {
-  initial: {
+const states = [
+  {
+    name: 'lead',
     requiredLength: LEAD_LENGTH,
     decode: readLead,
     nextState(state, stream, result) {
-      stream.emit('lead', result);
-      return states.structureHeader;
+      return states.header;
     }
   },
-  structureHeader: {
+  {
+    name: 'header',
     requiredLength: HEADER_LENGTH,
     decode: readHeader,
     nextState(state, stream, result) {
-      return Object.create(states.signatureIndex, {
+      return Object.create(states.index, {
         requiredLength: {
           value: result.count
         }
       });
     }
   },
-  signatureIndex: {
-    requiredLength: 4711,
+  {
+    name: 'index',
+    requiredLength: 0,
     decode: readSignatureIndex,
     nextState(state, stream, result) {
       return undefined;
     }
   }
-};
+].reduce((acc, cur) => {
+  acc[cur.name] = cur;
+  return acc;
+}, {});
 
 export class RPMStream extends Transform {
   constructor() {
     super();
-    this._state = states.initial;
+    this._state = states.lead;
     this._buffer = bl();
   }
 
@@ -54,6 +59,10 @@ export class RPMStream extends Transform {
         if (b.length >= state.requiredLength) {
           const result = state.decode(b.slice(0, state.requiredLength));
           b.consume(state.requiredLength);
+
+          console.log(`${state.name}: ${JSON.stringify(result)}`);
+
+          this.emit(state.name, result);
           state = state.nextState(state, this, result);
         } else {
           break;

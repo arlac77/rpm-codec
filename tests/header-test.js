@@ -53,7 +53,7 @@ function consume(t, buf) {
     }
   });
 
-  extract.on('finish', () => console.log('finish event'));
+  //extract.on('finish', () => console.log('finish event'));
 
   sbuff(buf)
     .pipe(zlib.createGunzip())

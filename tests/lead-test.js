@@ -21,15 +21,15 @@ test.cb('Read lead from rpm package', t => {
     'mktemp-1.6-4mdv2010.1.i586.rpm'
   );
 
-  fs.open(filename, 'r', function(status, fd) {
-    if (status) {
-      t.fail(`Opening rpm file failed with ${status}`);
+  fs.open(filename, 'r', (err, fd) => {
+    if (err) {
+      t.fail(`Opening rpm file failed with ${err}`);
       t.end();
       return;
     }
 
-    let buffer = new Buffer(96);
-    fs.read(fd, buffer, 0, 96, 0, function(err, num) {
+    const buffer = new Buffer(96);
+    fs.read(fd, buffer, 0, 96, 0, (err, num) => {
       if (err) {
         t.fail(`Reading failed with ${err}`);
         t.end();
