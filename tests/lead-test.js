@@ -1,5 +1,5 @@
 import test from 'ava';
-import { defaultLead, readLead } from '../src/lead';
+import { readLead } from '../src/lead';
 
 const fs = require('fs');
 const path = require('path');
@@ -8,13 +8,6 @@ const path = require('path');
 Buffer.prototype.toByteArray = function() {
   return Array.prototype.slice.call(this, 0);
 };
-
-/*
-test('should validate an RPM lead', t => {
-  const l1 = defaultLead();
-  //assert(header.byteArrayEqual([0xed, 0xab, 0xee, 0xdb], l1));
-});
-*/
 
 // TODO test lead with bad length -> throw
 // TODO test lead with bad magic -> throw

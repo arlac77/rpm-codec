@@ -1,9 +1,9 @@
 import { byteArrayEqual, num, str } from './util';
 
-export const leadMagic = [237, 171, 238, 219];
-export const leadMajor = [3];
-export const leadMinor = [0];
-export const leadType = [0, 0, 0, 0];
+export const LEAD_MAGIC = [237, 171, 238, 219];
+const LEAD_MAJOR = [3];
+const LEAD_MINOR = [0];
+const LEAD_TYPE = [0, 0, 0, 0];
 export const LEAD_LENGTH = 96;
 
 // [ byte[] -> {} ]
@@ -22,7 +22,12 @@ export const LEAD_LENGTH = 96;
 
 // Return default lead buffer
 export function defaultLead() {
-  const lead = Array.concat.apply(leadMagic, leadMajor, leadMinor, leadType);
+  const lead = Array.concat.apply(
+    LEAD_MAGIC,
+    LEAD_MAJOR,
+    LEAD_MINOR,
+    LEAD_TYPE
+  );
   while (lead.length < LEAD_LENGTH) lead.push(0);
   assert.equal(lead.length, LEAD_LENGTH);
   return lead;
@@ -35,10 +40,10 @@ export function readLead(lead) {
       'Expecting at least ' + LEAD_LENGTH + ' bytes but got ' + lead.length
     );
   }
-  if (!byteArrayEqual(leadMagic, lead)) {
+  if (!byteArrayEqual(LEAD_MAGIC, lead)) {
     throw new TypeError(
       'Bad magic, this is not a lead. Expecting ' +
-        leadMagic +
+        LEAD_MAGIC +
         ' but got ' +
         lead
     );
@@ -58,10 +63,10 @@ export function readLead(lead) {
 // [ {:magic :major :minor :type} -> byte[] ]
 export function writeLead(attrs) {
   const defaults = {
-    magic: leadMagic,
-    major: leadMajor,
-    minor: leadMinor,
-    type: leadType
+    magic: LEAD_MAGIC,
+    major: LEAD_MAJOR,
+    minor: LEAD_MINOR,
+    type: LEAD_TYPE
   };
   // TODO signatureType
   const merged = Object.assign({}, attrs);

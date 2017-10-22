@@ -58,23 +58,20 @@ export function readStoreValue(store, index) {
   return r;
 }
 
-export const headerStructureHeaderMagic = [0x8e, 0xad, 0xe8];
-export const headerStructureHeaderLength = 16;
+export const HEADER_MAGIC = [0x8e, 0xad, 0xe8];
+export const HEADER_LENGTH = 16;
 
 export function readHeader(buf) {
   // Preconditions
   // if (!typeof(buf) == []) throw TypeError(`Expecting [] but got ${typeof(buf)}`)
-  if (buf.length < headerStructureHeaderLength) {
+  if (buf.length < HEADER_LENGTH) {
     throw new TypeError(
-      `Illegal header size, expecting ${headerStructureHeaderLength} bytes`
+      `Illegal header size, expecting ${HEADER_LENGTH} bytes`
     );
   }
-  if (!byteArrayEqual(headerStructureHeaderMagic, buf)) {
+  if (!byteArrayEqual(HEADER_MAGIC, buf)) {
     throw new TypeError(
-      `Bad header magic, expecting ${headerStructureHeaderMagic} but got ${buf.slice(
-        0,
-        3
-      )}`
+      `Bad header magic, expecting ${HEADER_MAGIC} but got ${buf.slice(0, 3)}`
     );
   }
 

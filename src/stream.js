@@ -2,12 +2,7 @@ const bl = require('bl');
 const { Transform } = require('stream');
 
 import { readLead, LEAD_LENGTH } from './lead';
-
-import {
-  headerStructureHeaderLength,
-  readHeader,
-  readSignatureIndex
-} from './header';
+import { readHeader, readSignatureIndex, HEADER_LENGTH } from './header';
 
 /*
   states:
@@ -22,7 +17,7 @@ const states = {
     }
   },
   structureHeader: {
-    requiredLength: headerStructureHeaderLength,
+    requiredLength: HEADER_LENGTH,
     decode: readHeader,
     nextState(state, stream) {
       return Object.create(states.signatureIndex, {

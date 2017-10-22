@@ -3,7 +3,7 @@ import { num, str } from '../src/util';
 import { RPMStream } from '../src/stream';
 import {
   INDEX_SLOT_SIZE,
-  headerStructureHeaderLength,
+  HEADER_LENGTH,
   readSignatureIndex,
   storeSize,
   readStore,
@@ -84,7 +84,7 @@ function parse(bs) {
   let m = readHeader(bs.slice(pos));
 
   // Read signatures/index
-  pos += headerStructureHeaderLength;
+  pos += HEADER_LENGTH;
   let sigs = readSignatureIndex(bs.slice(pos), m.count);
 
   // Read signatures/store
@@ -98,7 +98,7 @@ function parse(bs) {
   let signatureStoreSize = storeSize(sigs);
   pos += signatureStoreSize;
   m = readHeader(bs.slice(pos));
-  pos += headerStructureHeaderLength;
+  pos += HEADER_LENGTH;
   let ids = readHeaderIndex(bs.slice(pos), m.count);
   pos += INDEX_SLOT_SIZE * m.count;
 
