@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/arlac77/rpm-stream#readme",
   "dependencies": {
-    "bl": "^0.9.4",
+    "bl": "^1.2.1",
     "cpio-stream": "^1.4.1"
   },
   "devDependencies": {
