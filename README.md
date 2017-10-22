@@ -1,9 +1,29 @@
-= rpm-stream image:https://travis-ci.org/jhinrichsen/rpm-stream.svg?branch=master["Build Status", link="https://travis-ci.org/jhinrichsen/rpm-stream"] image:https://coveralls.io.org/jhinrichsen/rpm-stream-coverage/badge.svg["Coverage Status", link="https://coveralls.io.org/jhinrichsen/rpm-stream-coverage"]
+[![npm](https://img.shields.io/npm/v/rpm-stream.svg)](https://www.npmjs.com/package/rpm-stream)
+[![Greenkeeper](https://badges.greenkeeper.io/arlac77/rpm-stream.svg)](https://greenkeeper.io/)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/arlac77/rpm-stream)
+[![Build Status](https://secure.travis-ci.org/arlac77/rpm-stream.png)](http://travis-ci.org/arlac77/rpm-stream)
+[![bithound](https://www.bithound.io/github/arlac77/rpm-stream/badges/score.svg)](https://www.bithound.io/github/arlac77/rpm-stream)
+[![codecov.io](http://codecov.io/github/arlac77/rpm-stream/coverage.svg?branch=master)](http://codecov.io/github/arlac77/rpm-stream?branch=master)
+[![Coverage Status](https://coveralls.io/repos/arlac77/rpm-stream/badge.svg)](https://coveralls.io/r/arlac77/rpm-stream)
+[![Code Climate](https://codeclimate.com/github/arlac77/rpm-stream/badges/gpa.svg)](https://codeclimate.com/github/arlac77/rpm-stream)
+[![Known Vulnerabilities](https://snyk.io/test/github/arlac77/rpm-stream/badge.svg)](https://snyk.io/test/github/arlac77/rpm-stream)
+[![GitHub Issues](https://img.shields.io/github/issues/arlac77/rpm-stream.svg?style=flat-square)](https://github.com/arlac77/rpm-stream/issues)
+[![Stories in Ready](https://badge.waffle.io/arlac77/rpm-stream.svg?label=ready&title=Ready)](http://waffle.io/arlac77/rpm-stream)
+[![Dependency Status](https://david-dm.org/arlac77/rpm-stream.svg)](https://david-dm.org/arlac77/rpm-stream)
+[![devDependency Status](https://david-dm.org/arlac77/rpm-stream/dev-status.svg)](https://david-dm.org/arlac77/rpm-stream#info=devDependencies)
+[![docs](http://inch-ci.org/github/arlac77/rpm-stream.svg?branch=master)](http://inch-ci.org/github/arlac77/rpm-stream)
+[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
+[![downloads](http://img.shields.io/npm/dm/rpm-stream.svg?style=flat-square)](https://npmjs.org/package/rpm-stream)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+rpm-stream
+===
 
 rpm-stream is a streaming rpm packer for node.js/ io.js, basically the rpm
 version of tar-stream.
 
-== Usage
+Usage
+===
 _Don't use this library._
 
 In 99% of all cases, you are better off using the OS supplied rpm toolchain
@@ -12,8 +32,9 @@ Creating an rpm package using the built-in toolchain is pretty easy: provide a
 text file ('.spec')
 containing some metadata for your files, create the package, done.
 
-[source, shell]
+```sh
 $ rpmbuild -bb <specfile>
+```
 
 You're probably in the remaining 1% if
 
@@ -44,11 +65,13 @@ implementation is 4.4.
 Do _not_ expect any newer features such as compression other than gzip (lzma,
 xz, ...).
 
-== RPM file format specification
+RPM file format specification
+===
 
 RPM files are persisted in network byte order and consist of four parts.
 
-=== Lead
+Lead
+===
 
 Our lead looks like this:
 
@@ -72,14 +95,16 @@ It's only use is to support non-rpm utilities such as 'file' that can identify
 rpms based on a magic value.
 (85 times '00')
 
-=== Signature
+Signature
+===
 
 Signature format is equal to header format.
 This lib does not support checksums because the order of the checksum field
 would require the complete rpm structure to be processed before streaming could
 continue.
 
-=== Header
+Header
+===
 
 Supported index types:
 
@@ -93,13 +118,15 @@ Supported index types:
 - BIN = 7
 - STRING_ARRAY = 8
 
-=== Payload
+Payload
+===
 
 A gzip compressed cpio structure carries the rpm payload. Other compressions
 algorithms exist, and are supported by newer versions of 'rpm', but for now it's
 gzip.
 
-== Bibliography
+Bibliography
+===
 
 [bibliography]
 - [[[wikipedia]]] Wikipedia: [http://en.wikipedia.org/wiki/RPM_Package_Manager]
