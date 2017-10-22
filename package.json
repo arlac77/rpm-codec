@@ -34,7 +34,7 @@
   "homepage": "https://github.com/arlac77/rpm-stream#readme",
   "dependencies": {
     "bl": "^0.9.4",
-    "cpio-stream": "https://github.com/jhinrichsen/cpio-stream/tarball/4ccae8d3d0088118534b744e2c560f5ee0db5759"
+    "cpio-stream": "^1.4.1"
   },
   "devDependencies": {
     "simple-bufferstream": "0.0.4",
