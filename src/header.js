@@ -34,7 +34,7 @@ export function readStoreValue(store, index) {
   const buf = store.slice(index.offset);
   const type = index.type;
   const stype = types[type];
-  console.log('readStoreValue(): type = ' + type + ', stype = ' + stype);
+  //console.log('readStoreValue(): type = ' + type + ', stype = ' + stype);
   let r;
 
   // Number?
@@ -42,7 +42,7 @@ export function readStoreValue(store, index) {
     // Remap count from bytes to corresponding type
     const n = stype.substring(3) / 8;
     r = num(store.slice(index.offset, index.offset + n));
-    console.log('Read number from store:' + r);
+    //console.log('Read number from store:' + r);
   } else if (
     type == types.CHAR ||
     type == types.STRING ||
@@ -51,7 +51,7 @@ export function readStoreValue(store, index) {
   ) {
     // TODO need some locale logic for i18n strings
     r = str(buf);
-    console.log('Read string from store:' + r);
+    //console.log('Read string from store:' + r);
   } else {
     r = buf;
   }
@@ -151,7 +151,7 @@ export function readStore(ids, store) {
     const v = readStoreValue(store, ids[i]);
     ids[i].value = v;
   }
-  console.log(`Store enhanced signatures: ${JSON.stringify(ids)}`);
+  //console.log(`Store enhanced signatures: ${JSON.stringify(ids)}`);
   return ids;
 }
 

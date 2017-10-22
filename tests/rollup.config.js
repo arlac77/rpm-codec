@@ -20,6 +20,15 @@ export default [
     external
   },
   {
+    input: 'tests/util-test.js',
+    output: {
+      file: 'build/util-test.js',
+      format: 'cjs',
+      sourcemap: true
+    },
+    external
+  },
+  {
     input: 'tests/header-test.js',
     output: {
       file: 'build/header-test.js',

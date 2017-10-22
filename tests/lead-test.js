@@ -23,7 +23,6 @@ test.cb('Read lead from rpm package', t => {
 
   fs.open(filename, 'r', function(status, fd) {
     if (status) {
-      console.log(`Opening file ${filename} failed with ${status.message}`);
       t.fail(`Opening rpm file failed with ${status}`);
       t.end();
       return;
@@ -37,7 +36,6 @@ test.cb('Read lead from rpm package', t => {
         return;
       }
       let l = readLead(buffer.toByteArray());
-      console.log(`Lead: ${JSON.stringify(l)}`);
       t.pass('Reading lead succeeded');
       t.end();
     });
