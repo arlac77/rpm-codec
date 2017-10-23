@@ -1,5 +1,4 @@
 import test from 'ava';
-import { RPMStream } from '../src/stream';
 import {
   INDEX_SLOT_SIZE,
   HEADER_LENGTH,

@@ -10,20 +10,20 @@ test.cb('simple unpack header', t => {
   t.plan(7 + 1);
 
   stream.on('lead', lead => {
-    t.is(lead.major, 3, 'major ok');
-    t.is(lead.minor, 0, 'minor ok');
-    t.is(lead.type, 1, 'type ok');
-    t.is(lead.arch, 28011, 'type ok');
-    t.is(lead.name, 'temp-1.6-4mdv2010.1', 'name ok');
-    t.is(lead.os, 1, 'os ok');
-    t.is(lead.signatureType, 5, 'signatureType ok');
+    t.is(lead.major, 3);
+    t.is(lead.minor, 0);
+    t.is(lead.signatureType, 5);
+    t.is(lead.os, 1);
+    t.is(lead.name, 'mktemp-1.6-4mdv2010.1');
+    t.is(lead.arch, 1);
+    t.is(lead.type, 0);
   });
 
   stream.on('header', header => {
     t.is(header.count, 7);
   });
 
-  stream.on('index', index => {
+  stream.on('field', index => {
     //console.log(index);
     t.end();
   });

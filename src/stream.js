@@ -1,7 +1,8 @@
-import { readLead, LEAD_LENGTH } from './lead';
-import { readHeader, readSignatureIndex, HEADER_LENGTH } from './header';
+import { LEAD } from './lead';
+import { FIELD } from './field';
+import { HEADER } from './header';
+import { structDecode, structLength, structCheckDefaults } from './util';
 
-const bl = require('bl');
 const { Transform } = require('stream');
 
 /*
@@ -10,34 +11,37 @@ const { Transform } = require('stream');
 const states = [
   {
     name: 'lead',
-    requiredLength: LEAD_LENGTH,
-    decode: readLead,
+    struct: LEAD,
     nextState(state, stream, result) {
+      structCheckDefaults(result, LEAD, 'lead');
       return states.header;
     }
   },
   {
     name: 'header',
-    requiredLength: HEADER_LENGTH,
-    decode: readHeader,
+    struct: HEADER,
     nextState(state, stream, result) {
-      return Object.create(states.index, {
-        requiredLength: {
-          value: result.count
+      structCheckDefaults(result, HEADER, 'header');
+      return Object.create(states.field, {
+        length: {
+          value: structLength(FIELD, result.count)
+        },
+        struct: {
+          value: { type: FIELD, length: result.count }
         }
       });
     }
   },
   {
-    name: 'index',
-    requiredLength: 0,
-    decode: readSignatureIndex,
+    name: 'field',
+    struct: FIELD,
     nextState(state, stream, result) {
       return undefined;
     }
   }
 ].reduce((acc, cur) => {
   acc[cur.name] = cur;
+  cur.length = structLength(cur.struct);
   return acc;
 }, {});
 
@@ -45,24 +49,25 @@ export class RPMStream extends Transform {
   constructor() {
     super();
     this._state = states.lead;
-    this._buffer = bl();
   }
 
   _transform(chunk, encoding, done) {
-    const b = this._buffer;
-    b.append(chunk);
+    if (this.lastChunk !== undefined) {
+      chunk = Buffer.concat([this.lastChunk, chunk]);
+      this.lastChunk = undefined;
+    }
 
     let state = this._state;
 
     try {
       while (state) {
-        if (b.length >= state.requiredLength) {
-          const result = state.decode(b.slice(0, state.requiredLength));
-          b.consume(state.requiredLength);
-
-          console.log(`${state.name}: ${JSON.stringify(result)}`);
-
+        if (chunk.length >= state.length) {
+          const result = structDecode(chunk, 0, state.struct);
+          console.log(
+            `${state.name} ${state.length}: ${JSON.stringify(result)}`
+          );
           this.emit(state.name, result);
+          chunk = chunk.slice(state.length);
           state = state.nextState(state, this, result);
         } else {
           break;
@@ -74,8 +79,6 @@ export class RPMStream extends Transform {
     }
 
     this._state = state;
-
-    //this.push(chunk);
 
     done();
   }
