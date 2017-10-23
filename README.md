@@ -129,9 +129,9 @@ Bibliography
 ===
 
 [bibliography]
-- [[[wikipedia]]] Wikipedia: [http://en.wikipedia.org/wiki/RPM_Package_Manager]
+- [wikipedia](http://en.wikipedia.org/wiki/RPM_Package_Manager)
 RPM Package Manager
-- [[[maxrpm]]] Edward C. Bailey. Maximum rpm. Red Hat Software, Inc. 1997.
-- [[[LSB]]] Linux Base RPM File Format [http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/pkgformat.html]
-- [[[cpio]]] FreeBSD cpio (odc and newc) file format spec [http://people.freebsd.org/%7Ekientzle/libarchive/man/cpio.5.txt]
-- [[[kernel]]] Al Viro, H. Peter Anvin. initramfs buffer format. Linux Kernel. 2002 [https://www.kernel.org/doc/Documentation/early-userspace/buffer-format.txt]
+- _maxrpm_ Edward C. Bailey. Maximum rpm. Red Hat Software, Inc. 1997.
+- [LSB Linux Base RPM File Format](http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/pkgformat.html)
+- [cpio FreeBSD cpio (odc and newc) file format spec](http://people.freebsd.org/%7Ekientzle/libarchive/man/cpio.5.txt)
+- [kernel Al Viro, H. Peter Anvin. initramfs buffer format. Linux Kernel. 2002](https://www.kernel.org/doc/Documentation/early-userspace/buffer-format.txt)
