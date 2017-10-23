@@ -1,5 +1,5 @@
 import { LEAD } from './lead';
-import { FIELD } from './field';
+import { FIELD, fieldDecode } from './field';
 import { HEADER } from './header';
 import { structDecode, structLength, structCheckDefaults } from './util';
 
@@ -12,7 +12,7 @@ const states = [
   {
     name: 'lead',
     struct: LEAD,
-    nextState(state, stream, result) {
+    nextState(stream, chunk, result, state) {
       structCheckDefaults(result, LEAD, 'lead');
       return states.header;
     }
@@ -20,7 +20,7 @@ const states = [
   {
     name: 'header',
     struct: HEADER,
-    nextState(state, stream, result) {
+    nextState(stream, chunk, result, state) {
       structCheckDefaults(result, HEADER, 'header');
       return Object.create(states.field, {
         length: {
@@ -35,7 +35,8 @@ const states = [
   {
     name: 'field',
     struct: FIELD,
-    nextState(state, stream, result) {
+    nextState(stream, chunk, fields, state) {
+      fields.forEach(f => (f.data = fieldDecode(chunk, f)));
       return undefined;
     }
   }
@@ -63,12 +64,10 @@ export class RPMStream extends Transform {
       while (state) {
         if (chunk.length >= state.length) {
           const result = structDecode(chunk, 0, state.struct);
-          console.log(
-            `${state.name} ${state.length}: ${JSON.stringify(result)}`
-          );
-          this.emit(state.name, result);
+          const oldState = state;
           chunk = chunk.slice(state.length);
-          state = state.nextState(state, this, result);
+          state = state.nextState(this, chunk, result, state);
+          this.emit(oldState.name, result);
         } else {
           break;
         }

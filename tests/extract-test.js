@@ -7,7 +7,7 @@ const path = require('path');
 test.cb('simple unpack header', t => {
   const stream = new RPMStream();
 
-  t.plan(7 + 1);
+  t.plan(7 + 1 + 2);
 
   stream.on('lead', lead => {
     t.is(lead.major, 3);
@@ -23,8 +23,11 @@ test.cb('simple unpack header', t => {
     t.is(header.count, 7);
   });
 
-  stream.on('field', index => {
-    //console.log(index);
+  stream.on('field', fields => {
+    t.is(fields.length, 7);
+    t.is(fields[0].type, 7);
+
+    console.log(fields);
     t.end();
   });
 

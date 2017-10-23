@@ -23,20 +23,6 @@ export const LEAD = [
   { name: 'reserved', type: 'void', length: 16 }
 ];
 
-// [ byte[] -> {} ]
-/*
- struct rpmlead {
-    unsigned char magic[4];
-    unsigned char major, minor;
-    short type;
-    short archnum;
-    char name[66];
-    short osnum;
-    short signature_type;
-    char reserved[16];
- }
-*/
-
 // Return default lead buffer
 export function defaultLead() {
   const lead = Array.concat.apply(

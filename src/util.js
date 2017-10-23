@@ -49,55 +49,55 @@ export function structLength(type, length = 1) {
 }
 
 export function structDecode(buffer, offset, format) {
-  if (!Array.isArray(format)) {
-    const result = [];
-    for (let i = 0; i < format.length; i++) {
-      result.push(structDecode(buffer, offset, format.type));
-      offset += structLength(format.type, 1);
-    }
+  if (Array.isArray(format)) {
+    const result = {};
+
+    format.forEach(f => {
+      switch (f.type) {
+        case 's':
+          const i = buffer.indexOf(0, offset);
+          result[f.name] = buffer.toString(
+            'utf8',
+            offset,
+            i >= 0 ? i : offset + f.length
+          );
+          break;
+        case 'u8':
+          if (f.length > 1) {
+            const a = new Uint8Array(f.length);
+            for (let i = 0; i < f.length; i++) {
+              a[i] = buffer.readUInt8(offset + i);
+            }
+            result[f.name] = a;
+          } else {
+            result[f.name] = buffer.readUInt8(offset);
+          }
+          break;
+        case 'u16be':
+          result[f.name] = buffer.readUInt16BE(offset);
+          break;
+        case 'u16le':
+          result[f.name] = buffer.readUInt16LE(offset);
+          break;
+        case 'u32be':
+          result[f.name] = buffer.readUInt32BE(offset);
+          break;
+        case 'u32le':
+          result[f.name] = buffer.readUInt32LE(offset);
+          break;
+      }
+
+      offset += structLength(f.type, f.length);
+    });
 
     return result;
   }
 
-  const result = {};
-
-  format.forEach(f => {
-    switch (f.type) {
-      case 's':
-        const i = buffer.indexOf(0, offset);
-        result[f.name] = buffer.toString(
-          'utf8',
-          offset,
-          i >= 0 ? i : offset + f.length
-        );
-        break;
-      case 'u8':
-        if (f.length > 1) {
-          const a = new Uint8Array(f.length);
-          for (let i = 0; i < f.length; i++) {
-            a[i] = buffer.readUInt8(offset + i);
-          }
-          result[f.name] = a;
-        } else {
-          result[f.name] = buffer.readUInt8(offset);
-        }
-        break;
-      case 'u16be':
-        result[f.name] = buffer.readUInt16BE(offset);
-        break;
-      case 'u16le':
-        result[f.name] = buffer.readUInt16LE(offset);
-        break;
-      case 'u32be':
-        result[f.name] = buffer.readUInt32BE(offset);
-        break;
-      case 'u32le':
-        result[f.name] = buffer.readUInt32LE(offset);
-        break;
-    }
-
-    offset += structLength(f.type, f.length);
-  });
+  const result = [];
+  for (let i = 0; i < format.length; i++) {
+    result.push(structDecode(buffer, offset, format.type));
+    offset += structLength(format.type, 1);
+  }
 
   return result;
 }
