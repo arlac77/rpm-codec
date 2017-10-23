@@ -1,6 +1,11 @@
 import test from 'ava';
 import { LEAD } from '../src/lead';
-import { structDecode, structLength } from '../src/util';
+import {
+  structDecode,
+  structEncode,
+  structLength,
+  structDefaults
+} from '../src/util';
 
 const fs = require('fs');
 const path = require('path');
@@ -47,4 +52,33 @@ test.cb('Read lead from rpm package', t => {
       t.end();
     });
   });
+});
+
+test('write lead', t => {
+  const lead = structDefaults(LEAD);
+  lead.name = 'AA';
+  lead.os = 1;
+  lead.arch = 1;
+  lead.type = 0;
+
+  //console.log(lead);
+  const buffer = new Buffer(structLength(LEAD));
+  structEncode(lead, buffer, 0, LEAD);
+  t.deepEqual(
+    buffer.slice(0, 12),
+    new Buffer([
+      0xed,
+      0xab,
+      0xee,
+      0xdb,
+      0x03,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x01,
+      0x41,
+      0x41
+    ])
+  );
 });

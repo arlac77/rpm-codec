@@ -136,6 +136,16 @@ export function structEncode(object, buffer, offset, format) {
   });
 }
 
+export function structDefaults(struct, record = {}) {
+  struct.forEach(s => {
+    if (s.default !== undefined) {
+      record[s.name] = s.default;
+    }
+  });
+
+  return record;
+}
+
 export function structCheckDefaults(record, struct, name) {
   struct.forEach(s => {
     if (s.default !== undefined) {
