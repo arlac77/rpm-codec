@@ -18,8 +18,8 @@ export const LEAD = [
   { name: 'type', type: 'u16be', length: 1 },
   { name: 'arch', type: 'u16be', length: 1 },
   { name: 'name', type: 's', length: 66 },
-  { name: 'os', type: 'u16be', length: 1 },
-  { name: 'signatureType', type: 'u16be', length: 1 },
+  { name: 'os', type: 'u16be', length: 1, default: 1 },
+  { name: 'signatureType', type: 'u16be', length: 1, default: 5 },
   { name: 'reserved', type: 'void', length: 16 }
 ];
 

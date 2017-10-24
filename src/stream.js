@@ -25,12 +25,14 @@ const states = [
     nextState(stream, chunk, result, state) {
       structCheckDefaults(result, HEADER, 'header');
       stream.emit(state.name, result);
+
+      const struct = { type: FIELD, length: result.count };
       return Object.create(states.field, {
         length: {
-          value: result.size + structLength(FIELD, result.count)
+          value: structLength(struct.type, struct.length)
         },
         struct: {
-          value: { type: FIELD, length: result.count }
+          value: struct
         }
       });
     }
@@ -40,6 +42,9 @@ const states = [
     struct: FIELD,
     nextState(stream, chunk, fields, state) {
       fields = fields.reduce((m, c) => {
+        console.log(
+          `[${c.tag}] ${stream._offset} ${stream._offset + c.offset}`
+        );
         c.data = fieldDecode(chunk, c);
         const t = tags.get(c.tag);
         if (t === undefined) {
@@ -50,6 +55,12 @@ const states = [
       }, new Map());
 
       stream.emit(state.name, fields);
+
+      const a = new Uint8Array(3);
+      for (let i = 0; i < 3; i++) {
+        a[i] = chunk.readUInt8(state.length + i);
+      }
+      console.log(a);
 
       return undefined;
     }
@@ -64,10 +75,10 @@ export class RPMStream extends Transform {
   constructor() {
     super();
     this._state = states.lead;
+    this._offset = 0;
   }
 
   _transform(chunk, encoding, done) {
-    console.log(`new chunk: ${chunk.length}`);
     if (this.lastChunk !== undefined) {
       chunk = Buffer.concat([this.lastChunk, chunk]);
       this.lastChunk = undefined;
@@ -79,6 +90,7 @@ export class RPMStream extends Transform {
       while (state) {
         if (chunk.length >= state.length) {
           const result = structDecode(chunk, 0, state.struct);
+          this._offset += state.length;
           chunk = chunk.slice(state.length);
           state = state.nextState(this, chunk, result, state);
         } else {

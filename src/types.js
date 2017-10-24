@@ -1,12 +1,27 @@
+/**
+ * Not Implemented
+ */
 export const TYPE_NULL = 0;
 export const TYPE_CHAR = 1;
 export const TYPE_INT8 = 2;
 export const TYPE_INT16 = 3;
 export const TYPE_INT32 = 4;
 export const TYPE_INT64 = 5;
+
+/**
+ * variable, NUL terminated
+ */
 export const TYPE_STRING = 6;
 export const TYPE_BIN = 7;
+
+/**
+ * Variable, sequence of NUL terminated strings
+ */
 export const TYPE_STRING_ARRAY = 8;
+
+/**
+ * Variable, sequence of NUL terminated strings
+ */
 export const TYPE_I18NSTRING = 9;
 
 // Source: http://rpm.org/api/4.4.2.2/rpmlib_8h.html
