@@ -11,27 +11,14 @@ import {
   TYPE_I18NSTRING
 } from './types';
 
+import { decodeStringArray } from './util';
+
 export const FIELD = [
   { name: 'tag', type: 'u32be', length: 1 },
   { name: 'type', type: 'u32be', length: 1 },
   { name: 'offset', type: 'u32be', length: 1 },
   { name: 'count', type: 'u32be', length: 1 }
 ];
-
-function decodeStringArray(buffer, offset, count, encoding) {
-  const values = [];
-
-  let last = offset;
-
-  for (let i = 0; i < length; i++) {
-    if (buffer[offset + i] === 0) {
-      values.push(buffer.toString(encoding, last, offset + i));
-      last = offset + i;
-    }
-  }
-
-  return values;
-}
 
 export function fieldDecode(buffer, field) {
   switch (field.type) {

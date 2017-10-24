@@ -170,3 +170,18 @@ export function structCheckDefaults(record, struct, name) {
     }
   });
 }
+
+export function decodeStringArray(buffer, offset, length, encoding) {
+  const values = [];
+
+  let last = offset;
+
+  for (let i = 0; i < length; i++) {
+    if (buffer[offset + i] === 0) {
+      values.push(buffer.toString(encoding, last, offset + i));
+      last = offset + i + 1;
+    }
+  }
+
+  return values;
+}
