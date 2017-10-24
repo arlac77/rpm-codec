@@ -80,7 +80,7 @@ test('struct encode', t => {
   t.deepEqual(b.slice(0, 9), b1.slice(0, 9));
 });
 
-test.only('decode string array', t => {
+test('decode string array', t => {
   const buffer = Buffer.from([0, 0, 65, 66, 0, 67, 0, 68, 0]);
   t.deepEqual(['AB', 'C', 'D'], decodeStringArray(buffer, 2, 7, 'ascii'));
 });

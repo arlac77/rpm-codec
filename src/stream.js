@@ -42,9 +42,7 @@ const states = [
     struct: FIELD,
     nextState(stream, chunk, fields, state) {
       fields = fields.reduce((m, c) => {
-        console.log(
-          `[${c.tag}] ${stream._offset} ${stream._offset + c.offset}`
-        );
+        console.log(`[${c.tag}] ${c.type} ${c.offset} ${c.count}`);
         c.data = fieldDecode(chunk, c);
         const t = tags.get(c.tag);
         if (t === undefined) {
@@ -89,9 +87,14 @@ export class RPMStream extends Transform {
     try {
       while (state) {
         if (chunk.length >= state.length) {
+          console.log(
+            `decode ${state.name} at ${this._offset} ${state.length}`
+          );
+
           const result = structDecode(chunk, 0, state.struct);
-          this._offset += state.length;
-          chunk = chunk.slice(state.length);
+          const length = state.length;
+          this._offset += length;
+          chunk = chunk.slice(length);
           state = state.nextState(this, chunk, result, state);
         } else {
           break;
