@@ -1,5 +1,6 @@
 import test from 'ava';
 import { RPMStream } from '../src/stream';
+import { TYPE_STRING } from '../src/types';
 
 const fs = require('fs');
 const path = require('path');
@@ -24,8 +25,11 @@ test.cb('simple unpack header', t => {
   });
 
   stream.on('field', fields => {
-    t.is(fields.length, 7);
-    t.is(fields[0].type, 7);
+    t.is(fields.size, 7);
+    t.is(fields.get('NAME').type, TYPE_STRING);
+
+    //t.is(fields.length, 7);
+    //t.is(fields[0].type, 7);
 
     console.log(fields);
     t.end();

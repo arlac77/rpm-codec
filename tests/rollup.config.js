@@ -36,5 +36,14 @@ export default [
       sourcemap: true
     },
     external
+  },
+  {
+    input: 'tests/types-test.js',
+    output: {
+      file: 'build/types-test.js',
+      format: 'cjs',
+      sourcemap: true
+    },
+    external
   }
 ];
