@@ -35,7 +35,9 @@ test.cb('Read header from rpm package', t => {
     '..',
     'tests',
     'fixtures',
-    'mktemp-1.5-12sls.i586.rpm'
+    'filesystem-3.2-40.fc26.aarch64.rpm'
+
+    //'mktemp-1.5-12sls.i586.rpm'
   );
   const buffer = fs.readFileSync(filename);
   //console.log(`Read ${buffer.length} bytes`);

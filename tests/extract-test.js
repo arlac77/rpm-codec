@@ -42,6 +42,7 @@ test.cb('simple unpack header', t => {
         '..',
         'tests',
         'fixtures',
+        //'filesystem-3.2-40.fc26.aarch64.rpm'
         'mktemp-1.6-4mdv2010.1.i586.rpm'
       )
     )
