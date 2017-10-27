@@ -33,7 +33,8 @@
   },
   "homepage": "https://github.com/arlac77/rpm-stream#readme",
   "dependencies": {
-    "cpio-stream": "^1.4.1"
+    "cpio-stream": "^1.4.1",
+    "lzma-native": "^3.0.1"
   },
   "devDependencies": {
     "simple-bufferstream": "0.0.4",

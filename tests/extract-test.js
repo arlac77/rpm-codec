@@ -23,6 +23,10 @@ test.cb('extrat', t => {
     t.is(lead.type, 0);
   });
 
+  stream.on('signature', header => {
+    //t.is(header.count, 8);
+  });
+
   stream.on('header', header => {
     //t.is(header.count, 8);
   });

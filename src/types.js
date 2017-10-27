@@ -81,6 +81,27 @@ noarch
 
 // Source: http://rpm.org/api/4.4.2.2/rpmlib_8h.html
 
+export const signatureTags = [
+  {
+    tag: 267,
+    name: 'SIGTAG_DSA',
+    type: TYPE_BIN,
+    count: 65
+  },
+  {
+    tag: 268,
+    name: 'SIGTAG_RSA',
+    type: TYPE_BIN,
+    count: 1
+  },
+  {
+    tag: 269,
+    name: 'SIGTAG_SHA1',
+    type: TYPE_STRING,
+    count: 1
+  }
+].reduce(tagPrepare, new Map());
+
 export const tags = [
   // private
   {
@@ -99,24 +120,6 @@ export const tags = [
     tag: 100,
     name: 'HEADERI18NTABLE',
     type: TYPE_STRING_ARRAY
-  },
-  {
-    tag: 267,
-    name: 'SIGTAG_DSA',
-    type: TYPE_BIN,
-    count: 65
-  },
-  {
-    tag: 268,
-    name: 'SIGTAG_RSA',
-    type: TYPE_BIN,
-    count: 1
-  },
-  {
-    tag: 269,
-    name: 'SIGTAG_SHA1',
-    type: TYPE_STRING,
-    count: 1
   },
 
   {
@@ -878,8 +881,10 @@ export const tags = [
     name: 'CVSID',
     type: 6
   }
-].reduce((m, c) => {
+].reduce(tagPrepare, new Map());
+
+function tagPrepare(m, c) {
   m.set(c.tag, c);
   m.set(c.name, c);
   return m;
-}, new Map());
+}

@@ -2,9 +2,32 @@ import { LEAD } from './lead';
 import { FIELD, fieldDecode } from './field';
 import { HEADER } from './header';
 import { structDecode, structLength, structCheckDefaults } from './util';
-import { tags } from './types';
+import { tags, signatureTags } from './types';
 
 const { Transform } = require('stream');
+const lzma = require('lzma-native');
+
+function nextHeaderState(stream, chunk, result, state) {
+  structCheckDefaults(result, HEADER, state.name);
+  //console.log(result);
+  stream.emit(state.name, result);
+
+  const struct = { type: FIELD, length: result.count };
+  return Object.create(states.field, {
+    length: {
+      value: structLength(struct.type, struct.length)
+    },
+    struct: {
+      value: struct
+    },
+    tags: {
+      value: state.name === 'header' ? tags : signatureTags
+    },
+    additionalLength: {
+      value: result.size //+ 4
+    }
+  });
+}
 
 /*
   states:
@@ -14,32 +37,20 @@ const states = [
     name: 'lead',
     struct: LEAD,
     nextState(stream, chunk, result, state) {
-      structCheckDefaults(result, LEAD, 'lead');
+      structCheckDefaults(result, LEAD, state.name);
       stream.emit(state.name, result);
-      return states.header;
+      return states.signature;
     }
+  },
+  {
+    name: 'signature',
+    struct: HEADER,
+    nextState: nextHeaderState
   },
   {
     name: 'header',
     struct: HEADER,
-    nextState(stream, chunk, result, state) {
-      structCheckDefaults(result, HEADER, 'header');
-      console.log(result);
-      stream.emit(state.name, result);
-
-      const struct = { type: FIELD, length: result.count };
-      return Object.create(states.field, {
-        length: {
-          value: structLength(struct.type, struct.length)
-        },
-        struct: {
-          value: struct
-        },
-        additionalLength: {
-          value: result.size //+ 4
-        }
-      });
-    }
+    nextState: nextHeaderState
   },
   {
     name: 'field',
@@ -49,15 +60,23 @@ const states = [
         console.log(c);
         //console.log(`[${c.tag}] ${c.type} ${c.offset} ${c.count}`);
         c.data = fieldDecode(chunk, c);
-        const t = tags.get(c.tag);
+        const t = state.tags.get(c.tag);
         if (t === undefined) {
           console.log(`undefined tag: ${c.tag}`);
         }
-        m.set(t ? t.name : c.tag, c);
+        m.set(t ? t.name : c.tag, c.data);
         return m;
       }, new Map());
 
       stream.emit(state.name, fields);
+
+      const compressor = fields.get('PAYLOADCOMPRESSOR');
+
+      switch (compressor) {
+        case 'lzma':
+          stream.decompressor = lzma.createDecompressor();
+          break;
+      }
 
       const result = structDecode(chunk, state.additionalLength, HEADER);
 
@@ -119,6 +138,10 @@ export class RPMStream extends Transform {
           this._offset += additionalLength;
           chunk = chunk.slice(additionalLength);
         } else {
+          if (this.decompressor) {
+            console.log(`pipe`);
+            this.pipe(decompressor);
+          }
           break;
         }
       }
