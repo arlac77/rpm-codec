@@ -114,29 +114,45 @@ export function structDefaults(struct, record = {}) {
   return record;
 }
 
-export function structCheckDefaults(record, struct, name) {
+export function throwOnProblems(problems, name) {
+  if (problems && problems.length > 0) {
+    const p = problems[0];
+    throw new TypeError(
+      `Bad ${p.field}, this is not a ${name}. Expecting ${p.default} but got ${p.value}`
+    );
+  }
+}
+
+export function structCheckDefaults(record, struct) {
+  const problems = [];
+
   struct.forEach(s => {
     if (s.default !== undefined) {
       const value = record[s.name];
 
-      function e() {
-        throw new TypeError(
-          `Bad ${s.name}, this is not a ${name}. Expecting ${s.default} but got ${value}`
-        );
-      }
-
       if (s.default instanceof Uint8Array) {
         for (let i = 0; i < s.default.length; i++)
           if (value[i] !== s.default[i]) {
-            e();
+            problems.push({
+              expected: s.default,
+              value,
+              field: s.name
+            });
+            break;
           }
       } else {
         if (s.default != value) {
-          e();
+          problems.push({
+            expected: s.default,
+            value,
+            field: s.name
+          });
         }
       }
     }
   });
+
+  return problems.length === 0 ? undefined : problems;
 }
 
 export function decodeStringArray(buffer, offset, length, encoding) {
@@ -157,4 +173,9 @@ export function decodeStringArray(buffer, offset, length, encoding) {
   }
 
   return values;
+}
+
+export function allign(x, allign = 8) {
+  while (x % allign !== 0) x++;
+  return x;
 }

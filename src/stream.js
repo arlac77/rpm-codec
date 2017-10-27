@@ -1,19 +1,29 @@
 import { LEAD } from './lead';
 import { FIELD, fieldDecode } from './field';
 import { HEADER } from './header';
-import { structDecode, structLength, structCheckDefaults } from './util';
+import {
+  structDecode,
+  structLength,
+  structCheckDefaults,
+  throwOnProblems,
+  allign
+} from './util';
 import { tags, signatureTags } from './types';
 
 const { Transform } = require('stream');
+const zlib = require('zlib');
 const lzma = require('lzma-native');
+const cpio = require('cpio-stream');
 
 function nextHeaderState(stream, chunk, result, state) {
-  structCheckDefaults(result, HEADER, state.name);
-  //console.log(result);
+  console.log(result);
+
+  throwOnProblems(structCheckDefaults(result, state.struct), state.name);
   stream.emit(state.name, result);
 
   const struct = { type: FIELD, length: result.count };
-  return Object.create(states.field, {
+
+  const ns = Object.create(states.field, {
     length: {
       value: structLength(struct.type, struct.length)
     },
@@ -22,22 +32,20 @@ function nextHeaderState(stream, chunk, result, state) {
     },
     tags: {
       value: state.name === 'header' ? tags : signatureTags
-    },
-    additionalLength: {
-      value: result.size //+ 4
     }
   });
+
+  ns.additionalLength = result.size;
+
+  return ns;
 }
 
-/*
-  states:
-*/
 const states = [
   {
     name: 'lead',
     struct: LEAD,
     nextState(stream, chunk, result, state) {
-      structCheckDefaults(result, LEAD, state.name);
+      throwOnProblems(structCheckDefaults(result, state.struct), state.name);
       stream.emit(state.name, result);
       return states.signature;
     }
@@ -57,13 +65,10 @@ const states = [
     struct: FIELD,
     nextState(stream, chunk, fields, state) {
       fields = fields.reduce((m, c) => {
-        console.log(c);
+        //console.log(c);
         //console.log(`[${c.tag}] ${c.type} ${c.offset} ${c.count}`);
         c.data = fieldDecode(chunk, c);
         const t = state.tags.get(c.tag);
-        if (t === undefined) {
-          console.log(`undefined tag: ${c.tag}`);
-        }
         m.set(t ? t.name : c.tag, c.data);
         return m;
       }, new Map());
@@ -73,21 +78,38 @@ const states = [
       const compressor = fields.get('PAYLOADCOMPRESSOR');
 
       switch (compressor) {
+        case 'gzip':
+          stream.decompressor = zlib.createGunzip();
+          break;
         case 'lzma':
           stream.decompressor = lzma.createDecompressor();
           break;
       }
 
-      const result = structDecode(chunk, state.additionalLength, HEADER);
+      const extract = cpio.extract();
+      extract.on('error', error => console.log(error));
+      extract.on('entry', (header, stream, callback) => {
+        console.log(`extract: ${header.name}`);
 
-      //console.log(result);
-      if (
-        result.magic[0] === HEADER[0].default[0] &&
-        result.magic[1] === HEADER[0].default[1] &&
-        result.magic[2] === HEADER[0].default[2]
-      ) {
+        stream.on('end', () => callback());
+        stream.resume();
+      });
+
+      const allignedAdditional =
+        allign(stream._offset + state.additionalLength) - stream._offset;
+
+      const result = structDecode(chunk, allignedAdditional, HEADER);
+
+      if (structCheckDefaults(result, HEADER) === undefined) {
+        console.log(`ASSIGN: ${state.additionalLength}`);
+
+        state.additionalLength = allignedAdditional;
+
+        //console.log(`${JSON.stringify(result)}`);
         return states.header;
       }
+
+      console.log(chunk.slice(0, 8));
 
       return undefined;
     }
@@ -116,10 +138,10 @@ export class RPMStream extends Transform {
 
     try {
       while (state) {
-        /*console.log(
-          `${state.name}: ${chunk.length} >= ${state.length +
+        console.log(
+          `${state.name} ${chunk.length} > ${state.length +
             state.additionalLength}`
-        );*/
+        );
         if (chunk.length >= state.length + state.additionalLength) {
           const result = structDecode(chunk, 0, state.struct);
 
@@ -127,16 +149,16 @@ export class RPMStream extends Transform {
             `decode ${state.name} at ${this._offset} ${state.length}`
           );*/
 
-          const length = state.length;
-          const additionalLength = state.additionalLength;
+          const oldState = state;
 
+          const length = state.length;
           this._offset += length;
           chunk = chunk.slice(length);
 
           state = state.nextState(this, chunk, result, state);
 
-          this._offset += additionalLength;
-          chunk = chunk.slice(additionalLength);
+          this._offset += oldState.additionalLength;
+          chunk = chunk.slice(oldState.additionalLength);
         } else {
           break;
         }

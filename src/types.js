@@ -24,60 +24,45 @@ export const TYPE_STRING_ARRAY = 8;
  */
 export const TYPE_I18NSTRING = 9;
 
+export const oses = [
+  ['Linux'],
+  ['Irix'],
+  ['SunOS', 'SunOS5', 'SunOS4', 'solaris'],
+  ['AmigaOS'],
+  ['HP-UX', 'hpux10'],
+  ['OSF1', 'osf4.0', 'osf3.2'],
+  ['FreeBSD'],
+  ['SCO_SV', 'SCO_SV3.2v5.0.2'],
+  ['IRIX64'],
+  ['NextStep'],
+  ['BSD_OS', 'bsdi'],
+  ['machten'],
+  ['CYGWIN32_NT', 'cygwin32'],
+  ['CYGWIN32_95'],
+  ['UNIX_SV', 'MP_RAS'],
+  ['MiNT', 'FreeMiNT'],
+  ['OS/390'],
+  ['VM/ESA'],
+  ['Linux/390'],
+  ['Linux/ESA'],
+  ['darwin', 'macosx']
+].reduce(listPrepare, new Map());
+
 export const architectures = [
-  {
-    description: 'Intel compatible 32-bit',
-    names: ['i386', 'i486', 'i586', 'i686', 'athlon']
-  },
-  {
-    description: 'Intel compatible 64-bit',
-    names: ['ia64']
-  }
-
-  /*
-HPAlpha (formerly Digital, Compaq)
-
-alpha, alphaev5, alphaev56, alphapca56, alphaev6, alphaev67
-
-Sparc/Ultra Sparc (Sun)
-
-sparc, sparcv9, sparc64
-
-ARM
-
-armv3l, armv4b, armv4l
-
-MIPS
-
-mips, mipsel
-
-Power PC
-
-ppc, ppciseries, ppcpseries, ppc64
-
-Motorola 68000 series
-
-m68k, m68kmint
-
-SGI MIPS
-
-Sgi
-
-IBM RS6000
-
-rs6000
-
-IBM S/390
-
-i370, s390x, s390
-}
-Platform independent
-
-noarch
-
-}
-*/
-];
+  [
+    'athlon',
+    'geode',
+    'pentium4',
+    'pentium3',
+    'i686',
+    'i586',
+    'i486',
+    'i386',
+    'x86_64',
+    'amd64',
+    'ia32e'
+  ]
+].reduce(listPrepare, new Map());
 
 // Source: http://rpm.org/api/4.4.2.2/rpmlib_8h.html
 
@@ -887,4 +872,11 @@ function tagPrepare(m, c) {
   m.set(c.tag, c);
   m.set(c.name, c);
   return m;
+}
+
+function listPrepare(a, c) {
+  const slot = { name: c[0], id: a.size + 1, aliases: c };
+  a.set(slot.id, slot);
+  slot.aliases.forEach(n => a.set(n, slot));
+  return a;
 }
