@@ -1,7 +1,5 @@
 import test from 'ava';
 import {
-  num,
-  str,
   structLength,
   structDecode,
   structEncode,
@@ -83,12 +81,4 @@ test('struct encode', t => {
 test('decode string array', t => {
   const buffer = Buffer.from([0, 0, 65, 66, 0, 67, 0, 68, 0]);
   t.deepEqual(['AB', 'C', 'D'], decodeStringArray(buffer, 2, 7, 'ascii'));
-});
-
-test('Convert byte[] to number', t => {
-  t.is(0, num([0]), 'Can convert 0');
-});
-
-test('Convert byte[] to number', t => {
-  t.is(65537, num([1, 0, 1]), 'Can convert large numbers');
 });

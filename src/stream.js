@@ -138,10 +138,6 @@ export class RPMStream extends Transform {
           this._offset += additionalLength;
           chunk = chunk.slice(additionalLength);
         } else {
-          if (this.decompressor) {
-            console.log(`pipe`);
-            this.pipe(decompressor);
-          }
           break;
         }
       }
@@ -151,6 +147,11 @@ export class RPMStream extends Transform {
     }
 
     this._state = state;
+
+    if (this.decompressor) {
+      console.log(`pipe: ${this._offset}`);
+      //this.pipe(this.decompressor).pipe(process.stdio);
+    }
 
     done();
   }

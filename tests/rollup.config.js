@@ -9,7 +9,7 @@ export default [
       sourcemap: true
     },
     external
-  } /*,
+  },
   {
     input: 'tests/lead-test.js',
     output: {
@@ -45,5 +45,5 @@ export default [
       sourcemap: true
     },
     external
-  }*/
+  }
 ];
