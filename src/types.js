@@ -24,6 +24,61 @@ export const TYPE_STRING_ARRAY = 8;
  */
 export const TYPE_I18NSTRING = 9;
 
+export const architectures = [
+  {
+    description: 'Intel compatible 32-bit',
+    names: ['i386', 'i486', 'i586', 'i686', 'athlon']
+  },
+  {
+    description: 'Intel compatible 64-bit',
+    names: ['ia64']
+  }
+
+  /*
+HPAlpha (formerly Digital, Compaq)
+
+alpha, alphaev5, alphaev56, alphapca56, alphaev6, alphaev67
+
+Sparc/Ultra Sparc (Sun)
+
+sparc, sparcv9, sparc64
+
+ARM
+
+armv3l, armv4b, armv4l
+
+MIPS
+
+mips, mipsel
+
+Power PC
+
+ppc, ppciseries, ppcpseries, ppc64
+
+Motorola 68000 series
+
+m68k, m68kmint
+
+SGI MIPS
+
+Sgi
+
+IBM RS6000
+
+rs6000
+
+IBM S/390
+
+i370, s390x, s390
+}
+Platform independent
+
+noarch
+
+}
+*/
+];
+
 // Source: http://rpm.org/api/4.4.2.2/rpmlib_8h.html
 
 export const tags = [

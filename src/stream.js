@@ -24,6 +24,7 @@ const states = [
     struct: HEADER,
     nextState(stream, chunk, result, state) {
       structCheckDefaults(result, HEADER, 'header');
+      console.log(result);
       stream.emit(state.name, result);
 
       const struct = { type: FIELD, length: result.count };
@@ -33,6 +34,9 @@ const states = [
         },
         struct: {
           value: struct
+        },
+        additionalLength: {
+          value: result.size //+ 4
         }
       });
     }
@@ -42,7 +46,8 @@ const states = [
     struct: FIELD,
     nextState(stream, chunk, fields, state) {
       fields = fields.reduce((m, c) => {
-        console.log(`[${c.tag}] ${c.type} ${c.offset} ${c.count}`);
+        console.log(c);
+        //console.log(`[${c.tag}] ${c.type} ${c.offset} ${c.count}`);
         c.data = fieldDecode(chunk, c);
         const t = tags.get(c.tag);
         if (t === undefined) {
@@ -54,17 +59,23 @@ const states = [
 
       stream.emit(state.name, fields);
 
-      const a = new Uint8Array(3);
-      for (let i = 0; i < 3; i++) {
-        a[i] = chunk.readUInt8(state.length + i);
+      const result = structDecode(chunk, state.additionalLength, HEADER);
+
+      //console.log(result);
+      if (
+        result.magic[0] === HEADER[0].default[0] &&
+        result.magic[1] === HEADER[0].default[1] &&
+        result.magic[2] === HEADER[0].default[2]
+      ) {
+        return states.header;
       }
-      console.log(a);
 
       return undefined;
     }
   }
 ].reduce((acc, cur) => {
   acc[cur.name] = cur;
+  cur.additionalLength = 0;
   cur.length = structLength(cur.struct);
   return acc;
 }, {});
@@ -86,16 +97,27 @@ export class RPMStream extends Transform {
 
     try {
       while (state) {
-        if (chunk.length >= state.length) {
-          console.log(
-            `decode ${state.name} at ${this._offset} ${state.length}`
-          );
-
+        /*console.log(
+          `${state.name}: ${chunk.length} >= ${state.length +
+            state.additionalLength}`
+        );*/
+        if (chunk.length >= state.length + state.additionalLength) {
           const result = structDecode(chunk, 0, state.struct);
+
+          /*console.log(
+            `decode ${state.name} at ${this._offset} ${state.length}`
+          );*/
+
           const length = state.length;
+          const additionalLength = state.additionalLength;
+
           this._offset += length;
           chunk = chunk.slice(length);
+
           state = state.nextState(this, chunk, result, state);
+
+          this._offset += additionalLength;
+          chunk = chunk.slice(additionalLength);
         } else {
           break;
         }

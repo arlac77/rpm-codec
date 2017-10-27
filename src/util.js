@@ -174,11 +174,16 @@ export function structCheckDefaults(record, struct, name) {
 export function decodeStringArray(buffer, offset, length, encoding) {
   const values = [];
 
+  //console.log(buffer.toString(encoding, offset, offset + 10));
+
   let last = offset;
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < buffer.length; i++) {
     if (buffer[offset + i] === 0) {
       values.push(buffer.toString(encoding, last, offset + i));
+      if (values.length === length) {
+        return values;
+      }
       last = offset + i + 1;
     }
   }

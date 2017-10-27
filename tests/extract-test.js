@@ -5,34 +5,40 @@ import { TYPE_STRING } from '../src/types';
 const fs = require('fs');
 const path = require('path');
 
-test.cb('simple unpack header', t => {
+test.cb('extrat', t => {
   const stream = new RPMStream();
 
-  t.plan(7 + 1 + 2);
+  //t.plan(7 + 1 + 2);
+
+  let fieldsNumber = 0;
 
   stream.on('lead', lead => {
+    console.log(lead);
     t.is(lead.major, 3);
     t.is(lead.minor, 0);
     t.is(lead.signatureType, 5);
     t.is(lead.os, 1);
-    t.is(lead.name, 'mktemp-1.6-4mdv2010.1');
-    t.is(lead.arch, 1);
+    //  t.is(lead.name, 'filesystem-3.2-40.fc26');
+    //t.is(lead.arch, 19);
     t.is(lead.type, 0);
   });
 
   stream.on('header', header => {
-    t.is(header.count, 7);
+    //t.is(header.count, 8);
   });
 
   stream.on('field', fields => {
-    t.is(fields.size, 7);
-    t.is(fields.get('NAME').type, TYPE_STRING);
+    fieldsNumber++;
+    //t.is(fields.size, 8);
+    //t.is(fields.get('NAME').type, TYPE_STRING);
 
-    //t.is(fields.length, 7);
     //t.is(fields[0].type, 7);
 
     console.log(fields);
-    t.end();
+
+    if (fieldsNumber === 2) {
+      t.end();
+    }
   });
 
   fs

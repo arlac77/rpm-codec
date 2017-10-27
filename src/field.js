@@ -33,7 +33,8 @@ export function fieldDecode(buffer, field) {
     case TYPE_INT32:
       return buffer.readUInt32LE(field.offset);
     case TYPE_STRING:
-      return buffer.toString('ascii', field.offset, field.count);
+      return decodeStringArray(buffer, field.offset, 1, 'ascii')[0];
+    //buffer.toString('ascii', field.offset, field.count);
     case TYPE_STRING_ARRAY:
       return decodeStringArray(buffer, field.offset, field.count, 'ascii');
     case TYPE_I18NSTRING:
