@@ -13,7 +13,6 @@ test.cb('extrat', t => {
   let fieldsNumber = 0;
 
   stream.on('lead', lead => {
-    console.log(lead);
     t.is(lead.major, 3);
     t.is(lead.minor, 0);
     t.is(lead.signatureType, 5);
@@ -38,7 +37,7 @@ test.cb('extrat', t => {
 
     //t.is(fields[0].type, 7);
 
-    console.log(fields);
+    //console.log(fields);
 
     if (fieldsNumber === 2) {
       t.end();
@@ -52,9 +51,9 @@ test.cb('extrat', t => {
         '..',
         'tests',
         'fixtures',
-        //'hello-2.3-1.el2.rf.i386.rpm'
+        'hello-2.3-1.el2.rf.i386.rpm'
         //'filesystem-3.2-40.fc26.aarch64.rpm'
-        'mktemp-1.6-4mdv2010.1.i586.rpm'
+        //'mktemp-1.6-4mdv2010.1.i586.rpm'
       )
     )
     .pipe(stream);

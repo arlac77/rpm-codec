@@ -16,8 +16,6 @@ const lzma = require('lzma-native');
 const cpio = require('cpio-stream');
 
 function nextHeaderState(stream, chunk, result, state) {
-  console.log(result);
-
   throwOnProblems(structCheckDefaults(result, state.struct), state.name);
   stream.emit(state.name, result);
 
@@ -101,7 +99,7 @@ const states = [
         return states.header;
       }
 
-      console.log(chunk.slice(0, 8));
+      //console.log(chunk.slice(allignedAdditional, 8));
 
       return undefined;
     }
@@ -136,13 +134,7 @@ export class RPMStream extends Transform {
         );
         if (chunk.length >= state.length + state.additionalLength) {
           const result = structDecode(chunk, 0, state.struct);
-
-          /*console.log(
-            `decode ${state.name} at ${this._offset} ${state.length}`
-          );*/
-
           const oldState = state;
-
           const length = state.length;
           this._offset += length;
           chunk = chunk.slice(length);
@@ -163,8 +155,15 @@ export class RPMStream extends Transform {
     this._state = state;
 
     if (this.decompressor) {
-      console.log(`pipe: ${this._offset}`);
-      //this.pipe(this.decompressor).pipe(process.stdio);
+      console.log(`pipe: ${this._offset} ${chunk.length}`);
+      /*let i = 0;
+      for (const value of chunk.values()) {
+        if (i++ === 16) break;
+        console.log(value.toString(16));
+      }*/
+
+      this.decompressor.write(chunk);
+      this.pipe(this.decompressor).pipe(process.stdio);
     }
 
     done();
