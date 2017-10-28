@@ -162,7 +162,8 @@ export class RPMStream extends Transform {
         console.log(value.toString(16));
       }*/
 
-      this.decompressor.write(chunk);
+      this.unshift(chunk);
+      //this.decompressor.write(chunk);
       this.pipe(this.decompressor).pipe(process.stdio);
     }
 
