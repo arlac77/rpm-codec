@@ -52,9 +52,9 @@ test.cb('extrat', t => {
         '..',
         'tests',
         'fixtures',
-        'hello-2.3-1.el2.rf.i386.rpm'
+        //'hello-2.3-1.el2.rf.i386.rpm'
         //'filesystem-3.2-40.fc26.aarch64.rpm'
-        //'mktemp-1.6-4mdv2010.1.i586.rpm'
+        'mktemp-1.6-4mdv2010.1.i586.rpm'
       )
     )
     .pipe(stream);

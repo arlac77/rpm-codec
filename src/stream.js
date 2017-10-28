@@ -65,8 +65,6 @@ const states = [
     struct: FIELD,
     nextState(stream, chunk, fields, state) {
       fields = fields.reduce((m, c) => {
-        //console.log(c);
-        //console.log(`[${c.tag}] ${c.type} ${c.offset} ${c.count}`);
         c.data = fieldDecode(chunk, c);
         const t = state.tags.get(c.tag);
         m.set(t ? t.name : c.tag, c.data);
@@ -75,9 +73,7 @@ const states = [
 
       stream.emit(state.name, fields);
 
-      const compressor = fields.get('PAYLOADCOMPRESSOR');
-
-      switch (compressor) {
+      switch (fields.get('PAYLOADCOMPRESSOR')) {
         case 'gzip':
           stream.decompressor = zlib.createGunzip();
           break;
@@ -101,11 +97,7 @@ const states = [
       const result = structDecode(chunk, allignedAdditional, HEADER);
 
       if (structCheckDefaults(result, HEADER) === undefined) {
-        console.log(`ASSIGN: ${state.additionalLength}`);
-
         state.additionalLength = allignedAdditional;
-
-        //console.log(`${JSON.stringify(result)}`);
         return states.header;
       }
 
