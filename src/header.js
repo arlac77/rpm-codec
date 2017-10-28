@@ -10,3 +10,5 @@ export const HEADER = [
   { name: 'count', type: 'u32be', length: 1 },
   { name: 'size', type: 'u32be', length: 1 }
 ];
+
+export function writeHeader() {}

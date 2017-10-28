@@ -80,14 +80,18 @@ const states = [
           break;
       }
 
-      const extract = cpio.extract();
-      extract.on('error', error => console.log(error));
-      extract.on('entry', (header, stream, callback) => {
-        console.log(`extract: ${header.name}`);
+      if (stream.decompressor !== undefined) {
+        const extract = cpio.extract();
+        extract.on('error', error => console.log(error));
+        extract.on('entry', (header, stream, callback) => {
+          console.log(`extract: ${header.name}`);
 
-        stream.on('end', () => callback());
-        stream.resume();
-      });
+          stream.on('end', () => callback());
+          stream.resume();
+        });
+
+        stream.decompressor.pipe(extract);
+      }
 
       const allignedAdditional =
         allign(stream._offset + state.additionalLength) - stream._offset;
@@ -119,6 +123,13 @@ export class RPMStream extends Transform {
   }
 
   _transform(chunk, encoding, done) {
+    console.log(`_transform: ${chunk.length}`);
+    if (this.decompressor !== undefined) {
+      console.log(`PIPE: ${chunk.length}`);
+      this.decompressor.write(chunk, done);
+      return;
+    }
+
     if (this.lastChunk !== undefined) {
       chunk = Buffer.concat([this.lastChunk, chunk]);
       this.lastChunk = undefined;
@@ -128,10 +139,10 @@ export class RPMStream extends Transform {
 
     try {
       while (state) {
-        console.log(
+        /*console.log(
           `${state.name} ${chunk.length} > ${state.length +
             state.additionalLength}`
-        );
+        );*/
         if (chunk.length >= state.length + state.additionalLength) {
           const result = structDecode(chunk, 0, state.struct);
           const oldState = state;
@@ -154,7 +165,7 @@ export class RPMStream extends Transform {
 
     this._state = state;
 
-    if (this.decompressor) {
+    if (this.decompressor !== undefined) {
       console.log(`pipe: ${this._offset} ${chunk.length}`);
       /*let i = 0;
       for (const value of chunk.values()) {
@@ -164,7 +175,7 @@ export class RPMStream extends Transform {
 
       this.unshift(chunk);
       //this.decompressor.write(chunk);
-      this.pipe(this.decompressor).pipe(process.stdio);
+      //this.decompressor.pipe(process.stdio);
     }
 
     done();
