@@ -17,7 +17,6 @@ const cpio = require('cpio-stream');
 
 function nextHeaderState(stream, chunk, result, state) {
   throwOnProblems(structCheckDefaults(result, state.struct), state.name);
-  stream.emit(state.name, result);
 
   const struct = { type: FIELD, length: result.count };
 
@@ -35,17 +34,16 @@ function nextHeaderState(stream, chunk, result, state) {
 
   ns.additionalLength = result.size;
 
-  return ns;
+  return [ns];
 }
 
 const states = [
   {
     name: 'lead',
     struct: LEAD,
-    nextState(stream, chunk, result, state) {
+    nextState(chunk, offset, result, state) {
       throwOnProblems(structCheckDefaults(result, state.struct), state.name);
-      stream.emit(state.name, result);
-      return states.signature;
+      return [states.signature];
     }
   },
   {
@@ -61,7 +59,7 @@ const states = [
   {
     name: 'field',
     struct: FIELD,
-    nextState(stream, chunk, fields, state) {
+    nextState(chunk, offset, fields, state) {
       fields = fields.reduce((m, c) => {
         c.data = fieldDecode(chunk, c);
         const t = state.tags.get(c.tag);
@@ -69,43 +67,17 @@ const states = [
         return m;
       }, new Map());
 
-      stream.emit(state.name, fields);
-
-      switch (fields.get('PAYLOADCOMPRESSOR')) {
-        case 'gzip':
-          stream.decompressor = zlib.createGunzip();
-          break;
-        case 'lzma':
-          stream.decompressor = lzma.createDecompressor();
-          break;
-      }
-
-      if (stream.decompressor !== undefined) {
-        const extract = cpio.extract();
-        extract.on('error', error => console.log(error));
-        extract.on('entry', (header, stream, callback) => {
-          console.log(`extract: ${header.name}`);
-
-          stream.on('end', () => callback());
-          stream.resume();
-        });
-
-        stream.decompressor.pipe(extract);
-      }
-
       const allignedAdditional =
-        allign(stream._offset + state.additionalLength) - stream._offset;
+        allign(offset + state.additionalLength) - offset;
 
       const result = structDecode(chunk, allignedAdditional, HEADER);
 
       if (structCheckDefaults(result, HEADER) === undefined) {
         state.additionalLength = allignedAdditional;
-        return states.header;
+        return [states.header];
       }
 
-      //console.log(chunk.slice(allignedAdditional, 8));
-
-      return undefined;
+      return [undefined, fields];
     }
   }
 ].reduce((acc, cur) => {
@@ -115,69 +87,75 @@ const states = [
   return acc;
 }, {});
 
-export class RPMStream extends Transform {
-  constructor() {
-    super();
-    this._state = states.lead;
-    this._offset = 0;
-  }
+export function RPMDecoder(stream) {
+  return new Promise((resolve, reject) => {
+    let state = states.lead;
+    let offset = 0;
+    let result;
 
-  _transform(chunk, encoding, done) {
-    console.log(`_transform: ${chunk.length}`);
-    if (this.decompressor !== undefined) {
-      console.log(`PIPE: ${chunk.length}`);
-      this.decompressor.write(chunk, done);
-      return;
-    }
+    const readable = () => {
+      //chunk = Buffer.concat([this.lastChunk, chunk]);
 
-    if (this.lastChunk !== undefined) {
-      chunk = Buffer.concat([this.lastChunk, chunk]);
-      this.lastChunk = undefined;
-    }
+      let chunk = stream.read();
 
-    let state = this._state;
+      //console.log(`${state.name} read: ${chunk.length}`);
 
-    try {
-      while (state) {
-        /*console.log(
-          `${state.name} ${chunk.length} > ${state.length +
-            state.additionalLength}`
-        );*/
-        if (chunk.length >= state.length + state.additionalLength) {
-          const result = structDecode(chunk, 0, state.struct);
-          const oldState = state;
-          const length = state.length;
-          this._offset += length;
-          chunk = chunk.slice(length);
+      try {
+        while (state) {
+          console.log(`${state.name} ${offset}`);
 
-          state = state.nextState(this, chunk, result, state);
+          if (chunk.length >= state.length + state.additionalLength) {
+            result = structDecode(chunk, 0, state.struct);
+            const oldState = state;
+            const length = state.length;
+            offset += length;
+            chunk = chunk.slice(length);
 
-          this._offset += oldState.additionalLength;
-          chunk = chunk.slice(oldState.additionalLength);
-        } else {
-          break;
+            [state, result] = state.nextState(chunk, offset, result, state);
+
+            offset += oldState.additionalLength;
+            chunk = chunk.slice(oldState.additionalLength);
+          } else {
+            break;
+          }
         }
+
+        stream.removeListener('readable', readable);
+        stream.unshift(chunk);
+
+        resolve(result);
+      } catch (e) {
+        stream.removeListener('readable', readable);
+        reject(e);
       }
-    } catch (e) {
-      this.emit('error', e);
-      state = undefined;
-    }
+    };
 
-    this._state = state;
+    stream.on('readable', readable);
+  });
+}
 
-    if (this.decompressor !== undefined) {
-      console.log(`pipe: ${this._offset} ${chunk.length}`);
-      /*let i = 0;
-      for (const value of chunk.values()) {
-        if (i++ === 16) break;
-        console.log(value.toString(16));
-      }*/
+export function contentDecoder(fields) {
+  let decompressor;
 
-      this.unshift(chunk);
-      //this.decompressor.write(chunk);
-      //this.decompressor.pipe(process.stdio);
-    }
-
-    done();
+  switch (fields.get('PAYLOADCOMPRESSOR')) {
+    case 'gzip':
+      decompressor = zlib.createGunzip();
+      break;
+    case 'lzma':
+      decompressor = lzma.createDecompressor();
+      break;
   }
+
+  const extract = cpio.extract();
+
+  extract.on('error', error => console.log(error));
+  extract.on('entry', (header, stream, callback) => {
+    console.log(`extract: ${header.name}`);
+    stream.on('end', () => callback());
+    stream.resume();
+  });
+
+  decompressor.pipe(extract);
+
+  return decompressor;
 }
