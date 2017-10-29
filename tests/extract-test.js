@@ -33,6 +33,6 @@ test('fail RPMDecoder invalid header', async t => {
   const error = await t.throws(RPMDecoder(input));
   t.is(
     error.message,
-    'Bad magic, this is not a lead. Expecting undefined but got 105,109,112,111'
+    'Bad magic, this is not a lead. Expecting 237,171,238,219 but got 105,109,112,111'
   );
 });

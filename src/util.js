@@ -118,7 +118,7 @@ export function throwOnProblems(problems, name) {
   if (problems && problems.length > 0) {
     const p = problems[0];
     throw new TypeError(
-      `Bad ${p.field}, this is not a ${name}. Expecting ${p.default} but got ${p.value}`
+      `Bad ${p.field}, this is not a ${name}. Expecting ${p.expected} but got ${p.value}`
     );
   }
 }
