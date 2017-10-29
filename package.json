@@ -37,7 +37,6 @@
     "lzma-native": "^3.0.1"
   },
   "devDependencies": {
-    "simple-bufferstream": "0.0.4",
     "jsdoc-to-markdown": "^3.0.0",
     "jsdoc-babel": "^0.3.0",
     "markdown-doctest": "^0.9.1",
