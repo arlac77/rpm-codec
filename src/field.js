@@ -11,7 +11,7 @@ import {
   TYPE_I18NSTRING
 } from './types';
 
-import { decodeStringArray } from './util';
+import { decodeStringArray, encodeStringArray } from './util';
 
 export const FIELD = [
   { name: 'tag', type: 'u32be', length: 1 },
@@ -34,7 +34,6 @@ export function fieldDecode(buffer, field) {
       return buffer.readUInt32LE(field.offset);
     case TYPE_STRING:
       return decodeStringArray(buffer, field.offset, 1, 'ascii')[0];
-    //buffer.toString('ascii', field.offset, field.count);
     case TYPE_STRING_ARRAY:
       return decodeStringArray(buffer, field.offset, field.count, 'ascii');
     case TYPE_I18NSTRING:
@@ -44,4 +43,31 @@ export function fieldDecode(buffer, field) {
   }
 }
 
-export function fieldEncode(buffer, offset, field) {}
+export function fieldEncode(buffer, offset, field, value) {
+  switch (field.type) {
+    case TYPE_NULL:
+      return 0;
+    case TYPE_CHAR:
+      //buffer.toString('ascii', field.offset, field.count);
+      return 1;
+    case TYPE_INT8:
+      buffer.writeUInt8(offset, value);
+      return 1;
+    case TYPE_INT16:
+      buffer.writeUInt16LE(offset, value);
+      return 2;
+    case TYPE_INT32:
+      buffer.writeUInt32LE(offset);
+      return 4;
+    case TYPE_STRING:
+      return encodeStringArray(buffer, offset, 1, 'ascii', [value]);
+    case TYPE_STRING_ARRAY:
+      return encodeStringArray(buffer, offset, value.length, 'ascii', value);
+    case TYPE_I18NSTRING:
+      return encodeStringArray(buffer, offset, value.length, 'utf8', value);
+    case TYPE_BIN:
+    //return buffer.slice(field.offset, field.offset + field.count);
+  }
+
+  return 0;
+}

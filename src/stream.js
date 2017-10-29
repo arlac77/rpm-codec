@@ -8,7 +8,7 @@ import {
   throwOnProblems,
   allign
 } from './util';
-import { tags, signatureTags } from './types';
+import { tags, signatureTags, oses } from './types';
 
 const { Transform } = require('stream');
 const zlib = require('zlib');
@@ -92,31 +92,36 @@ export function RPMDecoder(stream) {
     let state = states.lead;
     let offset = 0;
     let result;
+    let lastChunk;
 
     const readable = () => {
-      //chunk = Buffer.concat([this.lastChunk, chunk]);
-
       let chunk = stream.read();
+      if (lastChunk !== undefined) {
+        chunk = Buffer.concat([lastChunk, chunk]);
+        lastChunk = undefined;
+      }
 
       //console.log(`${state.name} read: ${chunk.length}`);
 
       try {
         while (state) {
-          console.log(`${state.name} ${offset}`);
+          //console.log(`${state.name} ${offset}`);
 
           if (chunk.length >= state.length + state.additionalLength) {
             result = structDecode(chunk, 0, state.struct);
+            //console.log(result);
+
             const oldState = state;
             const length = state.length;
             offset += length;
             chunk = chunk.slice(length);
 
             [state, result] = state.nextState(chunk, offset, result, state);
-
             offset += oldState.additionalLength;
             chunk = chunk.slice(oldState.additionalLength);
           } else {
-            break;
+            lastChunk = chunk;
+            return;
           }
         }
 
@@ -134,7 +139,13 @@ export function RPMDecoder(stream) {
   });
 }
 
-export function contentDecoder(fields) {
+const defaultEntryHandler = (header, stream, callback) => {
+  console.log(`extract: ${header.name}`);
+  stream.on('end', () => callback());
+  stream.resume();
+};
+
+export function contentDecoder(fields, entryHandler = defaultEntryHandler) {
   let decompressor;
 
   switch (fields.get('PAYLOADCOMPRESSOR')) {
@@ -142,20 +153,38 @@ export function contentDecoder(fields) {
       decompressor = zlib.createGunzip();
       break;
     case 'lzma':
+    case 'xz':
       decompressor = lzma.createDecompressor();
       break;
   }
 
   const extract = cpio.extract();
 
-  extract.on('error', error => console.log(error));
-  extract.on('entry', (header, stream, callback) => {
-    console.log(`extract: ${header.name}`);
-    stream.on('end', () => callback());
-    stream.resume();
-  });
+  //extract.on('error', error => console.log(error));
+  extract.on('entry', entryHandler);
 
   decompressor.pipe(extract);
 
   return decompressor;
+}
+
+export function RPMEncoder(stream, options) {
+  const lead = structDefaults(LEAD);
+  lead.name = options.name;
+  lead.os = oses.get(options.os).id;
+  lead.arch = architectures.get(options.architecture).id;
+  lead.type = 0;
+
+  const buffer = new Buffer(structLength(LEAD));
+  structEncode(lead, buffer, 0, LEAD);
+  stream.write(buffer);
+
+  stream.write(headerWithValues(new Map(), signatureTags));
+
+  stream.write(
+    headerWithValues(
+      new Map([['PAYLOADCOMPRESSOR', 'gzip'], ['PAYLOADFORMAT', 'cpio']]),
+      tags
+    )
+  );
 }

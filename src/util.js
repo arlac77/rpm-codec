@@ -155,10 +155,19 @@ export function structCheckDefaults(record, struct) {
   return problems.length === 0 ? undefined : problems;
 }
 
+export function encodeStringArray(buffer, offset, length, encoding, values) {
+  let o = offset;
+  for (let i = 0; i < length; i++) {
+    const used = buffer.write(values[i], o, buffer.length, encoding);
+    buffer[o + used] = 0;
+    o += used + 1;
+  }
+
+  return o - offset;
+}
+
 export function decodeStringArray(buffer, offset, length, encoding) {
   const values = [];
-
-  //console.log(buffer.toString(encoding, offset, offset + 10));
 
   let last = offset;
 

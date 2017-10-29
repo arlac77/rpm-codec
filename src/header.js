@@ -11,4 +11,16 @@ export const HEADER = [
   { name: 'size', type: 'u32be', length: 1 }
 ];
 
-export function writeHeader() {}
+export function headerWithValues(values, tags) {
+  const header = structDefaults(HEADER);
+  header.count = values.length;
+
+  for (const [key, values] of values.entries) {
+  }
+
+  header.size = 8;
+  const buffer = new Buffer(structLength(HEADER));
+  structEncode(header, buffer, 0, HEADER);
+
+  return buffer;
+}
