@@ -1,5 +1,5 @@
 import test from 'ava';
-import { RPMDecoder, contentDecoder } from '../src/stream';
+import { RPMDecoder, contentDecoder } from '../src/codec';
 import { TYPE_STRING } from '../src/types';
 
 const fs = require('fs');

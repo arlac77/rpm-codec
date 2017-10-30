@@ -1,9 +1,9 @@
 {
   "name": "rpm-codec",
   "version": "0.0.1",
-  "description": "Streaming RPM generator/extractor",
-  "main": "dist/stream.js",
-  "module": "src/stream.js",
+  "description": "RPM generator/extractor",
+  "main": "dist/codec.js",
+  "module": "src/codec.js",
   "scripts": {
     "test": "ava",
     "cover": "nyc ava",
