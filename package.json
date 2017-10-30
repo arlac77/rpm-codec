@@ -1,5 +1,5 @@
 {
-  "name": "rpm-stream",
+  "name": "rpm-codec",
   "version": "0.0.1",
   "description": "Streaming RPM generator/extractor",
   "main": "dist/stream.js",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arlac77/rpm-stream.git"
+    "url": "git+https://github.com/arlac77/rpm-codec.git"
   },
   "keywords": [
     "RPM",
@@ -29,9 +29,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/arlac77/rpm-stream/issues"
+    "url": "https://github.com/arlac77/rpm-codec/issues"
   },
-  "homepage": "https://github.com/arlac77/rpm-stream#readme",
+  "homepage": "https://github.com/arlac77/rpm-codec#readme",
   "dependencies": {
     "cpio-stream": "^1.4.1",
     "lzma-native": "^3.0.1"
