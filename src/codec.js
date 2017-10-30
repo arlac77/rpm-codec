@@ -10,7 +10,6 @@ import {
 } from './util';
 import { tags, signatureTags, oses } from './types';
 
-const { Transform } = require('stream');
 const zlib = require('zlib');
 const lzma = require('lzma-native');
 const cpio = require('cpio-stream');
