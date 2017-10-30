@@ -87,7 +87,10 @@ const states = [
   return acc;
 }, {});
 
-export function RPMDecoder(stream) {
+/**
+ * Decodes the rpm header.
+ */
+export async function RPMDecoder(stream) {
   return new Promise((resolve, reject) => {
     let state = states.lead;
     let offset = 0;
@@ -101,15 +104,10 @@ export function RPMDecoder(stream) {
         lastChunk = undefined;
       }
 
-      //console.log(`${state.name} read: ${chunk.length}`);
-
       try {
         while (state) {
-          //console.log(`${state.name} ${offset}`);
-
           if (chunk.length >= state.length + state.additionalLength) {
             result = structDecode(chunk, 0, state.struct);
-            //console.log(result);
 
             const oldState = state;
             const length = state.length;
@@ -148,7 +146,9 @@ const defaultEntryHandler = (header, stream, callback) => {
 export function contentDecoder(fields, entryHandler = defaultEntryHandler) {
   let decompressor;
 
-  switch (fields.get('PAYLOADCOMPRESSOR')) {
+  const plc = fields.get('PAYLOADCOMPRESSOR');
+
+  switch (plc) {
     case 'gzip':
       decompressor = zlib.createGunzip();
       break;
@@ -156,12 +156,23 @@ export function contentDecoder(fields, entryHandler = defaultEntryHandler) {
     case 'xz':
       decompressor = lzma.createDecompressor();
       break;
+
+    default:
+      throw new TypeError(`Unsupported payloadcompressor ${plc}`);
   }
 
-  const extract = cpio.extract();
+  let extract;
 
-  //extract.on('error', error => console.log(error));
-  extract.on('entry', entryHandler);
+  const plf = fields.get('PAYLOADFORMAT');
+
+  switch (plf) {
+    case 'cpio':
+      extract = cpio.extract();
+      extract.on('entry', entryHandler);
+      break;
+    default:
+      throw new TypeError(`Unsupported payloadformat ${plf}`);
+  }
 
   decompressor.pipe(extract);
 
