@@ -1,4 +1,6 @@
 {
   "plugins": ["node_modules/jsdoc-babel"],
-  "babel": {}
+  "babel": {
+    "presets": ["env"]
+  }
 }

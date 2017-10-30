@@ -18,39 +18,7 @@
 
 rpm-codec
 ===
-
-rpm-codec is a streaming rpm packer for node.js/ io.js, basically the rpm
-version of tar-stream.
-
-Usage
-===
-_Don't use this library._
-
-In 99% of all cases, you are better off using the OS supplied rpm toolchain
-('rpm', 'rpmbuild', ...).
-Creating an rpm package using the built-in toolchain is pretty easy: provide a
-text file ('.spec')
-containing some metadata for your files, create the package, done.
-
-```sh
-$ rpmbuild -bb <specfile>
-```
-
-You're probably in the remaining 1% if
-
-* You are not building an rpm once in a while for your beloved open source
-project, but are hosting a packaging server.
-* You want to be independant of changes in the underlying toolchain, e.g. when
-upgrading the OS.
-Especially if the whens and whys of such upgrades are controlled by your hosting
-platform and not by you.
-
-* You are packaging on a brand new platform, but your rpms need to run in
-ancient environments.
-* All of your artifacts are already prepared in binary form, maybe in a
-repository, and you just need a light rpm wrapper (streaming in memory, avoid
-hitting the disk completely)
-* You are already using the rpmlib interface for some kung fu voodoo.
+Encode/decode rpm lead/header(s)
 
 == Which version of RPM is supported?
 
@@ -121,7 +89,7 @@ Supported index types:
 Payload
 ===
 
-A gzip compressed cpio structure carries the rpm payload. Other compressions
+A gzip,xz compressed cpio structure carries the rpm payload. Other compressions
 algorithms exist, and are supported by newer versions of 'rpm', but for now it's
 gzip.
 

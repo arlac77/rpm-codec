@@ -1,7 +1,7 @@
 {
   "name": "rpm-codec",
   "version": "0.0.1",
-  "description": "RPM generator/extractor",
+  "description": "Encode/decode rpm lead/header(s)",
   "main": "dist/codec.js",
   "module": "src/codec.js",
   "scripts": {
@@ -37,11 +37,12 @@
     "lzma-native": "^3.0.1"
   },
   "devDependencies": {
-    "jsdoc-to-markdown": "^3.0.0",
+    "ava": "^0.23.0",
+    "babel-preset-env": "^1.6.1",
     "jsdoc-babel": "^0.3.0",
+    "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "nyc": "^11.3.0",
-    "ava": "^0.23.0",
     "rollup": "^0.50.0",
     "semantic-release": "^9.1.0",
     "xo": "^0.19.0"
