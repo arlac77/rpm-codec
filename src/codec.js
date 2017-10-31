@@ -14,10 +14,13 @@ const zlib = require('zlib');
 const lzma = require('lzma-native');
 const cpio = require('cpio-stream');
 
-function nextHeaderState(stream, chunk, result, state) {
-  throwOnProblems(structCheckDefaults(result, state.struct), state.name);
+function nextHeaderState(stream, chunk, results, lastResult, state) {
+  results[state.name] = lastResult;
 
-  const struct = { type: FIELD, length: result.count };
+  throwOnProblems(structCheckDefaults(lastResult, state.struct), state.name);
+  lastResult.values = new Map();
+
+  const struct = { type: FIELD, length: lastResult.count };
 
   const ns = Object.create(states.field, {
     length: {
@@ -26,23 +29,31 @@ function nextHeaderState(stream, chunk, result, state) {
     struct: {
       value: struct
     },
+    values: {
+      value: lastResult.values
+    },
     tags: {
       value: state.name === 'header' ? tags : signatureTags
     }
   });
 
-  ns.additionalLength = result.size;
+  ns.additionalLength = lastResult.size;
 
-  return [ns];
+  return ns;
 }
 
 const states = [
   {
     name: 'lead',
     struct: LEAD,
-    nextState(chunk, offset, result, state) {
-      throwOnProblems(structCheckDefaults(result, state.struct), state.name);
-      return [states.signature];
+    nextState(chunk, offset, results, lastResult, state) {
+      results[state.name] = lastResult;
+      throwOnProblems(
+        structCheckDefaults(lastResult, state.struct),
+        state.name
+      );
+
+      return states.signature;
     }
   },
   {
@@ -58,25 +69,26 @@ const states = [
   {
     name: 'field',
     struct: FIELD,
-    nextState(chunk, offset, fields, state) {
-      fields = fields.reduce((m, c) => {
+    nextState(chunk, offset, results, lastResult, state) {
+      let fields = lastResult;
+      fields.reduce((m, c) => {
         c.data = fieldDecode(chunk, c);
         const t = state.tags.get(c.tag);
         m.set(t ? t.name : c.tag, c.data);
         return m;
-      }, new Map());
+      }, state.values);
 
       const allignedAdditional =
         allign(offset + state.additionalLength) - offset;
 
-      const result = structDecode(chunk, allignedAdditional, HEADER);
+      const next = structDecode(chunk, allignedAdditional, HEADER);
 
-      if (structCheckDefaults(result, HEADER) === undefined) {
+      if (structCheckDefaults(next, HEADER) === undefined) {
         state.additionalLength = allignedAdditional;
-        return [states.header];
+        return states.header;
       }
 
-      return [undefined, fields];
+      return undefined;
     }
   }
 ].reduce((acc, cur) => {
@@ -88,13 +100,19 @@ const states = [
 
 /**
  * Decodes the rpm header.
+ * { lead : {},
+ *  signature : {}
+ *  header: {}
+ * }
+ * @return
  */
 export async function RPMDecoder(stream) {
   return new Promise((resolve, reject) => {
     let state = states.lead;
     let offset = 0;
-    let result;
     let lastChunk;
+
+    const results = {};
 
     const readable = () => {
       let chunk = stream.read();
@@ -106,14 +124,14 @@ export async function RPMDecoder(stream) {
       try {
         while (state) {
           if (chunk.length >= state.length + state.additionalLength) {
-            result = structDecode(chunk, 0, state.struct);
+            const lastResult = structDecode(chunk, 0, state.struct);
 
             const oldState = state;
             const length = state.length;
             offset += length;
             chunk = chunk.slice(length);
 
-            [state, result] = state.nextState(chunk, offset, result, state);
+            state = state.nextState(chunk, offset, results, lastResult, state);
             offset += oldState.additionalLength;
             chunk = chunk.slice(oldState.additionalLength);
           } else {
@@ -125,7 +143,7 @@ export async function RPMDecoder(stream) {
         stream.removeListener('readable', readable);
         stream.unshift(chunk);
 
-        resolve(result);
+        resolve(results);
       } catch (e) {
         stream.removeListener('readable', readable);
         reject(e);
@@ -142,10 +160,10 @@ const defaultEntryHandler = (header, stream, callback) => {
   stream.resume();
 };
 
-export function contentDecoder(fields, entryHandler = defaultEntryHandler) {
+export function contentDecoder(result, entryHandler = defaultEntryHandler) {
   let decompressor;
 
-  const plc = fields.get('PAYLOADCOMPRESSOR');
+  const plc = result.header.values.get('PAYLOADCOMPRESSOR');
 
   switch (plc) {
     case 'gzip':
@@ -162,7 +180,7 @@ export function contentDecoder(fields, entryHandler = defaultEntryHandler) {
 
   let extract;
 
-  const plf = fields.get('PAYLOADFORMAT');
+  const plf = result.header.values.get('PAYLOADFORMAT');
 
   switch (plf) {
     case 'cpio':

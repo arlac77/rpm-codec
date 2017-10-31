@@ -16,11 +16,11 @@ test('RPMDecoder lzma', async t => {
     )
   );
 
-  const header = await RPMDecoder(input);
+  const result = await RPMDecoder(input);
 
-  t.is(header.get('PAYLOADCOMPRESSOR'), 'lzma');
+  t.is(result.header.values.get('PAYLOADCOMPRESSOR'), 'lzma');
 
-  input.pipe(contentDecoder(header));
+  input.pipe(contentDecoder(result));
 });
 
 test('RPMDecoder gzip', async t => {
@@ -34,11 +34,11 @@ test('RPMDecoder gzip', async t => {
     )
   );
 
-  const header = await RPMDecoder(input);
+  const result = await RPMDecoder(input);
 
-  t.is(header.get('PAYLOADCOMPRESSOR'), 'gzip');
+  t.is(result.header.values.get('PAYLOADCOMPRESSOR'), 'gzip');
 
-  input.pipe(contentDecoder(header));
+  input.pipe(contentDecoder(result));
 });
 
 function collectEntries() {}
@@ -54,14 +54,14 @@ test('RPMDecoder aarch64', async t => {
     )
   );
 
-  const header = await RPMDecoder(input);
+  const result = await RPMDecoder(input);
 
-  t.is(header.get('PAYLOADCOMPRESSOR'), 'xz');
+  t.is(result.header.values.get('PAYLOADCOMPRESSOR'), 'xz');
 
   const files = new Set();
 
   const p = input.pipe(
-    contentDecoder(header, (header, stream, callback) => {
+    contentDecoder(result, (header, stream, callback) => {
       files.add(header.name);
       stream.on('end', () => callback());
       stream.resume();
