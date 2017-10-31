@@ -70,8 +70,7 @@ const states = [
     name: 'field',
     struct: FIELD,
     nextState(chunk, offset, results, lastResult, state) {
-      let fields = lastResult;
-      fields.reduce((m, c) => {
+      lastResult.reduce((m, c) => {
         c.data = fieldDecode(chunk, c);
         const t = state.tags.get(c.tag);
         m.set(t ? t.name : c.tag, c.data);
