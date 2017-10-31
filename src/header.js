@@ -1,3 +1,6 @@
+import { FIELD, fieldEncode } from './field';
+import { structDefaults, structLength, structEncode } from './util';
+
 export const HEADER = [
   {
     name: 'magic',
@@ -13,14 +16,38 @@ export const HEADER = [
 
 export function headerWithValues(values, tags) {
   const header = structDefaults(HEADER);
+  const FIELDS = { type: FIELD, length: values.length };
+  const fields = [];
+
   header.count = values.length;
 
-  for (const [key, values] of values.entries) {
+  const hs = structLength(HEADER);
+  const size = hs + structLength(FIELDS);
+
+  const buffer = new Buffer(size + 10000);
+
+  let offset = 0;
+  for (const [key, value] of values.entries()) {
+    const t = tags.get(key);
+
+    const field = {
+      tag: t.id,
+      type: t.type,
+      count: Array.isArray(value) ? value.length : 1,
+      offset
+    };
+
+    const length = fieldEncode(buffer, offset, field, value);
+
+    fields.push(field);
+
+    offset += length;
   }
 
   header.size = 8;
-  const buffer = new Buffer(structLength(HEADER));
+
   structEncode(header, buffer, 0, HEADER);
+  structEncode(fields, buffer, hs, FIELDS);
 
   return buffer;
 }

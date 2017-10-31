@@ -78,7 +78,7 @@ test('RPMDecoder aarch64', async t => {
 
 test('fail RPMDecoder invalid header', async t => {
   const input = fs.createReadStream(
-    path.join(__dirname, '..', 'tests', 'extract-test.js')
+    path.join(__dirname, '..', 'tests', 'decode-test.js')
   );
 
   const error = await t.throws(RPMDecoder(input));

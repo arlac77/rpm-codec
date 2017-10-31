@@ -1,14 +1,16 @@
 import { LEAD } from './lead';
 import { FIELD, fieldDecode } from './field';
-import { HEADER } from './header';
+import { HEADER, headerWithValues } from './header';
 import {
   structDecode,
+  structEncode,
   structLength,
+  structDefaults,
   structCheckDefaults,
   throwOnProblems,
   allign
 } from './util';
-import { tags, signatureTags, oses } from './types';
+import { tags, signatureTags, oses, architectures } from './types';
 
 const zlib = require('zlib');
 const lzma = require('lzma-native');
