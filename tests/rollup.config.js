@@ -2,9 +2,18 @@ const external = ['ava'];
 
 export default [
   {
-    input: 'tests/decode-test.js',
+    input: 'tests/util-test.js',
     output: {
-      file: 'build/decode-test.js',
+      file: 'build/util-test.js',
+      format: 'cjs',
+      sourcemap: true
+    },
+    external
+  },
+  {
+    input: 'tests/field-test.js',
+    output: {
+      file: 'build/field-test.js',
       format: 'cjs',
       sourcemap: true
     },
@@ -20,18 +29,18 @@ export default [
     external
   },
   {
-    input: 'tests/lead-test.js',
+    input: 'tests/decode-test.js',
     output: {
-      file: 'build/lead-test.js',
+      file: 'build/decode-test.js',
       format: 'cjs',
       sourcemap: true
     },
     external
   },
   {
-    input: 'tests/util-test.js',
+    input: 'tests/lead-test.js',
     output: {
-      file: 'build/util-test.js',
+      file: 'build/lead-test.js',
       format: 'cjs',
       sourcemap: true
     },

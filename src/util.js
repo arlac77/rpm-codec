@@ -8,12 +8,16 @@ const typeLength = {
   u32le: 4
 };
 
-export function structLength(type, length = 1) {
-  return (
-    (Array.isArray(type)
-      ? type.reduce((acc, t) => acc + structLength(t.type, t.length), 0)
-      : typeLength[type]) * length
-  );
+export function structLength(type) {
+  if (typeof type === 'string' || type instanceof String) {
+    return typeLength[type];
+  }
+
+  if (Array.isArray(type)) {
+    return type.reduce((acc, t) => acc + structLength(t.type) * t.length, 0);
+  }
+
+  return structLength(type.type) * type.length;
 }
 
 export function structDecode(buffer, offset, format) {
@@ -55,7 +59,7 @@ export function structDecode(buffer, offset, format) {
           break;
       }
 
-      offset += structLength(f.type, f.length);
+      offset += structLength(f.type) * f.length;
     });
 
     return result;
@@ -64,7 +68,7 @@ export function structDecode(buffer, offset, format) {
   const result = [];
   for (let i = 0; i < format.length; i++) {
     result.push(structDecode(buffer, offset, format.type));
-    offset += structLength(format.type, 1);
+    offset += structLength(format.type);
   }
 
   return result;
@@ -100,7 +104,7 @@ export function structEncode(object, buffer, offset, format) {
         break;
     }
 
-    offset += structLength(f.type, f.length);
+    offset += structLength(f.type) * f.length;
   });
 }
 

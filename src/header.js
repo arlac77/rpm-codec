@@ -22,11 +22,9 @@ export function headerWithValues(values, tags) {
   header.count = values.length;
 
   const hs = structLength(HEADER);
-  const size = hs + structLength(FIELDS);
-
-  const buffer = new Buffer(size + 10000);
 
   let offset = 0;
+
   for (const [key, value] of values.entries()) {
     const t = tags.get(key);
 
@@ -34,20 +32,25 @@ export function headerWithValues(values, tags) {
       tag: t.id,
       type: t.type,
       count: Array.isArray(value) ? value.length : 1,
-      offset
+      offset,
+      value
     };
-
-    const length = fieldEncode(buffer, offset, field, value);
 
     fields.push(field);
 
-    offset += length;
+    offset += fieldLength(field, value);
   }
 
-  header.size = 8;
+  const size = hs + structLength(FIELDS) + offset;
+  console.log(`${hs} + ${structLength(FIELDS)} + ${offset}`);
+
+  const buffer = new Buffer(size);
+
+  //header.size = 8;
 
   structEncode(header, buffer, 0, HEADER);
   structEncode(fields, buffer, hs, FIELDS);
+  fields.forEach(f => fieldEncode(buffer, f.offset + hs, f, f.value));
 
   return buffer;
 }

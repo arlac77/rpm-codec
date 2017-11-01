@@ -6,6 +6,14 @@ import {
   decodeStringArray
 } from '../src/util';
 
+test('struct length u8', t => {
+  t.is(1, structLength('u8'));
+});
+
+test('struct length u16be', t => {
+  t.is(2, structLength('u16be'));
+});
+
 const STRUCT = [
   {
     name: 'u8array',
@@ -19,8 +27,13 @@ const STRUCT = [
   { name: 'u32be', type: 'u32be', length: 1 }
 ];
 
-test('struct length', t => {
+test('struct length STRUCT', t => {
   t.is(4 + 1 + 1 * 2 + 2 + 2 + 4, structLength(STRUCT));
+});
+
+test('struct length STRUCT array', t => {
+  const type = { type: STRUCT, length: 8 };
+  t.is((4 + 1 + 1 * 2 + 2 + 2 + 4) * 8, structLength(type));
 });
 
 test('struct decode', t => {

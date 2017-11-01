@@ -26,7 +26,7 @@ function nextHeaderState(stream, chunk, results, lastResult, state) {
 
   const ns = Object.create(states.field, {
     length: {
-      value: structLength(struct.type, struct.length)
+      value: structLength(struct.type) * struct.length
     },
     struct: {
       value: struct

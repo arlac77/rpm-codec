@@ -71,3 +71,29 @@ export function fieldEncode(buffer, offset, field, value) {
 
   return 0;
 }
+
+export function fieldLength(field, value) {
+  switch (field.type) {
+    case TYPE_NULL:
+      return 0;
+    case TYPE_CHAR:
+      return 1;
+    case TYPE_INT8:
+      return 1;
+    case TYPE_INT16:
+      return 2;
+    case TYPE_INT32:
+      return 4;
+    case TYPE_INT64:
+      return 8;
+    case TYPE_STRING:
+      return value.length + 1;
+    case TYPE_STRING_ARRAY:
+      return value.reduce((a, c) => a + c.length + 1, 0);
+    case TYPE_I18NSTRING:
+      return value.reduce((a, c) => a + c.length + 1, 0);
+    case TYPE_BIN:
+      return value.reduce((a, c) => a + c.length, 0);
+  }
+  return 0;
+}
