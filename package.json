@@ -30,7 +30,9 @@
   },
   "homepage": "https://github.com/arlac77/rpm-codec#readme",
   "dependencies": {
-    "cpio-stream": "^1.4.1",
+    "cpio-stream": "^1.4.1"
+  },
+  "optionalDependencies": {
     "lzma-native": "^3.0.1"
   },
   "devDependencies": {

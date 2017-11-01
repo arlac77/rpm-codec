@@ -13,8 +13,13 @@ import {
 import { tags, signatureTags, oses, architectures } from './types';
 
 const zlib = require('zlib');
-const lzma = require('lzma-native');
 const cpio = require('cpio-stream');
+
+let lzma;
+
+try {
+  lzma = require('lzma-native');
+} catch (e) {}
 
 function nextHeaderState(stream, chunk, results, lastResult, state) {
   results[state.name] = lastResult;
@@ -182,8 +187,10 @@ export function contentDecoder(result, entryHandler = defaultEntryHandler) {
       break;
     case 'lzma':
     case 'xz':
-      decompressor = lzma.createDecompressor();
-      break;
+      if (lzma !== undefined) {
+        decompressor = lzma.createDecompressor();
+        break;
+      }
 
     default:
       throw new TypeError(`Unsupported payloadcompressor ${plc}`);
