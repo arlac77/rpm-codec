@@ -117,12 +117,22 @@ export async function RPMDecoder(stream) {
 
     const readable = () => {
       let chunk = stream.read();
-      if (lastChunk !== undefined) {
-        chunk = Buffer.concat([lastChunk, chunk]);
-        lastChunk = undefined;
+
+      if (chunk === null) {
+        stream.removeListener('readable', readable);
+        reject(
+          new TypeError(
+            `Unexpected end of stream at ${offset} while reading ${state.name}`
+          )
+        );
       }
 
       try {
+        if (lastChunk !== undefined) {
+          chunk = Buffer.concat([lastChunk, chunk]);
+          lastChunk = undefined;
+        }
+
         while (state) {
           if (chunk.length >= state.length + state.additionalLength) {
             const lastResult = structDecode(chunk, 0, state.struct);
@@ -210,10 +220,12 @@ export function RPMEncoder(stream, options) {
 
   stream.write(headerWithValues(new Map(), signatureTags));
 
+  /*
   stream.write(
     headerWithValues(
       new Map([['PAYLOADCOMPRESSOR', 'gzip'], ['PAYLOADFORMAT', 'cpio']]),
       tags
     )
   );
+  */
 }

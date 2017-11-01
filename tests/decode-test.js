@@ -87,3 +87,12 @@ test('fail RPMDecoder invalid header', async t => {
     'Bad magic, this is not a lead. Expecting 237,171,238,219 but got 105,109,112,111'
   );
 });
+
+test('fail RPMDecoder short file', async t => {
+  const input = fs.createReadStream(
+    path.join(__dirname, '..', 'tests', 'fixtures', 'to-short.rpm')
+  );
+
+  const error = await t.throws(RPMDecoder(input));
+  t.is(error.message, `Unexpected end of stream at 96 while reading signature`);
+});
