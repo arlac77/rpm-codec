@@ -21,6 +21,10 @@ test('length TYPE_CHAR', t => {
   t.is(fieldLength({ type: TYPE_CHAR }, 'a'), 1);
 });
 
+test('length TYPE_INT8', t => {
+  t.is(fieldLength({ type: TYPE_INT8 }, 1), 2);
+});
+
 test('length TYPE_INT16', t => {
   t.is(fieldLength({ type: TYPE_INT16 }, 1), 2);
 });
@@ -33,10 +37,20 @@ test('length TYPE_INT64', t => {
   t.is(fieldLength({ type: TYPE_INT64 }, 1), 8);
 });
 
+/*
+test('length TYPE_BIN', t => {
+  t.is(fieldLength({ type: TYPE_BIN }, new Uint8Array(4)), 1);
+});
+*/
+
 test('length TYPE_STRING', t => {
   t.is(fieldLength({ type: TYPE_STRING }, 'abc'), 4);
 });
 
 test('length TYPE_STRING_ARRAY', t => {
   t.is(fieldLength({ type: TYPE_STRING_ARRAY }, ['a', 'b', 'c']), 6);
+});
+
+test('length TYPE_I18NSTRING', t => {
+  t.is(fieldLength({ type: TYPE_I18NSTRING }, ['a', 'b', 'c']), 6);
 });
