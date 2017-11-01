@@ -3,8 +3,10 @@ import {
   structLength,
   structDecode,
   structEncode,
-  decodeStringArray
+  decodeStringArray,
+  encodeStringArray
 } from '../src/util';
+import { FIELD } from '../src/field';
 
 test('struct length u8', t => {
   t.is(1, structLength('u8'));
@@ -34,6 +36,11 @@ test('struct length STRUCT', t => {
 test('struct length STRUCT array', t => {
   const type = { type: STRUCT, length: 8 };
   t.is((4 + 1 + 1 * 2 + 2 + 2 + 4) * 8, structLength(type));
+});
+
+test('struct length FIELD array', t => {
+  const FIELDS = { type: FIELD, length: 2 };
+  t.is(16 * 2, structLength(FIELDS));
 });
 
 test('struct decode', t => {
@@ -66,7 +73,7 @@ test('struct decode', t => {
   t.is(d.u32be, 11 * 256 * 256 * 256 + 12 * 256 * 256 + 13 * 256 + 14);
 });
 
-test('struct encode', t => {
+test('structEncode', t => {
   const b = Buffer.from([
     0,
     1,
@@ -91,7 +98,20 @@ test('struct encode', t => {
   t.deepEqual(b.slice(0, 9), b1.slice(0, 9));
 });
 
+test('struct encode array', t => {
+  const type = { type: [{ name: 'tag', type: 'u8', length: 1 }], length: 4 };
+  const b = Buffer(4);
+  structEncode([{ tag: 1 }, { tag: 2 }, { tag: 3 }, { tag: 4 }], b, 0, type);
+  t.deepEqual(b, Buffer.from([1, 2, 3, 4]));
+});
+
 test('decode string array', t => {
   const buffer = Buffer.from([0, 0, 65, 66, 0, 67, 0, 68, 0]);
   t.deepEqual(['AB', 'C', 'D'], decodeStringArray(buffer, 2, 7, 'ascii'));
+});
+
+test('encode string array', t => {
+  const buffer = new Buffer(9);
+  encodeStringArray(buffer, 2, 'ascii', ['AB', 'C', 'D']);
+  t.deepEqual(buffer, Buffer.from([0, 0, 65, 66, 0, 67, 0, 68, 0]));
 });

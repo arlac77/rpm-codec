@@ -16,10 +16,10 @@ export const HEADER = [
 
 export function headerWithValues(values, tags) {
   const header = structDefaults(HEADER);
-  const FIELDS = { type: FIELD, length: values.length };
+  const FIELDS = { type: FIELD, length: values.size };
   const fields = [];
 
-  header.count = values.length;
+  header.count = values.size;
 
   const hs = structLength(HEADER);
 

@@ -60,11 +60,11 @@ export function fieldEncode(buffer, offset, field, value) {
       buffer.writeUInt32LE(offset);
       return 4;
     case TYPE_STRING:
-      return encodeStringArray(buffer, offset, 1, 'ascii', [value]);
+      return encodeStringArray(buffer, offset, 'ascii', [value]);
     case TYPE_STRING_ARRAY:
-      return encodeStringArray(buffer, offset, value.length, 'ascii', value);
+      return encodeStringArray(buffer, offset, 'ascii', value);
     case TYPE_I18NSTRING:
-      return encodeStringArray(buffer, offset, value.length, 'utf8', value);
+      return encodeStringArray(buffer, offset, 'utf8', value);
     case TYPE_BIN:
     //return buffer.slice(field.offset, field.offset + field.count);
   }

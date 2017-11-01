@@ -75,37 +75,45 @@ export function structDecode(buffer, offset, format) {
 }
 
 export function structEncode(object, buffer, offset, format) {
-  format.forEach(f => {
-    switch (f.type) {
-      case 's':
-        buffer.write(object[f.name], offset, f.length, 'utf8');
-        break;
-      case 'u8':
-        if (f.length > 1) {
-          const a = object[f.name];
-          for (let i = 0; i < f.length; i++) {
-            buffer.writeUInt8(a[i], offset + i);
+  if (Array.isArray(format)) {
+    format.forEach(f => {
+      switch (f.type) {
+        case 's':
+          buffer.write(object[f.name], offset, f.length, 'utf8');
+          break;
+        case 'u8':
+          if (f.length > 1) {
+            const a = object[f.name];
+            for (let i = 0; i < f.length; i++) {
+              buffer.writeUInt8(a[i], offset + i);
+            }
+          } else {
+            buffer.writeUInt8(object[f.name], offset);
           }
-        } else {
-          buffer.writeUInt8(object[f.name], offset);
-        }
-        break;
-      case 'u16be':
-        buffer.writeUInt16BE(object[f.name], offset);
-        break;
-      case 'u16le':
-        buffer.writeUInt16LE(object[f.name], offset);
-        break;
-      case 'u32be':
-        buffer.writeUInt32BE(object[f.name], offset);
-        break;
-      case 'u32le':
-        buffer.writeUInt32LE(object[f.name], offset);
-        break;
-    }
+          break;
+        case 'u16be':
+          buffer.writeUInt16BE(object[f.name], offset);
+          break;
+        case 'u16le':
+          buffer.writeUInt16LE(object[f.name], offset);
+          break;
+        case 'u32be':
+          buffer.writeUInt32BE(object[f.name], offset);
+          break;
+        case 'u32le':
+          buffer.writeUInt32LE(object[f.name], offset);
+          break;
+      }
 
-    offset += structLength(f.type) * f.length;
-  });
+      offset += structLength(f.type) * f.length;
+    });
+  } else {
+    object.forEach(o => {
+      offset = structEncode(o, buffer, offset, format.type);
+    });
+  }
+
+  return offset;
 }
 
 export function structDefaults(struct, record = {}) {
@@ -159,13 +167,13 @@ export function structCheckDefaults(record, struct) {
   return problems.length === 0 ? undefined : problems;
 }
 
-export function encodeStringArray(buffer, offset, length, encoding, values) {
+export function encodeStringArray(buffer, offset, encoding, values) {
   let o = offset;
-  for (let i = 0; i < length; i++) {
-    const used = buffer.write(values[i], o, buffer.length, encoding);
+  values.forEach(v => {
+    const used = buffer.write(v, o, buffer.length, encoding);
     buffer[o + used] = 0;
     o += used + 1;
-  }
+  });
 
   return o - offset;
 }
