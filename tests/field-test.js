@@ -22,7 +22,7 @@ test('length TYPE_CHAR', t => {
 });
 
 test('length TYPE_INT8', t => {
-  t.is(fieldLength({ type: TYPE_INT8 }, 1), 2);
+  t.is(fieldLength({ type: TYPE_INT8 }, 1), 1);
 });
 
 test('length TYPE_INT16', t => {
