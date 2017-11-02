@@ -64,6 +64,26 @@ export const architectures = [
   ]
 ].reduce(listPrepare, new Map());
 
+function flagsPrepare(a, c) {
+  const slot = { name: c, id: a.size + 1 };
+  a.set(slot.id, slot);
+  a.set(slot.name, slot);
+  return a;
+}
+
+export const fileFlags = [
+  'config',
+  'doc',
+  'dontuse',
+  'missingok',
+  'noreplace',
+  'specfile',
+  'ghost',
+  'license',
+  'readme',
+  'exclude'
+].reduce(flagsPrepare, new Map());
+
 // Source: http://rpm.org/api/4.4.2.2/rpmlib_8h.html
 
 const headerTags = [
