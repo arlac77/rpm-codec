@@ -1,5 +1,11 @@
 import test from 'ava';
-import { tags, TYPE_STRING, oses, architectures } from '../src/types';
+import {
+  tags,
+  TYPE_STRING,
+  oses,
+  architectures,
+  fileFlags
+} from '../src/types';
 
 test('tags tag + name', t => {
   t.deepEqual(tags.get(1000), {
@@ -24,3 +30,15 @@ test('architecture x86_64', t => {
   t.is(architectures.get(1).name, 'athlon');
   t.is(architectures.get('x86_64').id, 1);
 });
+
+test('fileType config', t => {
+  t.is(fileFlags.get(0x01).name, 'config');
+  t.is(fileFlags.get('config').id, 0x01);
+});
+
+/*
+test('fileType doc', t => {
+  t.is(fileFlags.get(0x02).name, 'doc');
+  t.is(fileFlags.get('doc').id, 0x02);
+});
+*/
