@@ -1,4 +1,4 @@
-import { FIELD, fieldEncode } from './field';
+import { FIELD, fieldEncode, fieldLength } from './field';
 import { structDefaults, structLength, structEncode } from './util';
 
 export const HEADER = [

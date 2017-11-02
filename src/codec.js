@@ -225,7 +225,9 @@ export function RPMEncoder(stream, options) {
   structEncode(lead, buffer, 0, LEAD);
   stream.write(buffer);
 
-  stream.write(headerWithValues(new Map(), signatureTags));
+  stream.write(
+    headerWithValues(new Map([['MD5', new Uint8Array(16)]]), signatureTags)
+  );
 
   /*
   stream.write(
