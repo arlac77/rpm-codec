@@ -162,6 +162,7 @@ export async function RPMDecoder(stream) {
         resolve(results);
       } catch (e) {
         stream.removeListener('readable', readable);
+        console.log(state.name);
         reject(e);
       }
     };
@@ -226,7 +227,32 @@ export function RPMEncoder(stream, options) {
   stream.write(buffer);
 
   stream.write(
-    headerWithValues(new Map([['MD5', new Uint8Array(16)]]), signatureTags)
+    headerWithValues(
+      new Map([
+        [
+          'MD5',
+          new Uint8Array([
+            0xa0,
+            0xa1,
+            0xa2,
+            0xa3,
+            0xa4,
+            0xa5,
+            0xa6,
+            0xa7,
+            0xa8,
+            0xa9,
+            0xaa,
+            0xab,
+            0xac,
+            0xad,
+            0xae,
+            0xaf
+          ])
+        ]
+      ]),
+      signatureTags
+    )
   );
 
   /*

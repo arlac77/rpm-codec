@@ -68,7 +68,9 @@ export function fieldEncode(buffer, offset, field, value) {
     case TYPE_I18NSTRING:
       return encodeStringArray(buffer, offset, 'utf8', value);
     case TYPE_BIN:
-    //return buffer.slice(field.offset, field.offset + field.count);
+      let i = 0;
+      for (; i < field.count; i++) buffer[i + field.offset] = value[i];
+      return i;
   }
 
   return 0;
@@ -95,7 +97,7 @@ export function fieldLength(field, value) {
     case TYPE_I18NSTRING:
       return value.reduce((a, c) => a + c.length + 1, 0);
     case TYPE_BIN:
-      return value.reduce((a, c) => a + c.length, 0);
+      return value.length;
   }
   return 0;
 }

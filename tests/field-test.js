@@ -37,11 +37,9 @@ test('length TYPE_INT64', t => {
   t.is(fieldLength({ type: TYPE_INT64 }, 1), 8);
 });
 
-/*
 test('length TYPE_BIN', t => {
-  t.is(fieldLength({ type: TYPE_BIN }, new Uint8Array(4)), 1);
+  t.is(fieldLength({ type: TYPE_BIN }, new Uint8Array(4)), 4);
 });
-*/
 
 test('length TYPE_STRING', t => {
   t.is(fieldLength({ type: TYPE_STRING }, 'abc'), 4);
