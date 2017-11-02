@@ -18,6 +18,28 @@ test('RPMDecoder lzma', async t => {
 
   const result = await RPMDecoder(input);
 
+  t.deepEqual(
+    result.signature.values.get('MD5'),
+    new Uint8Array([
+      0x74,
+      0x5c,
+      0x0d,
+      0xe1,
+      0x49,
+      0xea,
+      0xe9,
+      0x66,
+      0xdf,
+      0x7c,
+      0x69,
+      0x49,
+      0x48,
+      0x03,
+      0x85,
+      0x85
+    ])
+  );
+
   t.is(result.header.values.get('PAYLOADCOMPRESSOR'), 'lzma');
 
   input.pipe(contentDecoder(result));

@@ -39,7 +39,9 @@ export function fieldDecode(buffer, field) {
     case TYPE_I18NSTRING:
       return decodeStringArray(buffer, field.offset, field.count, 'utf8');
     case TYPE_BIN:
-      return buffer.slice(field.offset, field.offset + field.count);
+      return Uint8Array.from(
+        buffer.slice(field.offset, field.offset + field.count)
+      );
   }
 }
 
