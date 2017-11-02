@@ -150,7 +150,7 @@ export const signatureTags = [
     tag: 1004,
     name: 'MD5',
     type: TYPE_BIN,
-    count: 1,
+    count: 16,
     required: true
   },
   {
