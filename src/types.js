@@ -66,47 +66,91 @@ export const architectures = [
 
 // Source: http://rpm.org/api/4.4.2.2/rpmlib_8h.html
 
+const headerTags = [
+  {
+    tag: 62,
+    name: 'SIGNATURES',
+    type: TYPE_BIN,
+    count: 16,
+    required: false
+  },
+  {
+    tag: 63,
+    name: 'IMMUTABLE',
+    type: TYPE_BIN,
+    count: 16,
+    required: false
+  },
+  {
+    tag: 100,
+    name: 'I18NTABLE',
+    type: TYPE_STRING_ARRAY,
+    required: false
+  }
+];
+
 export const signatureTags = [
+  ...headerTags,
   {
     tag: 267,
-    name: 'SIGTAG_DSA',
+    name: 'DSA',
     type: TYPE_BIN,
-    count: 65
+    count: 65,
+    required: false
   },
   {
     tag: 268,
-    name: 'SIGTAG_RSA',
+    name: 'RSA',
     type: TYPE_BIN,
-    count: 1
+    count: 1,
+    required: false
   },
   {
     tag: 269,
-    name: 'SIGTAG_SHA1',
+    name: 'SHA1',
     type: TYPE_STRING,
-    count: 1
+    count: 1,
+    required: false
+  },
+  {
+    tag: 1000,
+    name: 'SIZE',
+    type: TYPE_INT32,
+    count: 1,
+    required: true
+  },
+  {
+    tag: 1002,
+    name: 'PGP',
+    type: TYPE_BIN,
+    count: 1,
+    required: false
+  },
+  {
+    tag: 1004,
+    name: 'MD5',
+    type: TYPE_BIN,
+    count: 1,
+    required: true
+  },
+  {
+    tag: 1005,
+    name: 'GPG',
+    type: TYPE_BIN,
+    count: 65,
+    required: false
+  },
+  {
+    tag: 1007,
+    name: 'PAYLOADSIZE',
+    type: TYPE_INT32,
+    count: 1,
+    required: false
   }
 ].reduce(tagPrepare, new Map());
 
 export const tags = [
-  // private
-  {
-    tag: 62,
-    name: 'HEADERSIGNATURES',
-    type: TYPE_BIN,
-    count: 16
-  },
-  {
-    tag: 63,
-    name: 'HEADERIMMUTABLE',
-    type: TYPE_BIN,
-    count: 16
-  },
-  {
-    tag: 100,
-    name: 'HEADERI18NTABLE',
-    type: TYPE_STRING_ARRAY
-  },
-
+  ...headerTags,
   {
     tag: 1000,
     name: 'NAME',
