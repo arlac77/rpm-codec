@@ -84,6 +84,19 @@ export const fileFlags = [
   'exclude'
 ].reduce(flagsPrepare, new Map());
 
+export const dependencyFlags = {
+  LESS: 0x02,
+  GREATER: 0x04,
+  EQUAL: 0x08,
+  PREREQ: 0x40,
+  INTERP: 0x100,
+  SCRIPT_PRE: 0x200,
+  SCRIPT_POST: 0x400,
+  SCRIPT_PREUN: 0x800,
+  SCRIPT_POSTUN: 0x1000,
+  RPMLIB: 0x1000000
+};
+
 // Source: http://rpm.org/api/4.4.2.2/rpmlib_8h.html
 
 const headerTags = [
@@ -174,17 +187,20 @@ export const tags = [
   {
     tag: 1000,
     name: 'NAME',
-    type: TYPE_STRING
+    type: TYPE_STRING,
+    required: true
   },
   {
     tag: 1001,
     name: 'VERSION',
-    type: TYPE_STRING
+    type: TYPE_STRING,
+    required: true
   },
   {
     tag: 1002,
     name: 'RELEASE',
-    type: TYPE_STRING
+    type: TYPE_STRING,
+    required: true
   },
   {
     tag: 1003,
@@ -193,12 +209,14 @@ export const tags = [
   {
     tag: 1004,
     name: 'SUMMARY',
-    type: TYPE_I18NSTRING
+    type: TYPE_I18NSTRING,
+    required: true
   },
   {
     tag: 1005,
     name: 'DESCRIPTION',
-    type: TYPE_I18NSTRING
+    type: TYPE_I18NSTRING,
+    required: true
   },
   {
     tag: 1006,
@@ -240,7 +258,8 @@ export const tags = [
   {
     tag: 1014,
     name: 'LICENSE',
-    type: TYPE_STRING
+    type: TYPE_STRING,
+    required: true
   },
   {
     tag: 1015,
@@ -250,7 +269,8 @@ export const tags = [
   {
     tag: 1016,
     name: 'GROUP',
-    type: TYPE_I18NSTRING
+    type: TYPE_I18NSTRING,
+    required: true
   },
   {
     tag: 1017,
@@ -400,17 +420,20 @@ export const tags = [
   {
     tag: 1048,
     name: 'REQUIREFLAGS',
-    type: TYPE_INT32
+    type: TYPE_INT32,
+    required: true
   },
   {
     tag: 1049,
     name: 'REQUIRENAME',
-    type: TYPE_STRING_ARRAY
+    type: TYPE_STRING_ARRAY,
+    required: true
   },
   {
     tag: 1050,
     name: 'REQUIREVERSION',
-    type: TYPE_STRING_ARRAY
+    type: TYPE_STRING_ARRAY,
+    required: true
   },
   {
     tag: 1051,

@@ -257,7 +257,12 @@ export function RPMEncoder(stream, options) {
   /*
   stream.write(
     headerWithValues(
-      new Map([['PAYLOADCOMPRESSOR', 'gzip'], ['PAYLOADFORMAT', 'cpio']]),
+      new Map([
+      ['REQUIRENAME', ['rpmlib(VersionedDependencies)','rpmlib(PayloadFilesHavePrefix)','rpmlib(CompressedFileNames)']],
+      ['REQUIREVERSION', ['3.0.3-1','4.0-1','3.0.4-1']],
+
+      ['PAYLOADCOMPRESSOR', 'gzip'],
+      ['PAYLOADFORMAT', 'cpio']]),
       tags
     )
   );
