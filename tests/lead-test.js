@@ -41,7 +41,6 @@ test.cb('Read lead from rpm package', t => {
         return;
       }
       const lead = structDecode(buffer, 0, LEAD);
-      //console.log(lead);
       t.is(lead.major, 3);
       t.is(lead.minor, 0);
       t.is(lead.signatureType, 5);
@@ -61,7 +60,6 @@ test('write lead', t => {
   lead.arch = 1;
   lead.type = 0;
 
-  //console.log(lead);
   const buffer = new Buffer(structLength(LEAD));
   structEncode(lead, buffer, 0, LEAD);
   t.deepEqual(
