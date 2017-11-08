@@ -162,7 +162,6 @@ export async function RPMDecoder(stream) {
         resolve(results);
       } catch (e) {
         stream.removeListener('readable', readable);
-        console.log(state.name);
         reject(e);
       }
     };
