@@ -9,7 +9,11 @@ test.skip('RPMEncoder', async t => {
 
   const output = fs.createWriteStream(fileName);
 
-  await RPMEncoder(output, { name: 'xxx', os: 'Linux', architecture: 'i386' });
+  await RPMEncoder(output, {
+    name: 'mktemp-1.5-12sls',
+    os: 'Linux',
+    architecture: 'i586'
+  });
 
   const input = fs.createReadStream(fileName);
 

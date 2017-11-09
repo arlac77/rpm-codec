@@ -18,6 +18,8 @@ test('RPMDecoder lzma', async t => {
 
   const result = await RPMDecoder(input);
 
+  console.log(result.signature.values);
+
   t.deepEqual(
     result.signature.values.get('MD5'),
     new Uint8Array([

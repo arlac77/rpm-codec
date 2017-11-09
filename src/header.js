@@ -33,13 +33,15 @@ export function headerWithValues(values, tags) {
       value
     };
 
+    console.log(`${key} ${t.tag} ${t.type} ${t.count} ${offset}`);
+
     fields.push(field);
 
     offset += fieldLength(field, value);
   }
 
   const size = hs + structLength(FIELDS) + offset;
-  //console.log(`${hs} + ${structLength(FIELDS)} + ${offset}`);
+  console.log(`${hs} + ${structLength(FIELDS)} + ${offset}`);
 
   const buffer = new Buffer(size);
 
