@@ -6,7 +6,7 @@
   "module": "src/codec.js",
   "scripts": {
     "test": "ava",
-    "cover": "nyc ava",
+    "cover": "nyc --temp-directory build/nyc ava",
     "precover": "rollup -c tests/rollup.config.js",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
