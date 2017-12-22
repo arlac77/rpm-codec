@@ -107,10 +107,11 @@ const states = [
 /**
  * Decodes the rpm header.
  * { lead : {},
- *  signature : {}
+ *  signature : {},
  *  header: {}
  * }
- * @return
+ * @param {Stream} stream
+ * @return {Object}
  */
 export async function RPMDecoder(stream) {
   return new Promise((resolve, reject) => {
