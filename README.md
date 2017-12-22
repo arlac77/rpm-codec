@@ -93,6 +93,10 @@ A gzip,xz compressed cpio structure carries the rpm payload. Other compressions
 algorithms exist, and are supported by newer versions of 'rpm', but for now it's
 gzip.
 
+
+# API
+
+
 Bibliography
 ===
 
