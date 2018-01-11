@@ -27,4 +27,4 @@ before_script:
   - npm prune
   - npm install -g --production coveralls codecov
 after_success:
-  - npm run semantic-release
+  - npm run travis-deploy-once "npm run semantic-release"

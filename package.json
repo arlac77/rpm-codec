@@ -29,7 +29,8 @@
     "prepare": "rollup -c",
     "docs": "documentation readme src/codec.js --section=API",
     "semantic-release": "semantic-release",
-    "lint": "documentation lint src/codec.js"
+    "lint": "documentation lint src/codec.js",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
     "cpio-stream": "^1.4.1"
@@ -40,8 +41,9 @@
     "nyc": "^11.4.1",
     "rollup": "^0.53.4",
     "rollup-plugin-multi-entry": "^2.0.2",
-    "semantic-release": "^11.1.0",
-    "documentation": "^5.3.5"
+    "semantic-release": "^12.2.0",
+    "documentation": "^5.3.5",
+    "travis-deploy-once": "^4.3.0"
   },
   "optionalDependencies": {
     "lzma-native": "^3.0.1"
