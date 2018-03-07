@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 8.1
+  - '8.10'
   - 9
 script:
   - npm run cover
@@ -10,7 +10,7 @@ after_script:
   - codecov
   - cat ./build/coverage/lcov.info | coveralls
   - npm run docs
-sudo: false
+sudo: 'false'
 branches:
   only:
     - master
