@@ -49,7 +49,7 @@
     "lzma-native": "^3.0.1"
   },
   "engines": {
-    "node": ">=8.10"
+    "node": ">=8.11"
   },
   "repository": {
     "type": "git",
