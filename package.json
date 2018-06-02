@@ -1,6 +1,9 @@
 {
   "name": "rpm-codec",
   "version": "0.0.0-semantic-release",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/codec.js",
   "module": "src/codec.js",
   "description": "Encode/decode rpm lead/header(s)",
