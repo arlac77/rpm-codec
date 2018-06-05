@@ -94,6 +94,7 @@ gzip.
 ### Table of Contents
 
 -   [RPMDecoder](#rpmdecoder)
+    -   [Parameters](#parameters)
 -   [TYPE_NULL](#type_null)
 -   [TYPE_STRING](#type_string)
 -   [TYPE_STRING_ARRAY](#type_string_array)
@@ -107,7 +108,7 @@ Decodes the rpm header.
  header: {}
 }
 
-**Parameters**
+### Parameters
 
 -   `stream` **[Stream](https://nodejs.org/api/stream.html)** 
 
