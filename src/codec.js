@@ -12,8 +12,8 @@ import {
 } from './util';
 import { tags, signatureTags, oses, architectures } from './types';
 
-const zlib = require('zlib');
-const cpio = require('cpio-stream');
+import { createGunzip } from 'zlib';
+import { extract } from 'cpio-stream';
 
 let lzma;
 
@@ -184,7 +184,7 @@ export function contentDecoder(result, entryHandler = defaultEntryHandler) {
 
   switch (plc) {
     case 'gzip':
-      decompressor = zlib.createGunzip();
+      decompressor = createGunzip();
       break;
     case 'lzma':
     case 'xz':
@@ -197,20 +197,20 @@ export function contentDecoder(result, entryHandler = defaultEntryHandler) {
       throw new TypeError(`Unsupported payloadcompressor ${plc}`);
   }
 
-  let extract;
+  let e;
 
   const plf = result.header.values.get('PAYLOADFORMAT');
 
   switch (plf) {
     case 'cpio':
-      extract = cpio.extract();
-      extract.on('entry', entryHandler);
+      e = extract();
+      e.on('entry', entryHandler);
       break;
     default:
       throw new TypeError(`Unsupported payloadformat ${plf}`);
   }
 
-  decompressor.pipe(extract);
+  decompressor.pipe(e);
 
   return decompressor;
 }
