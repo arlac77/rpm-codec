@@ -1,13 +1,13 @@
 import test from 'ava';
 import { RPMEncoder, RPMDecoder } from '../src/codec';
+import { join } from 'path';
 
-const fs = require('fs');
-const path = require('path');
+import { createReadStream } from 'fs';
 
 test.skip('RPMEncoder', async t => {
-  const fileName = path.join(__dirname, '..', 'build', 'xxx.rpm');
+  const fileName = join(__dirname, '..', 'build', 'xxx.rpm');
 
-  const output = fs.createWriteStream(fileName);
+  const output = createWriteStream(fileName);
 
   await RPMEncoder(output, {
     name: 'mktemp-1.5-12sls',
@@ -15,7 +15,7 @@ test.skip('RPMEncoder', async t => {
     architecture: 'i586'
   });
 
-  const input = fs.createReadStream(fileName);
+  const input = createReadStream(fileName);
 
   const result = await RPMDecoder(input);
 

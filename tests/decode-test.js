@@ -2,18 +2,12 @@ import test from 'ava';
 import { RPMDecoder, contentDecoder } from '../src/codec';
 import { TYPE_STRING } from '../src/types';
 
-const fs = require('fs');
-const path = require('path');
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 test('RPMDecoder lzma', async t => {
-  const input = fs.createReadStream(
-    path.join(
-      __dirname,
-      '..',
-      'tests',
-      'fixtures',
-      'mktemp-1.6-4mdv2010.1.i586.rpm'
-    )
+  const input = createReadStream(
+    join(__dirname, '..', 'tests', 'fixtures', 'mktemp-1.6-4mdv2010.1.i586.rpm')
   );
 
   const result = await RPMDecoder(input);
@@ -48,14 +42,8 @@ test('RPMDecoder lzma', async t => {
 });
 
 test('RPMDecoder gzip', async t => {
-  const input = fs.createReadStream(
-    path.join(
-      __dirname,
-      '..',
-      'tests',
-      'fixtures',
-      'hello-2.3-1.el2.rf.i386.rpm'
-    )
+  const input = createReadStream(
+    join(__dirname, '..', 'tests', 'fixtures', 'hello-2.3-1.el2.rf.i386.rpm')
   );
 
   const result = await RPMDecoder(input);
@@ -68,8 +56,8 @@ test('RPMDecoder gzip', async t => {
 function collectEntries() {}
 
 test('RPMDecoder aarch64', async t => {
-  const input = fs.createReadStream(
-    path.join(
+  const input = createReadStream(
+    join(
       __dirname,
       '..',
       'tests',
@@ -101,8 +89,8 @@ test('RPMDecoder aarch64', async t => {
 });
 
 test('fail RPMDecoder invalid header', async t => {
-  const input = fs.createReadStream(
-    path.join(__dirname, '..', 'tests', 'decode-test.js')
+  const input = createReadStream(
+    join(__dirname, '..', 'tests', 'decode-test.js')
   );
 
   const error = await t.throws(RPMDecoder(input));
@@ -113,8 +101,8 @@ test('fail RPMDecoder invalid header', async t => {
 });
 
 test('fail RPMDecoder short file', async t => {
-  const input = fs.createReadStream(
-    path.join(__dirname, '..', 'tests', 'fixtures', 'to-short.rpm')
+  const input = createReadStream(
+    join(__dirname, '..', 'tests', 'fixtures', 'to-short.rpm')
   );
 
   const error = await t.throws(RPMDecoder(input));

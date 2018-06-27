@@ -6,10 +6,8 @@ import {
   structLength,
   structDefaults
 } from '../src/util';
-
-const fs = require('fs');
-const path = require('path');
-const { promisify } = require('util');
+import { join } from 'path';
+import { open, read } from 'fs';
 
 test('lead length', t => t.is(structLength(LEAD), 96));
 
@@ -18,7 +16,7 @@ test('lead length', t => t.is(structLength(LEAD), 96));
 
 test.cb('Read lead from rpm package', t => {
   t.plan(7);
-  const filename = path.join(
+  const filename = join(
     __dirname,
     '..',
     'tests',
@@ -26,7 +24,7 @@ test.cb('Read lead from rpm package', t => {
     'mktemp-1.6-4mdv2010.1.i586.rpm'
   );
 
-  fs.open(filename, 'r', (err, fd) => {
+  open(filename, 'r', (err, fd) => {
     if (err) {
       t.fail(`Opening rpm file failed with ${err}`);
       t.end();
@@ -34,7 +32,7 @@ test.cb('Read lead from rpm package', t => {
     }
 
     const buffer = new Buffer(96);
-    fs.read(fd, buffer, 0, 96, 0, (err, num) => {
+    read(fd, buffer, 0, 96, 0, (err, num) => {
       if (err) {
         t.fail(`Reading failed with ${err}`);
         t.end();
