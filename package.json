@@ -7,11 +7,7 @@
   "main": "dist/codec.js",
   "module": "src/codec.js",
   "description": "Encode/decode rpm lead/header(s)",
-  "keywords": [
-    "RPM",
-    "package",
-    "stream"
-  ],
+  "keywords": ["RPM", "package", "stream"],
   "author": [
     "Jochen Hinrichsen <jochen.hinrichsen@kambrium.net>",
     "Markus Felten <markus.felten@gmx.de>"
@@ -36,7 +32,8 @@
     "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
-    "cpio-stream": "^1.4.1"
+    "cpio-stream": "^1.4.1",
+    "lzma-native": "^3.0.8"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -47,9 +44,6 @@
     "semantic-release": "^15.6.0",
     "documentation": "^8.0.0",
     "travis-deploy-once": "^5.0.0"
-  },
-  "optionalDependencies": {
-    "lzma-native": "^3.0.8"
   },
   "engines": {
     "node": ">=8.11"
@@ -63,23 +57,13 @@
   },
   "homepage": "https://github.com/arlac77/rpm-codec#readme",
   "ava": {
-    "files": [
-      "build/*-test.js"
-    ],
-    "presets": [
-      "latest"
-    ],
-    "require": [
-      "babel-register"
-    ]
+    "files": ["build/*-test.js"],
+    "presets": ["latest"],
+    "require": ["babel-register"]
   },
   "nyc": {
-    "include": [
-      "build/*-test.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["build/*-test.js"],
+    "reporter": ["lcov"],
     "report-dir": "./build/coverage"
   },
   "xo": {

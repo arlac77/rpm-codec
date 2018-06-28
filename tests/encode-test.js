@@ -1,7 +1,6 @@
 import test from 'ava';
 import { RPMEncoder, RPMDecoder } from '../src/codec';
 import { join } from 'path';
-
 import { createReadStream } from 'fs';
 
 test.skip('RPMEncoder', async t => {

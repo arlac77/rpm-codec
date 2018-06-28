@@ -11,15 +11,9 @@ import {
   allign
 } from './util';
 import { tags, signatureTags, oses, architectures } from './types';
-
 import { createGunzip } from 'zlib';
 import { extract } from 'cpio-stream';
-
-let lzma;
-
-try {
-  lzma = require('lzma-native');
-} catch (e) {}
+import { createDecompressor } from 'lzma-native';
 
 function nextHeaderState(stream, chunk, results, lastResult, state) {
   results[state.name] = lastResult;
@@ -106,12 +100,12 @@ const states = [
 
 /**
  * decoded rpm header
- * @typedef RPMHeader
+ * @typedef {Object} RPMHeader
  * @property {Object} lead
  * @property {Object} signature
  * @property {Object} header
  */
- 
+
 /**
  * Decodes the rpm header.
  * @param {Stream} stream
@@ -203,10 +197,8 @@ export function contentDecoder(result, entryHandler = defaultEntryHandler) {
       break;
     case 'lzma':
     case 'xz':
-      if (lzma !== undefined) {
-        decompressor = lzma.createDecompressor();
-        break;
-      }
+      decompressor = createDecompressor();
+      break;
 
     default:
       throw new TypeError(`Unsupported payloadcompressor ${plc}`);
