@@ -7,7 +7,11 @@
   "main": "dist/codec.js",
   "module": "src/codec.js",
   "description": "Encode/decode rpm lead/header(s)",
-  "keywords": ["RPM", "package", "stream"],
+  "keywords": [
+    "RPM",
+    "package",
+    "stream"
+  ],
   "author": [
     "Jochen Hinrichsen <jochen.hinrichsen@kambrium.net>",
     "Markus Felten <markus.felten@gmx.de>"
@@ -25,15 +29,17 @@
     "precover": "rollup -c tests/rollup.config.js",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
-    "prepare": "rollup -c",
+    "prepare": "npm run snyk-protect; rollup -c",
     "docs": "documentation readme src/codec.js --section=API",
     "semantic-release": "semantic-release",
     "lint": "documentation lint src/codec.js",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "snyk-protect": "snyk protect"
   },
   "dependencies": {
     "cpio-stream": "^1.4.1",
-    "lzma-native": "^3.0.8"
+    "lzma-native": "^3.0.8",
+    "snyk": "^1.87.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -57,13 +63,23 @@
   },
   "homepage": "https://github.com/arlac77/rpm-codec#readme",
   "ava": {
-    "files": ["build/*-test.js"],
-    "presets": ["latest"],
-    "require": ["babel-register"]
+    "files": [
+      "build/*-test.js"
+    ],
+    "presets": [
+      "latest"
+    ],
+    "require": [
+      "babel-register"
+    ]
   },
   "nyc": {
-    "include": ["build/*-test.js"],
-    "reporter": ["lcov"],
+    "include": [
+      "build/*-test.js"
+    ],
+    "reporter": [
+      "lcov"
+    ],
     "report-dir": "./build/coverage"
   },
   "xo": {
@@ -73,5 +89,6 @@
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template.git"
     }
-  }
+  },
+  "snyk": true
 }
