@@ -93,26 +93,59 @@ gzip.
 
 ### Table of Contents
 
+-   [RPMHeader](#rpmheader)
+    -   [Properties](#properties)
 -   [RPMDecoder](#rpmdecoder)
     -   [Parameters](#parameters)
+-   [defaultEntryHandler](#defaultentryhandler)
+    -   [Parameters](#parameters-1)
+-   [contentDecoder](#contentdecoder)
+    -   [Parameters](#parameters-2)
 -   [TYPE_NULL](#type_null)
 -   [TYPE_STRING](#type_string)
 -   [TYPE_STRING_ARRAY](#type_string_array)
 -   [TYPE_I18NSTRING](#type_i18nstring)
 
+## RPMHeader
+
+decoded rpm header
+
+Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+### Properties
+
+-   `lead` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `signature` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
 ## RPMDecoder
 
 Decodes the rpm header.
-{ lead : {},
- signature : {},
- header: {}
-}
 
 ### Parameters
 
 -   `stream` **[Stream](https://nodejs.org/api/stream.html)** 
 
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+Returns **[RPMHeader](#rpmheader)** 
+
+## defaultEntryHandler
+
+null handler simply skips content
+
+### Parameters
+
+-   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** file header
+-   `stream` **ReadStream** 
+-   `callback` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+
+## contentDecoder
+
+Decode the body part of an rpm stream
+
+### Parameters
+
+-   `result` **[RPMHeader](#rpmheader)** 
+-   `entryHandler` **EntryHandler**  (optional, default `defaultEntryHandler`)
 
 ## TYPE_NULL
 
