@@ -105,13 +105,17 @@ const states = [
 }, {});
 
 /**
+ * decoded rpm header
+ * @typedef RPMHeader
+ * @property {Object} lead
+ * @property {Object} signature
+ * @property {Object} header
+ */
+ 
+/**
  * Decodes the rpm header.
- * { lead : {},
- *  signature : {},
- *  header: {}
- * }
  * @param {Stream} stream
- * @return {Object}
+ * @return {RPMHeader}
  */
 export async function RPMDecoder(stream) {
   return new Promise((resolve, reject) => {
@@ -171,12 +175,23 @@ export async function RPMDecoder(stream) {
   });
 }
 
+/**
+ * null handler simply skips content
+ * @param {Object} header file header
+ * @param {ReadStream} stream
+ * @param {Function} callback
+ */
 const defaultEntryHandler = (header, stream, callback) => {
-  console.log(`extract: ${header.name}`);
+  //console.log(`extract: ${header.name}`);
   stream.on('end', () => callback());
   stream.resume();
 };
 
+/**
+ * Decode the body part of an rpm stream
+ * @param {RPMHeader} result
+ * @param {EntryHandler} entryHandler
+ */
 export function contentDecoder(result, entryHandler = defaultEntryHandler) {
   let decompressor;
 

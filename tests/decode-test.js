@@ -38,7 +38,12 @@ test('RPMDecoder lzma', async t => {
 
   t.is(result.header.values.get('PAYLOADCOMPRESSOR'), 'lzma');
 
-  input.pipe(contentDecoder(result));
+  input.pipe(contentDecoder(result,(header, stream, callback) => {
+      console.log(`extract: ${header.name}`);
+      stream.on('end', () => callback());
+      stream.resume();
+      }
+  ));
 });
 
 test('RPMDecoder gzip', async t => {
