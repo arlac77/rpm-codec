@@ -7,11 +7,7 @@
   "main": "dist/codec.js",
   "module": "src/codec.js",
   "description": "Encode/decode rpm lead/header(s)",
-  "keywords": [
-    "RPM",
-    "package",
-    "stream"
-  ],
+  "keywords": ["RPM", "package", "stream"],
   "author": [
     "Jochen Hinrichsen <jochen.hinrichsen@kambrium.net>",
     "Markus Felten <markus.felten@gmx.de>"
@@ -54,7 +50,7 @@
     "rollup-plugin-executable": "^1.2.0"
   },
   "engines": {
-    "node": ">=8.11"
+    "node": ">=10.7"
   },
   "repository": {
     "type": "git",
@@ -65,23 +61,13 @@
   },
   "homepage": "https://github.com/arlac77/rpm-codec#readme",
   "ava": {
-    "files": [
-      "build/*-test.js"
-    ],
-    "presets": [
-      "latest"
-    ],
-    "require": [
-      "babel-register"
-    ]
+    "files": ["build/*-test.js"],
+    "presets": ["latest"],
+    "require": ["babel-register"]
   },
   "nyc": {
-    "include": [
-      "build/*-test.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["build/*-test.js"],
+    "reporter": ["lcov"],
     "report-dir": "./build/coverage"
   },
   "xo": {
