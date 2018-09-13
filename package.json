@@ -40,7 +40,7 @@
     "lzma-native": "^4.0.1"
   },
   "devDependencies": {
-    "ava": "0.25.0",
+    "ava": "^1.0.0-beta.8",
     "documentation": "^8.1.2",
     "markdown-doctest": "^0.9.1",
     "nyc": "^13.1.0",
