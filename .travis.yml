@@ -10,6 +10,7 @@ script:
   - npm run docs
 after_script:
   - codecov
+  - cat ./coverage/lcov.info | coveralls
   - cat ./build/coverage/lcov.info | coveralls
 sudo: 'false'
 branches:
