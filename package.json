@@ -25,7 +25,7 @@
   "license": "MIT",
   "scripts": {
     "test": "ava",
-    "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage && nyc --temp-directory build/nyc ava",
+    "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
     "docs": "documentation readme src/codec.js --section=API",
@@ -65,24 +65,13 @@
   "homepage": "https://github.com/arlac77/rpm-codec#readme",
   "ava": {
     "files": [
-      "build/*-test.js"
+      "tests/*-test.js"
     ],
     "presets": [
-      "latest"
     ],
     "require": [
-      "babel-register"
+      "esm"
     ]
-  },
-  "nyc": {
-    "include": [
-      "build/*-test.js",
-      "src/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
-    "report-dir": "./build/coverage"
   },
   "xo": {
     "space": true
