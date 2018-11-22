@@ -11,7 +11,6 @@ script:
 after_script:
   - codecov
   - cat ./coverage/lcov.info | coveralls
-sudo: 'false'
 branches:
   only:
     - master
@@ -20,8 +19,7 @@ cache: npm
 notifications:
   email:
     - markus.felten@gmx.de
-before_install:
-  - npm i -g npm@latest
+before_install: []
 before_script:
   - npm prune
   - npm install -g --production coveralls codecov
