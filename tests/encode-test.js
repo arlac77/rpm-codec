@@ -18,6 +18,6 @@ test.skip('RPMEncoder', async t => {
 
   const result = await RPMDecoder(input);
 
-  console.log(result.signature);
+  //console.log(result.signature);
   t.is(result.lead.signatureType, 5);
 });

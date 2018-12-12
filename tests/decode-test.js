@@ -12,7 +12,7 @@ test("RPMDecoder lzma", async t => {
 
   const result = await RPMDecoder(input);
 
-  console.log(result.signature.values);
+  //console.log(result.signature.values);
 
   t.deepEqual(
     result.signature.values.get("MD5"),
@@ -40,7 +40,7 @@ test("RPMDecoder lzma", async t => {
 
   input.pipe(
     contentDecoder(result, (header, stream, callback) => {
-      console.log(`extract: ${header.name}`);
+      //console.log(`extract: ${header.name}`);
       stream.on("end", () => callback());
       stream.resume();
     })
