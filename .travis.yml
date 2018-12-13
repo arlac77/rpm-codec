@@ -3,7 +3,7 @@ os:
   - linux
   - osx
 node_js:
-  - 10.14.1
+  - 10.14.2
 script:
   - npm run cover
   - npm run lint
