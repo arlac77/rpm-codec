@@ -6,11 +6,6 @@ node_js:
   - 10.15.0
 script:
   - npm run cover
-  - npm run lint
-  - npm run docs
-after_script:
-  - codecov
-  - cat ./coverage/lcov.info | coveralls
 branches:
   only:
     - master
@@ -19,8 +14,23 @@ cache: npm
 notifications:
   email:
     - markus.felten@gmx.de
-before_script:
-  - npm prune
-  - npm install -g --production coveralls codecov
-after_success:
-  - npm run travis-deploy-once "npm run semantic-release"
+jobs:
+  include:
+    - stage: docs
+      node_js: lts/*
+      skip_cleanup: 'true'
+      script:
+        - npm install -g --production coveralls codecov
+        - npm run cover
+        - codecov
+        - cat ./coverage/lcov.info | coveralls
+        - npm run lint
+        - npm run docs
+    - stage: release
+      node_js: lts/*
+      script: skip
+      deploy:
+        provider: script
+        skip_cleanup: 'true'
+        script:
+          - npx semantic-release
