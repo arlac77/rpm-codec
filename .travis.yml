@@ -11,9 +11,7 @@ branches:
     - master
     - /^greenkeeper/.*$/
 cache: npm
-notifications:
-  email:
-    - markus.felten@gmx.de
+notifications: {}
 jobs:
   include:
     - stage: docs
