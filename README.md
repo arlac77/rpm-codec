@@ -7,7 +7,6 @@
 [![Coverage Status](https://coveralls.io/repos/arlac77/rpm-codec/badge.svg)](https://coveralls.io/r/arlac77/rpm-codec)
 [![Known Vulnerabilities](https://snyk.io/test/github/arlac77/rpm-codec/badge.svg)](https://snyk.io/test/github/arlac77/rpm-codec)
 [![GitHub Issues](https://img.shields.io/github/issues/arlac77/rpm-codec.svg?style=flat-square)](https://github.com/arlac77/rpm-codec/issues)
-[![Stories in Ready](https://badge.waffle.io/arlac77/rpm-codec.svg?label=ready&title=Ready)](http://waffle.io/arlac77/rpm-codec)
 [![Dependency Status](https://david-dm.org/arlac77/rpm-codec.svg)](https://david-dm.org/arlac77/rpm-codec)
 [![devDependency Status](https://david-dm.org/arlac77/rpm-codec/dev-status.svg)](https://david-dm.org/arlac77/rpm-codec#info=devDependencies)
 [![docs](http://inch-ci.org/github/arlac77/rpm-codec.svg?branch=master)](http://inch-ci.org/github/arlac77/rpm-codec)
