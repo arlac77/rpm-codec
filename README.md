@@ -10,7 +10,6 @@
 [![Dependency Status](https://david-dm.org/arlac77/rpm-codec.svg)](https://david-dm.org/arlac77/rpm-codec)
 [![devDependency Status](https://david-dm.org/arlac77/rpm-codec/dev-status.svg)](https://david-dm.org/arlac77/rpm-codec#info=devDependencies)
 [![docs](http://inch-ci.org/github/arlac77/rpm-codec.svg?branch=master)](http://inch-ci.org/github/arlac77/rpm-codec)
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![downloads](http://img.shields.io/npm/dm/rpm-codec.svg?style=flat-square)](https://npmjs.org/package/rpm-codec)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
