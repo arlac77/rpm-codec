@@ -1,6 +1,6 @@
-import { LEAD } from './lead';
-import { FIELD, fieldDecode } from './field';
-import { HEADER, headerWithValues } from './header';
+import { LEAD } from "./lead";
+import { FIELD, fieldDecode } from "./field";
+import { HEADER, headerWithValues } from "./header";
 import {
   structDecode,
   structEncode,
@@ -9,11 +9,11 @@ import {
   structCheckDefaults,
   throwOnProblems,
   allign
-} from './util';
-import { tags, signatureTags, oses, architectures } from './types';
-import { createGunzip } from 'zlib';
-import { extract } from 'cpio-stream';
-import { createDecompressor } from 'lzma-native';
+} from "./util";
+import { tags, signatureTags, oses, architectures } from "./types";
+import { createGunzip } from "zlib";
+import extract from "cpio-stream/lib/extract";
+import { createDecompressor } from "lzma-native";
 
 function nextHeaderState(stream, chunk, results, lastResult, state) {
   results[state.name] = lastResult;
@@ -34,7 +34,7 @@ function nextHeaderState(stream, chunk, results, lastResult, state) {
       value: lastResult.values
     },
     tags: {
-      value: state.name === 'header' ? tags : signatureTags
+      value: state.name === "header" ? tags : signatureTags
     }
   });
 
@@ -45,7 +45,7 @@ function nextHeaderState(stream, chunk, results, lastResult, state) {
 
 const states = [
   {
-    name: 'lead',
+    name: "lead",
     struct: LEAD,
     nextState(chunk, offset, results, lastResult, state) {
       results[state.name] = lastResult;
@@ -58,17 +58,17 @@ const states = [
     }
   },
   {
-    name: 'signature',
+    name: "signature",
     struct: HEADER,
     nextState: nextHeaderState
   },
   {
-    name: 'header',
+    name: "header",
     struct: HEADER,
     nextState: nextHeaderState
   },
   {
-    name: 'field',
+    name: "field",
     struct: FIELD,
     nextState(chunk, offset, results, lastResult, state) {
       lastResult.reduce((m, c) => {
@@ -123,7 +123,7 @@ export async function RPMDecoder(stream) {
       let chunk = stream.read();
 
       if (chunk === null) {
-        stream.removeListener('readable', readable);
+        stream.removeListener("readable", readable);
         reject(
           new TypeError(
             `Unexpected end of stream at ${offset} while reading ${state.name}`
@@ -155,17 +155,17 @@ export async function RPMDecoder(stream) {
           }
         }
 
-        stream.removeListener('readable', readable);
+        stream.removeListener("readable", readable);
         stream.unshift(chunk);
 
         resolve(results);
       } catch (e) {
-        stream.removeListener('readable', readable);
+        stream.removeListener("readable", readable);
         reject(e);
       }
     };
 
-    stream.on('readable', readable);
+    stream.on("readable", readable);
   });
 }
 
@@ -177,7 +177,7 @@ export async function RPMDecoder(stream) {
  */
 const defaultEntryHandler = (header, stream, callback) => {
   //console.log(`extract: ${header.name}`);
-  stream.on('end', () => callback());
+  stream.on("end", () => callback());
   stream.resume();
 };
 
@@ -189,14 +189,14 @@ const defaultEntryHandler = (header, stream, callback) => {
 export function contentDecoder(result, entryHandler = defaultEntryHandler) {
   let decompressor;
 
-  const plc = result.header.values.get('PAYLOADCOMPRESSOR');
+  const plc = result.header.values.get("PAYLOADCOMPRESSOR");
 
   switch (plc) {
-    case 'gzip':
+    case "gzip":
       decompressor = createGunzip();
       break;
-    case 'lzma':
-    case 'xz':
+    case "lzma":
+    case "xz":
       decompressor = createDecompressor();
       break;
 
@@ -206,12 +206,12 @@ export function contentDecoder(result, entryHandler = defaultEntryHandler) {
 
   let e;
 
-  const plf = result.header.values.get('PAYLOADFORMAT');
+  const plf = result.header.values.get("PAYLOADFORMAT");
 
   switch (plf) {
-    case 'cpio':
+    case "cpio":
       e = extract();
-      e.on('entry', entryHandler);
+      e.on("entry", entryHandler);
       break;
     default:
       throw new TypeError(`Unsupported payloadformat ${plf}`);
@@ -237,7 +237,7 @@ export function RPMEncoder(stream, options) {
     headerWithValues(
       new Map([
         [
-          'SIGNATURES',
+          "SIGNATURES",
           new Uint8Array([
             0,
             0,
@@ -258,7 +258,7 @@ export function RPMEncoder(stream, options) {
           ])
         ],
         [
-          'DSA',
+          "DSA",
           new Uint8Array([
             136,
             63,
@@ -327,11 +327,11 @@ export function RPMEncoder(stream, options) {
             6
           ])
         ],
-        ['SHA1', '8201decf2e7d589983931f9720860a72ea867002'],
-        ['SIZE', 673579008],
-        ['PAYLOADSIZE', 4231004160],
+        ["SHA1", "8201decf2e7d589983931f9720860a72ea867002"],
+        ["SIZE", 673579008],
+        ["PAYLOADSIZE", 4231004160],
         [
-          'MD5',
+          "MD5",
           new Uint8Array([
             0x74,
             0x5c,
@@ -353,7 +353,7 @@ export function RPMEncoder(stream, options) {
         ],
 
         [
-          'GPG',
+          "GPG",
           new Uint8Array([
             136,
             63,

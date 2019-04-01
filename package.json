@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/codec.js",
+  "main": "src/codec.js",
   "module": "src/codec.js",
   "description": "Encode/decode rpm lead/header(s)",
   "keywords": [
@@ -27,8 +27,7 @@
     "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
     "docs": "documentation readme src/codec.js --section=API",
     "lint": "documentation lint src/codec.js",
-    "posttest": "npm run prepare && markdown-doctest",
-    "prepare": "rollup -c",
+    "posttest": "markdown-doctest",
     "test": "ava"
   },
   "dependencies": {
@@ -41,12 +40,6 @@
     "documentation": "^9.3.1",
     "esm": "^3.2.22",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^1.7.4",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-commonjs": "^9.2.2",
-    "rollup-plugin-executable": "^1.4.5",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^4.0.1",
     "semantic-release": "^15.13.3"
   },
   "engines": {
