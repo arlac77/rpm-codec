@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "cpio-stream": "^1.4.1",
-    "lzma-native": "^4.0.3"
+    "lzma-native": "^4.0.5"
   },
   "devDependencies": {
     "ava": "^1.4.1",
