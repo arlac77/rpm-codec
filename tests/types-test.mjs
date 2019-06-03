@@ -5,7 +5,7 @@ import {
   oses,
   architectures,
   fileFlags
-} from '../src/types';
+} from '../src/types.mjs';
 
 test('tags tag + name', t => {
   t.deepEqual(tags.get(1000), {

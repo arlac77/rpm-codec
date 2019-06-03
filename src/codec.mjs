@@ -1,6 +1,6 @@
-import { LEAD } from "./lead";
-import { FIELD, fieldDecode } from "./field";
-import { HEADER, headerWithValues } from "./header";
+import { LEAD } from "./lead.mjs";
+import { FIELD, fieldDecode } from "./field.mjs";
+import { HEADER, headerWithValues } from "./header.mjs";
 import {
   structDecode,
   structEncode,
@@ -9,11 +9,10 @@ import {
   structCheckDefaults,
   throwOnProblems,
   allign
-} from "./util";
-import { tags, signatureTags, oses, architectures } from "./types";
+} from "./util.mjs";
+import { tags, signatureTags, oses, architectures } from "./types.mjs";
 import { createGunzip } from "zlib";
 import extract from "cpio-stream/lib/extract";
-import { createDecompressor } from "lzma-native";
 
 function nextHeaderState(stream, chunk, results, lastResult, state) {
   results[state.name] = lastResult;
@@ -186,7 +185,7 @@ const defaultEntryHandler = (header, stream, callback) => {
  * @param {RPMHeader} result
  * @param {EntryHandler} entryHandler
  */
-export function contentDecoder(result, entryHandler = defaultEntryHandler) {
+export async function contentDecoder(result, entryHandler = defaultEntryHandler) {
   let decompressor;
 
   const plc = result.header.values.get("PAYLOADCOMPRESSOR");
@@ -197,7 +196,10 @@ export function contentDecoder(result, entryHandler = defaultEntryHandler) {
       break;
     case "lzma":
     case "xz":
-      decompressor = createDecompressor();
+      const m = await import("lzma-native");
+      decompressor = m.createDecompressor();
+     //   import { createDecompressor } from "lzma-native";
+      //decompressor = createDecompressor();
       break;
 
     default:

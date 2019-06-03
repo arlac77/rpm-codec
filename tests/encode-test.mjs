@@ -1,10 +1,13 @@
 import test from 'ava';
-import { RPMEncoder, RPMDecoder } from '../src/codec';
-import { join } from 'path';
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 import { createReadStream } from 'fs';
+import { RPMEncoder, RPMDecoder } from '../src/codec.mjs';
+
+const here = dirname(fileURLToPath(import.meta.url));
 
 test.skip('RPMEncoder', async t => {
-  const fileName = join(__dirname, '..', 'build', 'xxx.rpm');
+  const fileName = join(here, '..', 'build', 'xxx.rpm');
 
   const output = createWriteStream(fileName);
 

@@ -5,8 +5,8 @@ import {
   structEncode,
   decodeStringArray,
   encodeStringArray
-} from '../src/util';
-import { FIELD } from '../src/field';
+} from '../src/util.mjs';
+import { FIELD } from '../src/field.mjs';
 
 test('struct length u8', t => {
   t.is(1, structLength('u8'));

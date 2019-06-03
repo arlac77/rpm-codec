@@ -9,9 +9,9 @@ import {
   TYPE_BIN,
   TYPE_STRING_ARRAY,
   TYPE_I18NSTRING
-} from './types';
+} from './types.mjs';
 
-import { decodeStringArray, encodeStringArray } from './util';
+import { decodeStringArray, encodeStringArray } from './util.mjs';
 
 export const FIELD = [
   { name: 'tag', type: 'u32be', length: 1 },

@@ -1,5 +1,5 @@
 import test from 'ava';
-import { fieldLength } from '../src/field';
+import { fieldLength } from '../src/field.mjs';
 import {
   TYPE_NULL,
   TYPE_CHAR,
@@ -11,7 +11,7 @@ import {
   TYPE_BIN,
   TYPE_STRING_ARRAY,
   TYPE_I18NSTRING
-} from '../src/types';
+} from '../src/types.mjs';
 
 test('length TYPE_NULL', t => {
   t.is(fieldLength({ type: TYPE_NULL }), 0);

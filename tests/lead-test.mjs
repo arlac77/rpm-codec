@@ -1,13 +1,17 @@
 import test from 'ava';
-import { LEAD } from '../src/lead';
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { open, read } from 'fs';
+
+import { LEAD } from '../src/lead.mjs';
 import {
   structDecode,
   structEncode,
   structLength,
   structDefaults
-} from '../src/util';
-import { join } from 'path';
-import { open, read } from 'fs';
+} from '../src/util.mjs';
+
+const here = dirname(fileURLToPath(import.meta.url));
 
 test('lead length', t => t.is(structLength(LEAD), 96));
 
@@ -17,7 +21,7 @@ test('lead length', t => t.is(structLength(LEAD), 96));
 test.cb('Read lead from rpm package', t => {
   t.plan(7);
   const filename = join(
-    __dirname,
+    here,
     '..',
     'tests',
     'fixtures',

@@ -5,8 +5,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "src/codec.js",
-  "module": "src/codec.js",
+  "main": "src/codec.mjs",
+  "module": "src/codec.mjs",
   "description": "Encode/decode rpm lead/header(s)",
   "keywords": [
     "RPM",
@@ -26,8 +26,8 @@
   "license": "MIT",
   "scripts": {
     "cover": "c8 --temp-directory build/tmp ava && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme src/codec.js --section=API",
-    "lint": "documentation lint src/codec.js",
+    "docs": "documentation readme src/codec.mjs --section=API",
+    "lint": "documentation lint src/codec.mjs",
     "posttest": "markdown-doctest",
     "test": "ava"
   },
@@ -56,7 +56,6 @@
   "homepage": "https://github.com/arlac77/rpm-codec#readme",
   "ava": {
     "files": [
-      "tests/*-test.js",
       "tests/*-test.mjs"
     ],
     "require": [
@@ -65,7 +64,6 @@
     "babel": false,
     "compileEnhancements": false,
     "extensions": [
-      "js",
       "mjs"
     ]
   },

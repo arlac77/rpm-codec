@@ -1,5 +1,5 @@
-import { FIELD, fieldEncode, fieldLength } from './field';
-import { structDefaults, structLength, structEncode } from './util';
+import { FIELD, fieldLength } from './field.mjs';
+import { structDefaults, structLength, structEncode } from './util.mjs';
 
 export const HEADER = [
   {

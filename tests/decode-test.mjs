@@ -1,13 +1,14 @@
 import test from "ava";
-import { RPMDecoder, contentDecoder } from "../src/codec";
-import { TYPE_STRING } from "../src/types";
-
 import { createReadStream } from "fs";
-import { join } from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { RPMDecoder, contentDecoder } from "../src/codec.mjs";
+
+const here = dirname(fileURLToPath(import.meta.url));
 
 test("RPMDecoder lzma", async t => {
   const input = createReadStream(
-    join(__dirname, "..", "tests", "fixtures", "mktemp-1.6-4mdv2010.1.i586.rpm")
+    join(here, "..", "tests", "fixtures", "mktemp-1.6-4mdv2010.1.i586.rpm")
   );
 
   const result = await RPMDecoder(input);
@@ -39,7 +40,7 @@ test("RPMDecoder lzma", async t => {
   t.is(result.header.values.get("PAYLOADCOMPRESSOR"), "lzma");
 
   input.pipe(
-    contentDecoder(result, (header, stream, callback) => {
+    await contentDecoder(result, (header, stream, callback) => {
       //console.log(`extract: ${header.name}`);
       stream.on("end", () => callback());
       stream.resume();
@@ -49,14 +50,14 @@ test("RPMDecoder lzma", async t => {
 
 test("RPMDecoder gzip", async t => {
   const input = createReadStream(
-    join(__dirname, "..", "tests", "fixtures", "hello-2.3-1.el2.rf.i386.rpm")
+    join(here, "..", "tests", "fixtures", "hello-2.3-1.el2.rf.i386.rpm")
   );
 
   const result = await RPMDecoder(input);
 
   t.is(result.header.values.get("PAYLOADCOMPRESSOR"), "gzip");
 
-  input.pipe(contentDecoder(result));
+  input.pipe(await contentDecoder(result));
 });
 
 function collectEntries() {}
@@ -64,7 +65,7 @@ function collectEntries() {}
 test("RPMDecoder aarch64", async t => {
   const input = createReadStream(
     join(
-      __dirname,
+      here,
       "..",
       "tests",
       "fixtures",
@@ -79,7 +80,7 @@ test("RPMDecoder aarch64", async t => {
   const files = new Set();
 
   const p = input.pipe(
-    contentDecoder(result, (header, stream, callback) => {
+    await contentDecoder(result, (header, stream, callback) => {
       files.add(header.name);
       stream.on("end", () => callback());
       stream.resume();
@@ -96,7 +97,7 @@ test("RPMDecoder aarch64", async t => {
 
 test("fail RPMDecoder invalid header", async t => {
   const input = createReadStream(
-    join(__dirname, "..", "tests", "decode-test.js")
+    join(here, "..", "tests", "decode-test.mjs")
   );
 
   await t.throwsAsync(async () => RPMDecoder(input), {
@@ -108,7 +109,7 @@ test("fail RPMDecoder invalid header", async t => {
 
 test("fail RPMDecoder short file", async t => {
   const input = createReadStream(
-    join(__dirname, "..", "tests", "fixtures", "to-short.rpm")
+    join(here, "..", "tests", "fixtures", "to-short.rpm")
   );
 
   await t.throwsAsync(async () => RPMDecoder(input), {

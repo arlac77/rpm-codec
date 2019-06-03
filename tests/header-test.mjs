@@ -1,11 +1,10 @@
 import test from 'ava';
-import { HEADER } from '../src/header';
+import { HEADER } from '../src/header.mjs';
 import {
-  structDecode,
   structEncode,
   structLength,
   structDefaults
-} from '../src/util';
+} from '../src/util.mjs';
 
 test('write header', t => {
   const header = structDefaults(HEADER);
