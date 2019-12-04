@@ -1,10 +1,11 @@
 {
   "name": "rpm-codec",
   "version": "0.0.0-semantic-release",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": false,
+  "type": "module",
   "main": "src/codec.mjs",
   "module": "src/codec.mjs",
   "description": "Encode/decode rpm lead/header(s)",
@@ -71,6 +72,5 @@
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template-esm-only.git"
     }
-  },
-  "sideEffects": false
+  }
 }
