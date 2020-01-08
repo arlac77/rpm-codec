@@ -2,8 +2,6 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/arlac77/rpm-codec/badge.svg)](https://snyk.io/test/github/arlac77/rpm-codec)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![npm](https://img.shields.io/npm/v/rpm-codec.svg)](https://www.npmjs.com/package/rpm-codec)
-[![Greenkeeper](https://badges.greenkeeper.io/arlac77/rpm-codec.svg)](https://greenkeeper.io/)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/arlac77/rpm-codec)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![minified size](https://badgen.net/bundlephobia/min/rpm-codec)](https://bundlephobia.com/result?p=rpm-codec)
 [![downloads](http://img.shields.io/npm/dm/rpm-codec.svg?style=flat-square)](https://npmjs.org/package/rpm-codec)
@@ -11,6 +9,8 @@
 [![Build Status](https://secure.travis-ci.org/arlac77/rpm-codec.png)](http://travis-ci.org/arlac77/rpm-codec)
 [![codecov.io](http://codecov.io/github/arlac77/rpm-codec/coverage.svg?branch=master)](http://codecov.io/github/arlac77/rpm-codec?branch=master)
 [![Coverage Status](https://coveralls.io/repos/arlac77/rpm-codec/badge.svg)](https://coveralls.io/r/arlac77/rpm-codec)
+[![Greenkeeper](https://badges.greenkeeper.io/arlac77/rpm-codec.svg)](https://greenkeeper.io/)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/arlac77/rpm-codec)
 
 # rpm-codec
 
