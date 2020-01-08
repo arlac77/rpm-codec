@@ -30,7 +30,8 @@
     "docs": "documentation readme src/codec.mjs --section=API",
     "lint": "documentation lint src/codec.mjs",
     "posttest": "markdown-doctest",
-    "test": "ava"
+    "test": "ava",
+    "prepare": "rollup -c"
   },
   "dependencies": {
     "cpio-stream": "^1.4.1",
