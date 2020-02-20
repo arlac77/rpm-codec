@@ -26,10 +26,10 @@
   ],
   "license": "BSD-2-Clause",
   "scripts": {
+    "test": "ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/codec.mjs --section=API",
-    "lint": "documentation lint src/codec.mjs",
-    "test": "ava --timeout 2m"
+    "lint": "documentation lint src/codec.mjs"
   },
   "dependencies": {
     "cpio-stream": "^1.4.1",
