@@ -12,7 +12,7 @@ import {
 } from "./util.mjs";
 import { tags, signatureTags, oses, architectures } from "./types.mjs";
 import { createGunzip } from "zlib";
-import extract from "cpio-stream/lib/extract";
+import extract from "cpio-stream/lib/extract.js";
 
 function nextHeaderState(stream, chunk, results, lastResult, state) {
   results[state.name] = lastResult;
