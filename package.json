@@ -7,7 +7,6 @@
   "sideEffects": false,
   "type": "module",
   "main": "src/codec.mjs",
-  "module": "src/codec.mjs",
   "description": "Encode/decode rpm lead/header(s)",
   "keywords": [
     "RPM",
