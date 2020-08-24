@@ -8,7 +8,6 @@
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Known Vulnerabilities](https://snyk.io/test/github/arlac77/rpm-codec/badge.svg)](https://snyk.io/test/github/arlac77/rpm-codec)
-[![codecov.io](http://codecov.io/github/arlac77/rpm-codec/coverage.svg?branch=master)](http://codecov.io/github/arlac77/rpm-codec?branch=master)
 [![Coverage Status](https://coveralls.io/repos/arlac77/rpm-codec/badge.svg)](https://coveralls.io/r/arlac77/rpm-codec)
 
 # rpm-codec
