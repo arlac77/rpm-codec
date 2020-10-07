@@ -8,7 +8,7 @@
   "type": "module",
   "main": "./src/codec.mjs",
   "exports": {
-    ".": "src/codec.mjs"
+    ".": "./src/codec.mjs"
   },
   "description": "Encode/decode rpm lead/header(s)",
   "keywords": [
