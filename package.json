@@ -6,7 +6,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "main": "src/codec.mjs",
+  "main": "./src/codec.mjs",
   "exports": {
     ".": "src/codec.mjs"
   },
