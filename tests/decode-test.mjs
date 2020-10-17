@@ -1,5 +1,7 @@
 import test from "ava";
 import { createReadStream } from "fs";
+import { pipeline } from "stream";
+import { promisify } from "util";
 import { RPMDecoder, contentDecoder } from "../src/codec.mjs";
 
 test("RPMDecoder lzma", async t => {
@@ -70,6 +72,17 @@ test("RPMDecoder aarch64", async t => {
 
   const files = new Set();
 
+  await promisify(pipeline)(
+    input,
+    await contentDecoder(result, (header, stream, callback) => {
+      files.add(header.name);
+      console.log(header);
+      stream.resume();
+    })
+  );
+
+  console.log(files);
+  /*
   const p = input.pipe(
     await contentDecoder(result, (header, stream, callback) => {
       files.add(header.name);
@@ -82,6 +95,7 @@ test("RPMDecoder aarch64", async t => {
     p.on("end", () => resolve());
     p.on("error", err => reject(err));
   });
+*/
 
   t.true(files.has("./usr/src"));
 });
