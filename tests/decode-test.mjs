@@ -1,14 +1,10 @@
 import test from "ava";
 import { createReadStream } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
 import { RPMDecoder, contentDecoder } from "../src/codec.mjs";
-
-const here = dirname(fileURLToPath(import.meta.url));
 
 test("RPMDecoder lzma", async t => {
   const input = createReadStream(
-    join(here, "..", "tests", "fixtures", "mktemp-1.6-4mdv2010.1.i586.rpm")
+    new URL("fixtures/mktemp-1.6-4mdv2010.1.i586.rpm", import.meta.url).pathname
   );
 
   const result = await RPMDecoder(input);
@@ -50,7 +46,7 @@ test("RPMDecoder lzma", async t => {
 
 test("RPMDecoder gzip", async t => {
   const input = createReadStream(
-    join(here, "..", "tests", "fixtures", "hello-2.3-1.el2.rf.i386.rpm")
+    new URL("fixtures/hello-2.3-1.el2.rf.i386.rpm", import.meta.url).pathname
   );
 
   const result = await RPMDecoder(input);
@@ -64,13 +60,8 @@ function collectEntries() {}
 
 test("RPMDecoder aarch64", async t => {
   const input = createReadStream(
-    join(
-      here,
-      "..",
-      "tests",
-      "fixtures",
-      "filesystem-3.2-40.fc26.aarch64.rpm"
-    )
+    new URL("fixtures/filesystem-3.2-40.fc26.aarch64.rpm", import.meta.url)
+      .pathname
   );
 
   const result = await RPMDecoder(input);
@@ -95,9 +86,9 @@ test("RPMDecoder aarch64", async t => {
   t.true(files.has("./usr/src"));
 });
 
-test("fail RPMDecoder invalid header", async t => {
+test.only("fail RPMDecoder invalid header", async t => {
   const input = createReadStream(
-    join(here, "..", "tests", "decode-test.mjs")
+    new URL("decode-test.mjs", import.meta.url).pathname
   );
 
   await t.throwsAsync(async () => RPMDecoder(input), {
@@ -109,7 +100,7 @@ test("fail RPMDecoder invalid header", async t => {
 
 test("fail RPMDecoder short file", async t => {
   const input = createReadStream(
-    join(here, "..", "tests", "fixtures", "to-short.rpm")
+    new URL("fixtures/to-short.rpm", import.meta.url).pathname
   );
 
   await t.throwsAsync(async () => RPMDecoder(input), {
