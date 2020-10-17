@@ -231,7 +231,7 @@ export function RPMEncoder(stream, options) {
   lead.arch = architectures.get(options.architecture).id;
   lead.type = 0;
 
-  const buffer = new Buffer.alloc(structLength(LEAD));
+  const buffer = Buffer.alloc(structLength(LEAD));
   structEncode(lead, buffer, 0, LEAD);
   stream.write(buffer);
 

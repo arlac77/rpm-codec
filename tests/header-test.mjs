@@ -10,11 +10,11 @@ test('write header', t => {
   const header = structDefaults(HEADER);
   header.count = 7;
   header.size = 8;
-  const buffer = new Buffer(structLength(HEADER));
+  const buffer = Buffer.alloc(structLength(HEADER));
   structEncode(header, buffer, 0, HEADER);
   t.deepEqual(
     buffer.slice(0, 16),
-    new Buffer([
+    Buffer.from([
       0x8e,
       0xad,
       0xe8,

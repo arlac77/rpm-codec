@@ -43,7 +43,7 @@ export function headerWithValues(values, tags) {
   const size = hs + structLength(FIELDS) + offset;
   console.log(`${hs} + ${structLength(FIELDS)} + ${offset}`);
 
-  const buffer = new Buffer.alloc(size);
+  const buffer = Buffer.alloc(size);
 
   const header = structDefaults(HEADER);
   header.count = values.size;

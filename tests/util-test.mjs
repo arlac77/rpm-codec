@@ -93,14 +93,14 @@ test('structEncode', t => {
     15
   ]);
   const d = structDecode(b, 0, STRUCT);
-  const b1 = Buffer(15);
+  const b1 = Buffer.alloc(15);
   structEncode(d, b1, 0, STRUCT);
   t.deepEqual(b.slice(0, 9), b1.slice(0, 9));
 });
 
 test('struct encode array', t => {
   const type = { type: [{ name: 'tag', type: 'u8', length: 1 }], length: 4 };
-  const b = Buffer(4);
+  const b = Buffer.alloc(4);
   structEncode([{ tag: 1 }, { tag: 2 }, { tag: 3 }, { tag: 4 }], b, 0, type);
   t.deepEqual(b, Buffer.from([1, 2, 3, 4]));
 });
@@ -111,7 +111,7 @@ test('decode string array', t => {
 });
 
 test('encode string array', t => {
-  const buffer = new Buffer(9);
+  const buffer = Buffer.alloc(9);
   encodeStringArray(buffer, 2, 'ascii', ['AB', 'C', 'D']);
   t.deepEqual(buffer, Buffer.from([0, 0, 65, 66, 0, 67, 0, 68, 0]));
 });
