@@ -3,7 +3,7 @@
 [![minified size](https://badgen.net/bundlephobia/min/rpm-codec)](https://bundlephobia.com/result?p=rpm-codec)
 [![downloads](http://img.shields.io/npm/dm/rpm-codec.svg?style=flat-square)](https://npmjs.org/package/rpm-codec)
 [![GitHub Issues](https://img.shields.io/github/issues/arlac77/rpm-codec.svg?style=flat-square)](https://github.com/arlac77/rpm-codec/issues)
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Farlac77%2Frpm-codec%2Fbadge&style=flat)](https://actions-badge.atrox.dev/arlac77/rpm-codec/goto)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Farlac77%2Frpm-codec%2Fbadge\&style=flat)](https://actions-badge.atrox.dev/arlac77/rpm-codec/goto)
 [![Styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Known Vulnerabilities](https://snyk.io/test/github/arlac77/rpm-codec/badge.svg)](https://snyk.io/test/github/arlac77/rpm-codec)
@@ -13,9 +13,9 @@
 
 Encode/decode rpm lead/header(s)
 
-== Which version of RPM is supported?
+\== Which version of RPM is supported?
 
-According to &lt;<wikipedia>> there are, well, three versions of rpm:
+According to <<wikipedia>> there are, well, three versions of rpm:
 
 1.  'THE' rpm
 2.  rpm.org, a public effort starting around 2007 producing versions 4.8 to 4.10
@@ -23,7 +23,7 @@ According to &lt;<wikipedia>> there are, well, three versions of rpm:
 
 The first rpm i got my hand on was 4.4, so for now the one and only
 implementation is 4.4.
-Do _not_ expect any newer features such as compression other than gzip (lzma,
+Do *not* expect any newer features such as compression other than gzip (lzma,
 xz, ...).
 
 # RPM file format specification
@@ -65,15 +65,15 @@ continue.
 
 Supported index types:
 
--   NULL = 0
--   CHAR = 1
--   INT8 = 2
--   INT16 = 3
--   INT32 = 4
--   INT64 = 5
--   STRING = 6
--   BIN = 7
--   STRING_ARRAY = 8
+*   NULL = 0
+*   CHAR = 1
+*   INT8 = 2
+*   INT16 = 3
+*   INT32 = 4
+*   INT64 = 5
+*   STRING = 6
+*   BIN = 7
+*   STRING_ARRAY = 8
 
 # Payload
 
@@ -87,18 +87,18 @@ gzip.
 
 ### Table of Contents
 
--   [RPMHeader](#rpmheader)
-    -   [Properties](#properties)
--   [RPMDecoder](#rpmdecoder)
-    -   [Parameters](#parameters)
--   [defaultEntryHandler](#defaultentryhandler)
-    -   [Parameters](#parameters-1)
--   [contentDecoder](#contentdecoder)
-    -   [Parameters](#parameters-2)
--   [TYPE_NULL](#type_null)
--   [TYPE_STRING](#type_string)
--   [TYPE_STRING_ARRAY](#type_string_array)
--   [TYPE_I18NSTRING](#type_i18nstring)
+*   [RPMHeader](#rpmheader)
+    *   [Properties](#properties)
+*   [RPMDecoder](#rpmdecoder)
+    *   [Parameters](#parameters)
+*   [defaultEntryHandler](#defaultentryhandler)
+    *   [Parameters](#parameters-1)
+*   [contentDecoder](#contentdecoder)
+    *   [Parameters](#parameters-2)
+*   [TYPE_NULL](#type_null)
+*   [TYPE_STRING](#type_string)
+*   [TYPE_STRING_ARRAY](#type_string_array)
+*   [TYPE_I18NSTRING](#type_i18nstring)
 
 ## RPMHeader
 
@@ -108,9 +108,9 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### Properties
 
--   `lead` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
--   `signature` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
--   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `lead` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `signature` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
 
 ## RPMDecoder
 
@@ -118,7 +118,7 @@ Decodes the rpm header.
 
 ### Parameters
 
--   `stream` **[Stream](https://nodejs.org/api/stream.html)** 
+*   `stream` **[Stream](https://nodejs.org/api/stream.html)** 
 
 Returns **[RPMHeader](#rpmheader)** 
 
@@ -128,9 +128,9 @@ null handler simply skips content
 
 ### Parameters
 
--   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** file header
--   `stream` **ReadStream** 
--   `callback` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+*   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** file header
+*   `stream` **ReadStream** 
+*   `callback` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
 
 ## contentDecoder
 
@@ -138,8 +138,8 @@ Decode the body part of an rpm stream
 
 ### Parameters
 
--   `result` **[RPMHeader](#rpmheader)** 
--   `entryHandler` **EntryHandler**  (optional, default `defaultEntryHandler`)
+*   `result` **[RPMHeader](#rpmheader)** 
+*   `entryHandler` **EntryHandler**  (optional, default `defaultEntryHandler`)
 
 ## TYPE_NULL
 
@@ -167,11 +167,11 @@ Type: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 # Bibliography
 
-[bibliography]
+\[bibliography]
 
--   [wikipedia](http://en.wikipedia.org/wiki/RPM_Package_Manager)
+*   [wikipedia](http://en.wikipedia.org/wiki/RPM_Package_Manager)
     RPM Package Manager
--   _maxrpm_ Edward C. Bailey. Maximum rpm. Red Hat Software, Inc. 1997.
--   [LSB Linux Base RPM File Format](http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/pkgformat.html)
--   [cpio FreeBSD cpio (odc and newc) file format spec](http://people.freebsd.org/%7Ekientzle/libarchive/man/cpio.5.txt)
--   [kernel Al Viro, H. Peter Anvin. initramfs buffer format. Linux Kernel. 2002](https://www.kernel.org/doc/Documentation/early-userspace/buffer-format.txt)
+*   *maxrpm* Edward C. Bailey. Maximum rpm. Red Hat Software, Inc. 1997.
+*   [LSB Linux Base RPM File Format](http://refspecs.linuxbase.org/LSB\_3.1.1/LSB-Core-generic/LSB-Core-generic/pkgformat.html)
+*   [cpio FreeBSD cpio (odc and newc) file format spec](http://people.freebsd.org/%7Ekientzle/libarchive/man/cpio.5.txt)
+*   [kernel Al Viro, H. Peter Anvin. initramfs buffer format. Linux Kernel. 2002](https://www.kernel.org/doc/Documentation/early-userspace/buffer-format.txt)
