@@ -38,7 +38,7 @@
     "lzma-native": "^8.0.1"
   },
   "devDependencies": {
-    "ava": "^4.3.0",
+    "ava": "^4.3.1",
     "c8": "^7.11.3",
     "documentation": "^13.2.5",
     "semantic-release": "^19.0.3"
