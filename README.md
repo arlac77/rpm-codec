@@ -73,7 +73,7 @@ Supported index types:
 *   INT64 = 5
 *   STRING = 6
 *   BIN = 7
-*   STRING_ARRAY = 8
+*   STRING\_ARRAY = 8
 
 # Payload
 
@@ -95,10 +95,10 @@ gzip.
     *   [Parameters](#parameters-1)
 *   [contentDecoder](#contentdecoder)
     *   [Parameters](#parameters-2)
-*   [TYPE_NULL](#type_null)
-*   [TYPE_STRING](#type_string)
-*   [TYPE_STRING_ARRAY](#type_string_array)
-*   [TYPE_I18NSTRING](#type_i18nstring)
+*   [TYPE\_NULL](#type_null)
+*   [TYPE\_STRING](#type_string)
+*   [TYPE\_STRING\_ARRAY](#type_string_array)
+*   [TYPE\_I18NSTRING](#type_i18nstring)
 
 ## RPMHeader
 
@@ -108,9 +108,9 @@ Type: [Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 
 ### Properties
 
-*   `lead` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-*   `signature` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-*   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+*   `lead` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `signature` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
+*   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
 
 ## RPMDecoder
 
@@ -118,9 +118,9 @@ Decodes the rpm header.
 
 ### Parameters
 
-*   `stream` **[Stream](https://nodejs.org/api/stream.html)** 
+*   `stream` **[Stream](https://nodejs.org/api/stream.html)**&#x20;
 
-Returns **[RPMHeader](#rpmheader)** 
+Returns **[RPMHeader](#rpmheader)**&#x20;
 
 ## defaultEntryHandler
 
@@ -129,8 +129,8 @@ null handler simply skips content
 ### Parameters
 
 *   `header` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** file header
-*   `stream` **ReadStream** 
-*   `callback` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** 
+*   `stream` **ReadStream**&#x20;
+*   `callback` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)**&#x20;
 
 ## contentDecoder
 
@@ -138,28 +138,28 @@ Decode the body part of an rpm stream
 
 ### Parameters
 
-*   `result` **[RPMHeader](#rpmheader)** 
+*   `result` **[RPMHeader](#rpmheader)**&#x20;
 *   `entryHandler` **EntryHandler**  (optional, default `defaultEntryHandler`)
 
-## TYPE_NULL
+## TYPE\_NULL
 
 Not Implemented
 
 Type: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
-## TYPE_STRING
+## TYPE\_STRING
 
 variable, NUL terminated
 
 Type: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
-## TYPE_STRING_ARRAY
+## TYPE\_STRING\_ARRAY
 
 Variable, sequence of NUL terminated strings
 
 Type: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
-## TYPE_I18NSTRING
+## TYPE\_I18NSTRING
 
 Variable, sequence of NUL terminated strings
 
@@ -172,6 +172,6 @@ Type: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Globa
 *   [wikipedia](http://en.wikipedia.org/wiki/RPM_Package_Manager)
     RPM Package Manager
 *   *maxrpm* Edward C. Bailey. Maximum rpm. Red Hat Software, Inc. 1997.
-*   [LSB Linux Base RPM File Format](http://refspecs.linuxbase.org/LSB\_3.1.1/LSB-Core-generic/LSB-Core-generic/pkgformat.html)
+*   [LSB Linux Base RPM File Format](http://refspecs.linuxbase.org/LSB_3.1.1/LSB-Core-generic/LSB-Core-generic/pkgformat.html)
 *   [cpio FreeBSD cpio (odc and newc) file format spec](http://people.freebsd.org/%7Ekientzle/libarchive/man/cpio.5.txt)
 *   [kernel Al Viro, H. Peter Anvin. initramfs buffer format. Linux Kernel. 2002](https://www.kernel.org/doc/Documentation/early-userspace/buffer-format.txt)
