@@ -48,7 +48,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/arlac77/rpm-codec.git"
+    "url": "https://github.com/arlac77/rpm-codec"
   },
   "bugs": {
     "url": "https://github.com/arlac77/rpm-codec/issues"
