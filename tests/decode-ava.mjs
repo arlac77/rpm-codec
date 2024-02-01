@@ -1,7 +1,7 @@
 import test from "ava";
-import { createReadStream } from "fs";
-import { pipeline } from "stream";
-import { promisify } from "util";
+import { createReadStream } from "node:fs";
+import { pipeline } from "node:stream";
+import { promisify } from "node:util";
 import { RPMDecoder, contentDecoder } from "../src/codec.mjs";
 
 test("RPMDecoder lzma", async t => {
@@ -102,7 +102,7 @@ test("RPMDecoder aarch64", async t => {
 
 test.only("fail RPMDecoder invalid header", async t => {
   const input = createReadStream(
-    new URL("decode-test.mjs", import.meta.url).pathname
+    new URL("decode-ava.mjs", import.meta.url).pathname
   );
 
   await t.throwsAsync(async () => RPMDecoder(input), {

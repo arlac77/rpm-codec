@@ -1,8 +1,7 @@
 import test from "ava";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
-import { open, read } from "fs";
-
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { open, read } from "node:fs";
 import { LEAD } from "../src/lead.mjs";
 import {
   structDecode,
@@ -18,7 +17,7 @@ test("lead length", t => t.is(structLength(LEAD), 96));
 // TODO test lead with bad length -> throw
 // TODO test lead with bad magic -> throw
 
-test.cb("Read lead from rpm package", t => {
+test("Read lead from rpm package", t => {
   t.plan(7);
   const filename = join(
     here,
@@ -31,7 +30,6 @@ test.cb("Read lead from rpm package", t => {
   open(filename, "r", (err, fd) => {
     if (err) {
       t.fail(`Opening rpm file failed with ${err}`);
-      t.end();
       return;
     }
 
@@ -39,7 +37,6 @@ test.cb("Read lead from rpm package", t => {
     read(fd, buffer, 0, 96, 0, (err, num) => {
       if (err) {
         t.fail(`Reading failed with ${err}`);
-        t.end();
         return;
       }
       const lead = structDecode(buffer, 0, LEAD);
@@ -50,7 +47,6 @@ test.cb("Read lead from rpm package", t => {
       t.is(lead.name, "mktemp-1.6-4mdv2010.1");
       t.is(lead.arch, 1);
       t.is(lead.type, 0);
-      t.end();
     });
   });
 });

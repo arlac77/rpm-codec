@@ -9,7 +9,7 @@ const typeLength = {
 };
 
 export function structLength(type) {
-  if (typeof type === 'string' || type instanceof String) {
+  if (typeof type === "string" || type instanceof String) {
     return typeLength[type];
   }
 
@@ -26,15 +26,15 @@ export function structDecode(buffer, offset, format) {
 
     format.forEach(f => {
       switch (f.type) {
-        case 's':
+        case "s":
           const i = buffer.indexOf(0, offset);
           result[f.name] = buffer.toString(
-            'utf8',
+            "utf8",
             offset,
             i >= 0 ? i : offset + f.length
           );
           break;
-        case 'u8':
+        case "u8":
           if (f.length > 1) {
             const a = new Uint8Array(f.length);
             for (let i = 0; i < f.length; i++) {
@@ -45,16 +45,16 @@ export function structDecode(buffer, offset, format) {
             result[f.name] = buffer.readUInt8(offset);
           }
           break;
-        case 'u16be':
+        case "u16be":
           result[f.name] = buffer.readUInt16BE(offset);
           break;
-        case 'u16le':
+        case "u16le":
           result[f.name] = buffer.readUInt16LE(offset);
           break;
-        case 'u32be':
+        case "u32be":
           result[f.name] = buffer.readUInt32BE(offset);
           break;
-        case 'u32le':
+        case "u32le":
           result[f.name] = buffer.readUInt32LE(offset);
           break;
       }
@@ -78,10 +78,10 @@ export function structEncode(object, buffer, offset, format) {
   if (Array.isArray(format)) {
     format.forEach(f => {
       switch (f.type) {
-        case 's':
-          buffer.write(object[f.name], offset, f.length, 'utf8');
+        case "s":
+          buffer.write(object[f.name], offset, f.length, "utf8");
           break;
-        case 'u8':
+        case "u8":
           if (f.length > 1) {
             const a = object[f.name];
             for (let i = 0; i < f.length; i++) {
@@ -91,16 +91,16 @@ export function structEncode(object, buffer, offset, format) {
             buffer.writeUInt8(object[f.name], offset);
           }
           break;
-        case 'u16be':
+        case "u16be":
           buffer.writeUInt16BE(object[f.name], offset);
           break;
-        case 'u16le':
+        case "u16le":
           buffer.writeUInt16LE(object[f.name], offset);
           break;
-        case 'u32be':
+        case "u32be":
           buffer.writeUInt32BE(object[f.name], offset);
           break;
-        case 'u32le':
+        case "u32le":
           buffer.writeUInt32LE(object[f.name], offset);
           break;
       }

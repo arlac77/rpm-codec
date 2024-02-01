@@ -1,3 +1,5 @@
+import { createGunzip } from "node:zlib";
+import extract from "cpio-stream/lib/extract.js";
 import { LEAD } from "./lead.mjs";
 import { FIELD, fieldDecode } from "./field.mjs";
 import { HEADER, headerWithValues } from "./header.mjs";
@@ -11,8 +13,6 @@ import {
   allign
 } from "./util.mjs";
 import { tags, signatureTags, oses, architectures } from "./types.mjs";
-import { createGunzip } from "zlib";
-import extract from "cpio-stream/lib/extract.js";
 
 function nextHeaderState(stream, chunk, results, lastResult, state) {
   results[state.name] = lastResult;
@@ -185,7 +185,10 @@ const defaultEntryHandler = (header, stream, callback) => {
  * @param {RPMHeader} result
  * @param {EntryHandler} entryHandler
  */
-export async function contentDecoder(result, entryHandler = defaultEntryHandler) {
+export async function contentDecoder(
+  result,
+  entryHandler = defaultEntryHandler
+) {
   let decompressor;
 
   const plc = result.header.values.get("PAYLOADCOMPRESSOR");
@@ -198,7 +201,7 @@ export async function contentDecoder(result, entryHandler = defaultEntryHandler)
     case "xz":
       const m = await import("lzma-native");
       decompressor = m.createDecompressor();
-     //   import { createDecompressor } from "lzma-native";
+      //   import { createDecompressor } from "lzma-native";
       //decompressor = createDecompressor();
       break;
 
@@ -241,92 +244,17 @@ export function RPMEncoder(stream, options) {
         [
           "SIGNATURES",
           new Uint8Array([
-            0,
-            0,
-            0,
-            62,
-            0,
-            0,
-            0,
-            7,
-            255,
-            255,
-            255,
-            144,
-            0,
-            0,
-            0,
-            16
+            0, 0, 0, 62, 0, 0, 0, 7, 255, 255, 255, 144, 0, 0, 0, 16
           ])
         ],
         [
           "DSA",
           new Uint8Array([
-            136,
-            63,
-            3,
-            5,
-            0,
-            76,
-            34,
-            11,
-            196,
-            231,
-            137,
-            138,
-            224,
-            112,
-            119,
-            31,
-            243,
-            17,
-            2,
-            83,
-            92,
-            0,
-            158,
-            41,
-            175,
-            155,
-            28,
-            18,
-            134,
-            208,
-            211,
-            99,
-            154,
-            104,
-            63,
-            200,
-            215,
-            222,
-            102,
-            171,
-            123,
-            173,
-            85,
-            0,
-            158,
-            38,
-            212,
-            165,
-            176,
-            0,
-            232,
-            109,
-            167,
-            188,
-            145,
-            117,
-            133,
-            151,
-            21,
-            40,
-            230,
-            202,
-            11,
-            27,
-            6
+            136, 63, 3, 5, 0, 76, 34, 11, 196, 231, 137, 138, 224, 112, 119, 31,
+            243, 17, 2, 83, 92, 0, 158, 41, 175, 155, 28, 18, 134, 208, 211, 99,
+            154, 104, 63, 200, 215, 222, 102, 171, 123, 173, 85, 0, 158, 38,
+            212, 165, 176, 0, 232, 109, 167, 188, 145, 117, 133, 151, 21, 40,
+            230, 202, 11, 27, 6
           ])
         ],
         ["SHA1", "8201decf2e7d589983931f9720860a72ea867002"],
@@ -335,93 +263,19 @@ export function RPMEncoder(stream, options) {
         [
           "MD5",
           new Uint8Array([
-            0x74,
-            0x5c,
-            0x0d,
-            0xe1,
-            0x49,
-            0xea,
-            0xe9,
-            0x66,
-            0xdf,
-            0x7c,
-            0x69,
-            0x49,
-            0x48,
-            0x03,
-            0x85,
-            0x85
+            0x74, 0x5c, 0x0d, 0xe1, 0x49, 0xea, 0xe9, 0x66, 0xdf, 0x7c, 0x69,
+            0x49, 0x48, 0x03, 0x85, 0x85
           ])
         ],
 
         [
           "GPG",
           new Uint8Array([
-            136,
-            63,
-            3,
-            5,
-            0,
-            76,
-            34,
-            11,
-            196,
-            231,
-            137,
-            138,
-            224,
-            112,
-            119,
-            31,
-            243,
-            17,
-            2,
-            210,
-            168,
-            0,
-            160,
-            170,
-            3,
-            230,
-            191,
-            199,
-            205,
-            21,
-            142,
-            135,
-            36,
-            79,
-            218,
-            215,
-            61,
-            203,
-            192,
-            121,
-            114,
-            46,
-            208,
-            0,
-            158,
-            43,
-            50,
-            38,
-            103,
-            147,
-            230,
-            78,
-            191,
-            191,
-            54,
-            48,
-            85,
-            160,
-            61,
-            235,
-            64,
-            158,
-            225,
-            50,
-            191
+            136, 63, 3, 5, 0, 76, 34, 11, 196, 231, 137, 138, 224, 112, 119, 31,
+            243, 17, 2, 210, 168, 0, 160, 170, 3, 230, 191, 199, 205, 21, 142,
+            135, 36, 79, 218, 215, 61, 203, 192, 121, 114, 46, 208, 0, 158, 43,
+            50, 38, 103, 147, 230, 78, 191, 191, 54, 48, 85, 160, 61, 235, 64,
+            158, 225, 50, 191
           ])
         ]
       ]),
