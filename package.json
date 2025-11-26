@@ -54,7 +54,7 @@
   "bugs": {
     "url": "https://github.com/arlac77/rpm-codec/issues"
   },
-  "homepage": "https://github.com/arlac77/rpm-codec#readme",
+  "homepage": "",
   "template": {
     "inheritFrom": [
       "arlac77/template-license-MIT",
